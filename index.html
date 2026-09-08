@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#070b14">
+  <title>Tubewell Smart Grid 17.0 - Active Turn & Master Override</title>
+  
+  <!-- Firebase App & Realtime Database SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #070b14;
+      --panel-bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #2e3d55;
+      --text: #f8fafc;
+      --text-dim: #94a3b8;
+      --primary: #0284c7;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --purple: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg-dark); color: var(--text); padding: 12px; }
+    .app-container { max-width: 1260px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+
+    header {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; color: var(--primary); }
+    .badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      font-family: monospace;
+    }
+
+    input, select, button {
+      padding: 9px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+    }
+    button { cursor: pointer; font-weight: 700; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    button:active { transform: scale(0.98); }
+    .btn-p { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn-s { background: var(--success); border-color: var(--success); color: #fff; }
+    .btn-d { background: var(--danger); border-color: var(--danger); color: #fff; }
+    .btn-w { background: var(--warning); border-color: var(--warning); color: #fff; }
+
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+    }
+    .tel-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .tel-lbl { font-size: 10px; text-transform: uppercase; font-weight: 700; color: var(--text-dim); }
+    .tel-val { font-size: 20px; font-weight: 800; margin: 4px 0; font-family: monospace; }
+    .vr { color: #f87171; }
+    .vy { color: #facc15; }
+    .vb { color: #60a5fa; }
+    .amps { color: #4ade80; }
+    .flow { color: #38bdf8; }
+
+    .workspace-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 900px) {
+      .workspace-grid { grid-template-columns: 390px 1fr; }
+    }
+
+    .panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .panel h3 { font-size: 14px; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+
+    .contactor-box {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .bulb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #475569;
+      box-shadow: 0 0 0 4px rgba(71, 85, 105, 0.2);
+      transition: all 0.3s;
+    }
+    .bulb.running { background: var(--success); box-shadow: 0 0 16px var(--success); }
+
+    .switch-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 800;
+      border-radius: 8px;
+      border: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .switch-btn.locked { background: #334155; color: #64748b; cursor: not-allowed; }
+
+    .table-box { overflow-x: auto; max-height: 280px; overflow-y: auto; border-radius: 6px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 11.5px; text-align: left; }
+    th { background: var(--card-bg); padding: 9px 11px; color: var(--text-dim); position: sticky; top: 0; z-index: 1; border-bottom: 1px solid var(--border); }
+    td { padding: 9px 11px; border-bottom: 1px solid var(--border); }
+
+    .privacy-queue-box {
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px dashed var(--purple);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11.5px;
+    }
+
+    /* Executive Invoice Card */
+    .invoice-container {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 10px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+    .inv-title { font-size: 18px; font-weight: 800; color: #0284c7; }
+    .inv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11.5px; }
+    .inv-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
+    .inv-table th { background: #f8fafc; color: #475569; padding: 6px 8px; border-bottom: 1px solid #cbd5e1; }
+    .inv-table td { padding: 6px 8px; border-bottom: 1px solid #f1f5f9; color: #1e293b; }
+    .inv-totals { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 11.5px; }
+
+    @media print {
+      body * { visibility: hidden; }
+      .invoice-container, .invoice-container * { visibility: visible; }
+      .invoice-container { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
+    }
+
+    .auth-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(7, 11, 20, 0.98);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+    .auth-modal {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Secure 2-Step PIN Modal -->
+<div class="auth-overlay" id="authGateway">
+  <div class="auth-modal">
+    <div style="font-size: 18px; font-weight: 800; color: var(--primary);">⚡ Tubewell Secured Terminal</div>
+    <p style="font-size: 11.5px; color: var(--text-dim);">Enter registered mobile number and private PIN to sign in.</p>
+    
+    <!-- Step 1: Phone Validation -->
+    <div id="step_phone">
+      <label style="font-size: 11px; font-weight: bold; color: var(--text-dim);">Registered Mobile Number</label>
+      <input type="tel" id="auth_phone_input" placeholder="10-digit mobile" style="width: 100%; margin-top: 4px;" value="8354816628">
+      <div style="font-size: 10.5px; color: var(--primary); margin-top: 4px;">Primary Master: <strong>8354816628</strong></div>
+      <button class="btn-p" id="btn_verify_phone" style="width: 100%; margin-top: 12px;" onclick="verifyUserInCloud()">Continue to PIN ➔</button>
+    </div>
+
+    <!-- Step 2: PIN Challenge -->
+    <div id="step_pin" style="display: none;">
+      <div id="auth_user_label" style="font-size: 12.5px; font-weight: bold; color: var(--primary);"></div>
+      <label id="pin_label_text" style="font-size: 11px; font-weight: bold; color: var(--text-dim); margin-top: 6px; display: block;">Enter 4-Digit Security PIN</label>
+      <input type="password" id="auth_pin_input" placeholder="••••" style="width: 100%; margin-top: 4px; font-size: 16px; letter-spacing: 4px; text-align: center;" maxlength="8">
+      <div id="pin_hint_text" style="font-size: 10px; color: var(--text-dim); margin-top: 3px;"></div>
+      <button class="btn-s" id="btn_sign_in" style="width: 100%; margin-top: 10px;" onclick="authenticateWithPin()">Sign In</button>
+      <button class="btn-w" style="width: 100%; margin-top: 6px; font-size: 11px;" onclick="resetLoginStep()">Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-container">
+  <header>
+    <div class="brand">
+      <span>⚡</span>
+      <span>Tubewell Grid 17.0 Pro</span>
+      <span class="badge" id="queueModeBadge">Queue: OFF (Manual Mode)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div class="badge" id="userBadge">Authenticating...</div>
+      <button class="btn-d" style="padding: 4px 8px; font-size: 11px;" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- Live 3-Phase Telemetry -->
+  <div class="telemetry-grid">
+    <div class="tel-card">
+      <div class="tel-lbl">Phase R Volt</div>
+      <div class="tel-val vr" id="v_r">412 V</div>
+      <span style="font-size:9px; color:var(--text-dim);">380V - 440V</span>
+    </div>
+    <div class="tel-card">
+      <div class="tel-lbl">Phase Y Volt</div>
+      <div class="tel-val vy" id="v_y">414 V</div>
+      <span style="font-size:9px; color:var(--text-dim);">380V - 440V</span>
+    </div>
+    <div class="tel-card">
+      <div class="tel-lbl">Phase B Volt</div>
+      <div class="tel-val vb" id="v_b">410 V</div>
+      <span style="font-size:9px; color:var(--text-dim);">380V - 440V</span>
+    </div>
+    <div class="tel-card">
+      <div class="tel-lbl">Motor Current</div>
+      <div class="tel-val amps" id="i_amps">0.0 A</div>
+      <span style="font-size:9px; color:var(--text-dim);">Nom: 15-18A</span>
+    </div>
+    <div class="tel-card">
+      <div class="tel-lbl">Discharge Rate</div>
+      <div class="tel-val flow" id="f_lpm">0 L/min</div>
+      <span style="font-size:9px; color:var(--text-dim);" id="flowTag">Pump Off</span>
+    </div>
+  </div>
+
+  <div class="workspace-grid">
+    
+    <!-- Left Column: Motor Contactor, Overrides & Controlled State -->
+    <div class="panel">
+      <h3>Motor Contactor & Turn Status</h3>
+      
+      <div class="contactor-box">
+        <div class="bulb" id="pumpLight"></div>
+        <div style="font-size: 14px; font-weight: 800;" id="pumpStateText">CONTACTOR OPEN (STOPPED)</div>
+        <div style="font-size: 12px; color: var(--warning); font-weight: bold;" id="activeControllerText">Authorized: None</div>
+        
+        <button id="pumpActuatorBtn" class="switch-btn btn-s" onclick="togglePump()">START MOTOR (PUMP WATER)</button>
+      </div>
+
+      <!-- Turn Cycle Card -->
+      <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
+        <div style="font-size: 11.5px; font-weight: bold; color: var(--primary);">
+          ⏳ Current Irrigation Turn Cycle
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-dim);">Turn Handover (First Start):</span>
+          <span style="font-family: monospace; font-weight: bold; color: var(--success);" id="lbl_cycle_start">--:--:--</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-dim);">Turn Active For:</span>
+          <span style="font-weight: bold; color: var(--primary);" id="lbl_turn_state_desc">Standby (Owner Own-Field Default)</span>
+        </div>
+        
+        <!-- Owner Internal Telemetry Box -->
+        <div id="ownerInternalMetricsBox" style="display: none; border-top: 1px dashed var(--border); padding-top: 6px; margin-top: 2px;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-dim);">Current Run Pumping Time:</span>
+            <span style="font-family: monospace; font-weight: bold; color: var(--primary);" id="lbl_owner_live_hours">0.00 hrs (0m)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-dim);">Accrued Cycle Fare:</span>
+            <span style="font-family: monospace; font-weight: bold; color: var(--success);" id="lbl_owner_live_fare">₹0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peer Visibility Box for Farmers (When Queue Mode is ON) -->
+      <div class="privacy-queue-box" id="farmerPeerQueueVisibilityBox" style="display: none;">
+        <div style="font-size: 11px; font-weight: bold; color: #d8b4fe;">⚡ Neighborhood Turn Sequence:</div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-dim);">Currently Running Field:</span>
+          <span style="font-weight: bold; color: var(--warning);" id="lbl_peer_running">--</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-dim);">Next Field After Turn:</span>
+          <span style="font-weight: bold; color: var(--primary);" id="lbl_peer_next">--</span>
+        </div>
+      </div>
+
+      <!-- Farmer Surrender Button -->
+      <div id="farmerClosureBox" style="display: none; background: rgba(245, 158, 11, 0.1); border: 1px dashed var(--warning); padding: 10px; border-radius: 8px;">
+        <div style="font-size: 11.5px; font-weight: bold; color: var(--warning);">Field Irrigation Complete? Hand Over Control</div>
+        <p style="font-size: 10.5px; color: var(--text-dim); margin: 3px 0 8px 0;">
+          Surrendering turn finalizes your billing cycle, halts the pump, and transfers control.
+        </p>
+        <button class="btn-w" style="width: 100%; padding: 10px;" onclick="farmerRelinquishTurn()">
+          ✅ Surrender Turn (Irrigation Complete)
+        </button>
+      </div>
+
+      <!-- Master Revoke Button -->
+      <div id="ownerRevokeTurnBox" style="display: none;">
+        <button class="btn-d" style="width: 100%; padding: 10px; font-size: 11.5px;" onclick="ownerForceEndTurn()">
+          🛑 Finalize Cycle & Release Turn to Standby
+        </button>
+      </div>
+
+      <!-- Master Override Dropdown -->
+      <div id="ownerImpersonationPanel" style="display: none; border-top: 1px solid var(--border); padding-top: 8px; flex-direction: column; gap: 6px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 11.5px; font-weight: bold; color: var(--primary);">⚡ Master Override: Select Field to Run</span>
+          <span id="override_status_tag" style="font-size: 10px; color: var(--warning); font-weight: bold;">Instant Switch</span>
+        </div>
+        <select id="sel_simulate_user" onchange="executeMasterOverride(this.value)"></select>
+      </div>
+    </div>
+
+    <!-- Right Column: Queue Manager, Master Controls & Invoices -->
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      
+      <!-- OWNER QUEUE CONTROLLER & ROSTER MANAGEMENT -->
+      <div class="panel" id="queuePanel" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <span style="font-size: 14px; font-weight: bold; color: var(--primary);">🔢 Queue & Access Sequencing Controller</span>
+          <button id="btn_toggle_queue_mode" class="btn-w" style="font-size: 11px; padding: 5px 10px;" onclick="toggleQueueMode()">
+            Queue Mode: OFF (Click to Enable)
+          </button>
+        </div>
+        
+        <p style="font-size: 11px; color: var(--text-dim); margin-top: -4px;">
+          When Auto-Queue is <strong>ENABLED</strong>, closing a turn automatically opens the next farmer in sequence. When <strong>OFF</strong>, the pump halts in manual idle.
+        </p>
+
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr>
+                <th>Seq #</th>
+                <th>Farmer Name</th>
+                <th>Plot</th>
+                <th>Queue Status</th>
+                <th>Activate / Handover</th>
+              </tr>
+            </thead>
+            <tbody id="queueTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MASTER SETTINGS & IMMUTABLE DIRECTORY WITH SAFE EDIT/SAVE FORM -->
+      <div class="panel" id="masterPanel" style="display: none;">
+        <h3>Master Administration, User Directory & Tariff</h3>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+          <div style="font-size: 11.5px; font-weight: bold;">🔑 Master PIN:</div>
+          <div style="display: flex; gap: 6px;">
+            <input type="password" id="edit_master_pin" placeholder="New Master PIN" style="width: 120px;" maxlength="10">
+            <button class="btn-p" onclick="saveNewMasterPin()">Update PIN</button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+          <div style="font-size: 11.5px; font-weight: bold;">Distribution Tariff (₹/min):</div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <input type="number" id="cfg_rate_minute" step="0.1" style="width: 80px;" value="2.00">
+            <button class="btn-p" onclick="updateSystemTariff()">Update</button>
+          </div>
+        </div>
+
+        <!-- Add New Farmer Form -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 90px auto; gap: 6px;">
+          <input type="text" id="reg_name" placeholder="Farmer Name">
+          <input type="tel" id="reg_phone" placeholder="10-digit mobile">
+          <input type="text" id="reg_plot" placeholder="Plot Area (e.g. 3.0 Acres)">
+          <input type="text" id="reg_custom_pin" placeholder="PIN (4-digit)" maxlength="6">
+          <button class="btn-s" onclick="registerFarmerInCloud()">+ Register</button>
+        </div>
+
+        <!-- Safe Edit/Save Directory Table -->
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr>
+                <th>Farmer Name</th>
+                <th>Mobile Number</th>
+                <th>Plot Allocation</th>
+                <th>PIN</th>
+                <th>Edit / Save Profile</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="farmerEditableDirectoryBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CYCLE-ENCAPSULATED LEDGER -->
+      <div class="panel">
+        <h3 id="ledgerTitle">Micro-Grid Irrigation Turn History</h3>
+
+        <div style="background: var(--card-bg); padding: 10px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border: 1px solid var(--border);" id="ledgerFilterRibbon">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <label style="font-size: 10px; color: var(--text-dim); font-weight: bold;">Filter by Account / Field:</label>
+            <select id="sel_filter_user" onchange="handleLedgerFiltersChanged()">
+              <option value="ALL">-- All Registered Farmers --</option>
+              <option value="OWNER_DIRECT">⚡ Owner Personal Field (Self-Runs)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Ledger Table -->
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr>
+                <th>Cycle Ref</th>
+                <th>Account / Field</th>
+                <th>Turn Handover (Start)</th>
+                <th>Turn Surrender (End)</th>
+                <th>Pumping Hours</th>
+                <th>Discharge</th>
+                <th>Fare (₹)</th>
+                <th>Invoice</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerTableBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 10px; border-radius: 8px; flex-wrap: wrap; gap: 6px;">
+          <span style="font-size: 11px; color: var(--text-dim);">Consolidates turn cycle with exact first-start and surrender timestamps.</span>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-p" onclick="generateCycleBill()">🧾 Generate Official Invoice</button>
+            <button class="btn-s" id="btnWhatsAppDirect" onclick="dispatchDirectWhatsAppBill()">📲 Send WhatsApp</button>
+            <button class="btn-w" onclick="window.print()">🖨️ Print / Save PDF</button>
+          </div>
+        </div>
+
+        <!-- Presentable Invoice Card -->
+        <div class="invoice-container" id="printableInvoiceCard">
+          <div class="inv-header">
+            <div>
+              <div class="inv-title">⚡ TUBEWELL IRRIGATION INVOICE</div>
+              <div class="inv-sub">Micro-Grid Automated Water Distribution Station</div>
+              <div class="inv-sub">Master Station: +91-8354816628</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; font-weight: 800; color: #0f172a;" id="inv_ref_no">INV-XXXXXX</div>
+              <div style="font-size: 11px; color: #64748b;" id="inv_date">Date: --/--/----</div>
+              <span style="font-size: 9px; padding: 2px 6px; border-radius: 4px; background: #fee2e2; color: #dc2626; font-weight: bold;" id="inv_status_tag">ORIGINAL BILL</span>
+            </div>
+          </div>
+
+          <div class="inv-grid">
+            <div>
+              <span style="color: #64748b; font-size: 10px; font-weight: bold;">BILLED TO:</span>
+              <div style="font-weight: 800; font-size: 13px; color: #0f172a;" id="inv_farmer_name">--</div>
+              <div style="color: #475569;" id="inv_farmer_plot">Plot Identity: --</div>
+              <div style="color: #475569;" id="inv_farmer_phone">Phone: --</div>
+            </div>
+            <div style="text-align: right;">
+              <span style="color: #64748b; font-size: 10px; font-weight: bold;">CYCLE TIME WINDOW:</span>
+              <div style="color: #475569;" id="inv_cycle_window">Turn Window: -- to --</div>
+              <div style="color: #475569;" id="inv_tariff_rate">Tariff: ₹2.00 / min</div>
+            </div>
+          </div>
+
+          <table class="inv-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Turn Handover (Start)</th>
+                <th>Turn Surrendered (End)</th>
+                <th>Pumping Run</th>
+                <th>Discharge</th>
+                <th style="text-align: right;">Amount (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="invTableBody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: #94a3b8; padding: 14px;">No bill generated yet.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="inv-totals">
+            <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 14px; color: #0284c7;">
+              <span>TOTAL NET AMOUNT DUE:</span>
+              <span id="inv_total_fare">₹0.00</span>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; padding-top: 8px; font-size: 10px; color: #64748b;">
+            <span>Verified by 3-Phase Contactor Clock Sync.</span>
+            <span>Authorized Signature: __________________</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // =========================================================================
+  // FIREBASE REALTIME DATABASE CONFIGURATION
+  // =========================================================================
+  const firebaseConfig = {
+    apiKey: "AIzaSyCH8lBCeYYnTiZ3u-Z6Gs1OmhBf3R_b0i4",
+    authDomain: "tubewell-grid-1425b.firebaseapp.com",
+    databaseURL: "https://tubewell-grid-1425b-default-rtdb.firebaseio.com",
+    projectId: "tubewell-grid-1425b",
+    storageBucket: "tubewell-grid-1425b.firebasestorage.app",
+    messagingSenderId: "76348823069",
+    appId: "1:76348823069:web:3d6c60a5ebf1ffe29618f4",
+    measurementId: "G-TL6KLFR7YV"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const rtdb = firebase.database();
+
+  const PRIMARY_MASTER = "8354816628";
+  let authenticatedUser = null;
+  let userInVerification = null;
+  let systemTariffPerMinute = 2.00;
+  let isQueueAutoModeEnabled = false;
+  let isPumpEngaged = false;
+  let tickerTimer = null;
+
+  // Cache & Active States
+  let cloudFarmers = {};
+  let cloudSessions = [];
+  let currentActiveTurn = null;
+  let editingRowUid = null;
+  let generatedBillPlainText = "";
+
+  function cleanPhone(num) {
+    if (!num) return "";
+    return String(num).replace(/\D/g, '').slice(-10);
+  }
+
+  function fetchWithTimeout(ref, timeoutMs = 2500) {
+    return Promise.race([
+      ref.once('value'),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), timeoutMs))
+    ]);
+  }
+
+  // =========================================================================
+  // HARDENED 2-STEP SECURE PIN AUTHENTICATION
+  // =========================================================================
+  async function verifyUserInCloud() {
+    const btn = document.getElementById('btn_verify_phone');
+    const p = cleanPhone(document.getElementById('auth_phone_input').value.trim());
+    if (p.length !== 10) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    btn.innerText = "Checking...";
+    btn.disabled = true;
+
+    try {
+      if (p === PRIMARY_MASTER) {
+        let meta = {};
+        try {
+          const snap = await fetchWithTimeout(rtdb.ref('/tubewell/system_meta'), 1500);
+          meta = snap.val() || {};
+        } catch (e) {
+          console.warn("Using offline master bootstrap PIN (8354)");
+        }
+        
+        userInVerification = {
+          role: 'master',
+          uid: 'MASTER_ROOT',
+          name: 'Authorized Grid Master',
+          phone: PRIMARY_MASTER,
+          pin: String(meta.masterPin || '8354')
+        };
+      } else {
+        const snap = await fetchWithTimeout(rtdb.ref('/tubewell/farmers'), 2500);
+        const allFarmers = snap.val() || {};
+        
+        let foundFarmer = null;
+        Object.keys(allFarmers).forEach(k => {
+          const f = allFarmers[k];
+          if (f && (cleanPhone(f.phone) === p || cleanPhone(k) === p)) {
+            foundFarmer = { uid: f.uid || k, ...f };
+          }
+        });
+
+        if (!foundFarmer) {
+          alert("Mobile number not registered. Contact Master (" + PRIMARY_MASTER + ").");
+          btn.innerText = "Continue to PIN ➔";
+          btn.disabled = false;
+          return;
+        }
+
+        userInVerification = { 
+          role: 'farmer', 
+          ...foundFarmer,
+          pin: String(foundFarmer.pin || p.slice(-4))
+        };
+      }
+
+      document.getElementById('step_phone').style.display = 'none';
+      document.getElementById('step_pin').style.display = 'block';
+      document.getElementById('auth_user_label').innerText = `${userInVerification.name} (+91-${userInVerification.phone})`;
+      
+      const pinHint = document.getElementById('pin_hint_text');
+      pinHint.innerText = (userInVerification.role === 'master') ? "Master PIN required." : "Enter your registered secret 4-digit PIN.";
+      document.getElementById('auth_pin_input').value = '';
+      document.getElementById('auth_pin_input').focus();
+    } catch (err) {
+      if (p === PRIMARY_MASTER) {
+        userInVerification = { role: 'master', uid: 'MASTER_ROOT', name: 'Authorized Grid Master', phone: PRIMARY_MASTER, pin: '8354' };
+        document.getElementById('step_phone').style.display = 'none';
+        document.getElementById('step_pin').style.display = 'block';
+        document.getElementById('auth_user_label').innerText = `Authorized Grid Master (+91-8354816628)`;
+        document.getElementById('pin_hint_text').innerText = "Default Master PIN: 8354";
+      } else {
+        alert("Connection timeout. Please check your internet connection and retry.");
+      }
+    } finally {
+      btn.innerText = "Continue to PIN ➔";
+      btn.disabled = false;
+    }
+  }
+
+  async function authenticateWithPin() {
+    const entered = document.getElementById('auth_pin_input').value.trim();
+    if (!entered) {
+      alert("Please enter your PIN.");
+      return;
+    }
+
+    if (String(entered) !== String(userInVerification.pin)) {
+      alert("Invalid Security PIN. Access Denied.");
+      return;
+    }
+
+    authenticatedUser = userInVerification;
+    document.getElementById('authGateway').style.display = 'none';
+    document.getElementById('userBadge').innerText = `${authenticatedUser.name} (${authenticatedUser.role.toUpperCase()})`;
+
+    initUserInterface();
+  }
+
+  function resetLoginStep() {
+    document.getElementById('step_phone').style.display = 'block';
+    document.getElementById('step_pin').style.display = 'none';
+    document.getElementById('auth_pin_input').value = '';
+  }
+
+  function logout() {
+    authenticatedUser = null;
+    document.getElementById('authGateway').style.display = 'flex';
+    resetLoginStep();
+  }
+
+  // =========================================================================
+  // REAL-TIME CLOUD LISTENERS
+  // =========================================================================
+  function initUserInterface() {
+    const isMaster = (authenticatedUser.role === 'master');
+    
+    document.getElementById('masterPanel').style.display = isMaster ? 'flex' : 'none';
+    document.getElementById('queuePanel').style.display = isMaster ? 'flex' : 'none';
+    document.getElementById('ownerImpersonationPanel').style.display = isMaster ? 'flex' : 'none';
+    document.getElementById('ownerInternalMetricsBox').style.display = isMaster ? 'block' : 'none';
+    document.getElementById('ledgerFilterRibbon').style.display = isMaster ? 'flex' : 'none';
+
+    rtdb.ref('/tubewell/system_meta').on('value', snap => {
+      const meta = snap.val() || {};
+      systemTariffPerMinute = meta.tariff || 2.00;
+      isQueueAutoModeEnabled = meta.queueAutoMode === true;
+      document.getElementById('cfg_rate_minute').value = systemTariffPerMinute.toFixed(2);
+      updateQueueBadge();
+      updatePeerVisibilityCard();
+    });
+
+    // Normalize Farmers into cloudFarmers with Guaranteed UID, Phone & Name
+    rtdb.ref('/tubewell/farmers').on('value', snap => {
+      const raw = snap.val() || {};
+      cloudFarmers = {};
+      Object.keys(raw).forEach(key => {
+        const item = raw[key];
+        if (item && typeof item === 'object') {
+          const uid = item.uid || key;
+          const phone = cleanPhone(item.phone || key);
+          cloudFarmers[uid] = {
+            ...item,
+            uid: uid,
+            phone: phone,
+            name: item.name || 'Farmer (' + phone + ')',
+            plot: item.plot || 'General Plot',
+            pin: String(item.pin || phone.slice(-4)),
+            queueOrder: parseInt(item.queueOrder) || 1,
+            inQueue: item.inQueue !== false
+          };
+        }
+      });
+
+      populateUserFilterDropdown();
+      if (isMaster) {
+        renderQueueTable();
+        renderFarmerEditableDirectory();
+        populateImpersonationList();
+      }
+      evaluateTurnPermissions();
+      updatePeerVisibilityCard();
+    });
+
+    // Real-Time Turn Synchronization
+    rtdb.ref('/tubewell/active_turn').on('value', snap => {
+      currentActiveTurn = snap.val() || null;
+      
+      if (currentActiveTurn && currentActiveTurn.isMotorRunning) {
+        isPumpEngaged = true;
+        document.getElementById('pumpLight').classList.add('running');
+        document.getElementById('pumpStateText').innerText = "CONTACTOR CLOSED (PUMP RUNNING)";
+        document.getElementById('pumpStateText').style.color = "var(--success)";
+        document.getElementById('i_amps').innerText = "16.4 A";
+        document.getElementById('f_lpm').innerText = "345 L/min";
+        document.getElementById('flowTag').innerText = "Pumping";
+
+        startLocalTicker();
+      } else {
+        isPumpEngaged = false;
+        clearInterval(tickerTimer);
+        document.getElementById('pumpLight').classList.remove('running');
+        document.getElementById('pumpStateText').innerText = "CONTACTOR OPEN (STOPPED)";
+        document.getElementById('pumpStateText').style.color = "var(--text)";
+        document.getElementById('i_amps').innerText = "0.0 A";
+        document.getElementById('f_lpm').innerText = "0 L/min";
+        document.getElementById('flowTag').innerText = "Pump Off";
+        
+        updateLiveMetricLabels(getAccurateTurnSeconds());
+      }
+
+      updateTurnStatusUI();
+      evaluateTurnPermissions();
+      updatePeerVisibilityCard();
+      if (isMaster) populateImpersonationList();
+    });
+
+    rtdb.ref('/tubewell/sessions').on('value', snap => {
+      const data = snap.val() || {};
+      cloudSessions = Object.keys(data).map(k => ({ sessionId: k, ...data[k] }));
+      handleLedgerFiltersChanged();
+    });
+
+    rtdb.ref('/tubewell/telemetry').on('value', snap => {
+      const telem = snap.val();
+      if (!telem) return;
+      document.getElementById('v_r').innerText = `${telem.vR || 412} V`;
+      document.getElementById('v_y').innerText = `${telem.vY || 414} V`;
+      document.getElementById('v_b').innerText = `${telem.vB || 410} V`;
+    });
+  }
+
+  // =========================================================================
+  // PRECISE RUNTIME TRACKING VIA EPOCH TIMESTAMPS
+  // =========================================================================
+  function getAccurateTurnSeconds() {
+    if (!currentActiveTurn) return 0;
+    let total = currentActiveTurn.accumulatedSecondsBeforeCurrentRun || 0;
+    if (currentActiveTurn.isMotorRunning && currentActiveTurn.lastMotorStartTime) {
+      const elapsed = Math.round((Date.now() - currentActiveTurn.lastMotorStartTime) / 1000);
+      total += Math.max(0, elapsed);
+    }
+    return total;
+  }
+
+  function updateLiveMetricLabels(sec) {
+    const hrsDecimal = (sec / 3600).toFixed(2);
+    const hrs = Math.floor(sec / 3600);
+    const mins = Math.floor((sec % 3600) / 60);
+    const fare = ((sec / 60) * systemTariffPerMinute).toFixed(2);
+
+    document.getElementById('lbl_owner_live_hours').innerText = `${hrsDecimal} hrs (${hrs}h ${mins}m)`;
+    document.getElementById('lbl_owner_live_fare').innerText = `₹${fare}`;
+  }
+
+  function startLocalTicker() {
+    clearInterval(tickerTimer);
+    tickerTimer = setInterval(() => {
+      updateLiveMetricLabels(getAccurateTurnSeconds());
+    }, 1000);
+  }
+
+  // =========================================================================
+  // MASTER OVERRIDE: DIRECT INSTANT HANDOVER (FIXED & TESTED)
+  // =========================================================================
+  async function executeMasterOverride(selectedUid) {
+    if (!authenticatedUser || authenticatedUser.role !== 'master') return;
+
+    if (isPumpEngaged) {
+      alert("Motor is currently running! Please stop the motor before switching the active turn.");
+      populateImpersonationList();
+      return;
+    }
+
+    const now = Date.now();
+    const startTimeStr = new Date(now).toLocaleTimeString('en-IN', { hour12: true });
+
+    if (!selectedUid || selectedUid === 'OWNER_DIRECT') {
+      // Switched to Master's own field
+      await rtdb.ref('/tubewell/active_turn').set({
+        farmerUid: 'OWNER_DIRECT',
+        farmerPhone: PRIMARY_MASTER,
+        farmerName: 'Owner Personal Field',
+        plot: 'Owner Estate Land',
+        isOwnerPersonalRun: true,
+        cycleStartTimestamp: now,
+        cycleStartTimeIso: startTimeStr,
+        accumulatedSecondsBeforeCurrentRun: 0,
+        isMotorRunning: false,
+        lastMotorStartTime: null
+      });
+      alert("⚡ Active Turn Switched to: Owner Personal Field (Self-Run).\nContactor is ready to start.");
+    } else {
+      const targetFarmer = cloudFarmers[selectedUid];
+      if (!targetFarmer) {
+        alert("Farmer record not found. Please refresh and try again.");
+        return;
+      }
+
+      // Immediately commit active turn to Firebase
+      await rtdb.ref('/tubewell/active_turn').set({
+        farmerUid: targetFarmer.uid,
+        farmerPhone: targetFarmer.phone,
+        farmerName: targetFarmer.name,
+        plot: targetFarmer.plot,
+        isOwnerPersonalRun: false,
+        cycleStartTimestamp: now,
+        cycleStartTimeIso: startTimeStr,
+        accumulatedSecondsBeforeCurrentRun: 0,
+        isMotorRunning: false,
+        lastMotorStartTime: null
+      });
+
+      alert(`⚡ Master Override Successful!\nTurn activated for: ${targetFarmer.name} (${targetFarmer.plot}).\nContactor is unlocked for both Owner and ${targetFarmer.name}.`);
+    }
+  }
+
+  function updateTurnStatusUI() {
+    const hasTurn = currentActiveTurn !== null;
+    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
+    const isMyTurn = hasTurn && authenticatedUser && (authenticatedUser.uid === currentActiveTurn.farmerUid || (authenticatedUser.phone && cleanPhone(authenticatedUser.phone) === cleanPhone(currentActiveTurn.farmerPhone)));
+
+    if (hasTurn) {
+      document.getElementById('lbl_cycle_start').innerText = currentActiveTurn.cycleStartTimeIso || "--:--:--";
+      document.getElementById('lbl_turn_state_desc').innerText = `Active: ${currentActiveTurn.farmerName} (${currentActiveTurn.plot})`;
+      document.getElementById('lbl_turn_state_desc').style.color = "var(--success)";
+      
+      document.getElementById('farmerClosureBox').style.display = (isMyTurn && !isMaster) ? 'block' : 'none';
+      document.getElementById('ownerRevokeTurnBox').style.display = isMaster ? 'block' : 'none';
+    } else {
+      document.getElementById('lbl_cycle_start').innerText = "Standby";
+      document.getElementById('lbl_turn_state_desc').innerText = "Standby (Owner Own-Field Default)";
+      document.getElementById('lbl_turn_state_desc').style.color = "var(--text-dim)";
+      document.getElementById('farmerClosureBox').style.display = 'none';
+      document.getElementById('ownerRevokeTurnBox').style.display = 'none';
+    }
+  }
+
+  function evaluateTurnPermissions() {
+    const btn = document.getElementById('pumpActuatorBtn');
+    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
+    const hasTurn = currentActiveTurn !== null;
+    const isMyTurn = hasTurn && authenticatedUser && (authenticatedUser.uid === currentActiveTurn.farmerUid || (authenticatedUser.phone && cleanPhone(authenticatedUser.phone) === cleanPhone(currentActiveTurn.farmerPhone)));
+
+    // Permission check: Master can ALWAYS operate. Farmer operates only if it is their active turn.
+    const allowed = isMaster ? true : isMyTurn;
+
+    if (!allowed) {
+      btn.className = "switch-btn locked";
+      btn.innerText = "Contactor Locked (Not Your Turn)";
+    } else {
+      btn.className = isPumpEngaged ? "switch-btn btn-d" : "switch-btn btn-s";
+      btn.innerText = isPumpEngaged ? "STOP MOTOR (PAUSE FLOW)" : "START MOTOR (PUMP WATER)";
+    }
+
+    let controllerText = "Authorized: None";
+    if (isMaster) {
+      if (hasTurn) {
+        controllerText = isPumpEngaged 
+          ? `🟢 Running for: ${currentActiveTurn.farmerName} (${currentActiveTurn.plot})`
+          : `Ready to Start: ${currentActiveTurn.farmerName} (${currentActiveTurn.plot})`;
+      } else {
+        controllerText = isPumpEngaged 
+          ? `🟢 Running: Owner Personal Field (Self-Run)`
+          : `Ready: Owner Personal Field (Default)`;
+      }
+    } else {
+      controllerText = isMyTurn 
+        ? (isPumpEngaged ? `🟢 Motor Running on Your Turn` : `Your Turn is Active — Ready to Start`)
+        : `Turn not assigned to you`;
+    }
+    document.getElementById('activeControllerText').innerText = controllerText;
+  }
+
+  // =========================================================================
+  // CONTACTOR CONTROL & FAIL-SAFE START/STOP
+  // =========================================================================
+  async function togglePump() {
+    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
+    const hasTurn = currentActiveTurn !== null;
+    const isMyTurn = hasTurn && authenticatedUser && (authenticatedUser.uid === currentActiveTurn.farmerUid || (authenticatedUser.phone && cleanPhone(authenticatedUser.phone) === cleanPhone(currentActiveTurn.farmerPhone)));
+    const allowed = isMaster ? true : isMyTurn;
+
+    if (!allowed) {
+      alert("Contactor locked! It is not your turn.");
+      return;
+    }
+
+    // Auto-bootstrap Owner Self-Run if Master clicks Start with no turn selected
+    if (!isPumpEngaged && isMaster && !currentActiveTurn) {
+      const now = Date.now();
+      const startTimeStr = new Date(now).toLocaleTimeString('en-IN', { hour12: true });
+      await rtdb.ref('/tubewell/active_turn').set({
+        farmerUid: 'OWNER_DIRECT',
+        farmerPhone: PRIMARY_MASTER,
+        farmerName: 'Owner Personal Field',
+        plot: 'Owner Estate Land',
+        isOwnerPersonalRun: true,
+        cycleStartTimestamp: now,
+        cycleStartTimeIso: startTimeStr,
+        accumulatedSecondsBeforeCurrentRun: 0,
+        isMotorRunning: false,
+        lastMotorStartTime: null
+      });
+    }
+
+    if (!isPumpEngaged) {
+      // START MOTOR
+      await rtdb.ref('/tubewell/active_turn').update({
+        isMotorRunning: true,
+        lastMotorStartTime: Date.now()
+      });
+      rtdb.ref('/tubewell/control/trigger_start').set(true);
+    } else {
+      // STOP MOTOR
+      const elapsedThisRun = currentActiveTurn.lastMotorStartTime 
+        ? Math.round((Date.now() - currentActiveTurn.lastMotorStartTime) / 1000) 
+        : 0;
+      const updatedTotal = (currentActiveTurn.accumulatedSecondsBeforeCurrentRun || 0) + elapsedThisRun;
+
+      await rtdb.ref('/tubewell/active_turn').update({
+        isMotorRunning: false,
+        accumulatedSecondsBeforeCurrentRun: updatedTotal,
+        lastMotorStartTime: null
+      });
+      rtdb.ref('/tubewell/control/trigger_stop').set(true);
+    }
+  }
+
+  // =========================================================================
+  // SURRENDER & REVOKE CYCLE COMMIT
+  // =========================================================================
+  async function completeAndCloseTurnCycle(closedBy = "farmer") {
+    if (!currentActiveTurn) return;
+
+    // Calculate final total running seconds
+    let finalSec = currentActiveTurn.accumulatedSecondsBeforeCurrentRun || 0;
+    if (currentActiveTurn.isMotorRunning && currentActiveTurn.lastMotorStartTime) {
+      finalSec += Math.round((Date.now() - currentActiveTurn.lastMotorStartTime) / 1000);
+      await rtdb.ref('/tubewell/control/trigger_stop').set(true);
+    }
+
+    const cycleEnd = Date.now();
+    const cycleEndTimeStr = new Date(cycleEnd).toLocaleTimeString('en-IN', { hour12: true });
+
+    const verifiedMins = Math.max(1, Math.round(finalSec / 60));
+    const verifiedHours = parseFloat((finalSec / 3600).toFixed(2));
+    const fare = parseFloat((verifiedMins * systemTariffPerMinute).toFixed(2));
+    const liters = Math.round(finalSec * 5.75);
+
+    const isOwnerRun = currentActiveTurn.isOwnerPersonalRun === true || currentActiveTurn.farmerUid === 'OWNER_DIRECT';
+
+    const cycleRecord = {
+      cycleId: (isOwnerRun ? 'OWN-CYC-' : 'CYC-') + Math.floor(1000 + Math.random() * 9000),
+      userUid: currentActiveTurn.farmerUid,
+      userId: currentActiveTurn.farmerPhone,
+      userName: currentActiveTurn.farmerName,
+      userPhone: currentActiveTurn.farmerPhone,
+      plot: currentActiveTurn.plot || 'Standard Plot',
+      isOwnerPersonalRun: isOwnerRun,
+      date: new Date().toLocaleDateString('en-IN'),
+      cycleStartIso: currentActiveTurn.cycleStartTimeIso,
+      cycleEndIso: cycleEndTimeStr,
+      durationHours: verifiedHours,
+      durationMins: verifiedMins,
+      litersDischarged: liters,
+      fare: fare,
+      billed: false,
+      closedBy: closedBy
+    };
+
+    await rtdb.ref('/tubewell/sessions').push(cycleRecord);
+    alert(`Turn finalized for ${currentActiveTurn.farmerName}!\n• Start: ${currentActiveTurn.cycleStartTimeIso}\n• Surrendered: ${cycleEndTimeStr}\n• Active Run: ${verifiedHours} Hours\n• Fare: ₹${fare.toFixed(2)}`);
+
+    await rtdb.ref('/tubewell/active_turn').remove();
+    await triggerAutomatedNextTurn();
+  }
+
+  function farmerRelinquishTurn() {
+    if (!confirm("Are you sure field irrigation is complete? This will surrender your turn and lock your contactor switch.")) return;
+    completeAndCloseTurnCycle("farmer");
+  }
+
+  function ownerForceEndTurn() {
+    if (!confirm("Revoke active turn? This will stop the motor and finalize this cycle's billing records.")) return;
+    completeAndCloseTurnCycle("owner");
+  }
+
+  // =========================================================================
+  // SAFE TOGGLE EDIT / SAVE USER FORM (PREVENTS ACCIDENTAL OVERWRITING)
+  // =========================================================================
+  function renderFarmerEditableDirectory() {
+    const tbody = document.getElementById('farmerEditableDirectoryBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    const keys = Object.keys(cloudFarmers);
+    if (keys.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-dim); padding:14px;">No registered farmers found. Add one above.</td></tr>';
+      return;
+    }
+
+    keys.forEach(uid => {
+      const f = cloudFarmers[uid];
+      const isEditing = (editingRowUid === uid);
+      const tr = document.createElement('tr');
+
+      if (isEditing) {
+        tr.innerHTML = `
+          <td><input type="text" id="row_name_${uid}" value="${f.name || ''}" style="width: 120px; padding: 4px;"></td>
+          <td><input type="tel" id="row_phone_${uid}" value="${f.phone || ''}" style="width: 105px; padding: 4px;"></td>
+          <td><input type="text" id="row_plot_${uid}" value="${f.plot || ''}" style="width: 110px; padding: 4px;"></td>
+          <td><input type="text" id="row_pin_${uid}" value="${f.pin || f.phone.slice(-4)}" style="width: 55px; text-align:center; padding: 4px;" maxlength="6"></td>
+          <td>
+            <button class="btn-s" style="padding: 4px 8px; font-size: 10px;" onclick="saveFarmerRow('${uid}')">💾 Save</button>
+            <button class="btn-w" style="padding: 4px 8px; font-size: 10px;" onclick="cancelFarmerRowEdit()">Cancel</button>
+          </td>
+          <td><button class="btn-d" style="padding: 4px 8px; font-size: 10px;" onclick="removeFarmer('${uid}')">Delete</button></td>
+        `;
+      } else {
+        tr.innerHTML = `
+          <td><strong>${f.name}</strong></td>
+          <td>+91-${f.phone}</td>
+          <td>${f.plot}</td>
+          <td><span style="font-family:monospace; background:#1e293b; padding:2px 6px; border-radius:4px;">${f.pin || f.phone.slice(-4)}</span></td>
+          <td>
+            <button class="btn-p" style="padding: 4px 8px; font-size: 10px;" onclick="enableFarmerRowEdit('${uid}')">✏️ Edit</button>
+          </td>
+          <td><button class="btn-d" style="padding: 4px 8px; font-size: 10px;" onclick="removeFarmer('${uid}')">Delete</button></td>
+        `;
+      }
+      tbody.appendChild(tr);
+    });
+  }
+
+  function enableFarmerRowEdit(uid) {
+    editingRowUid = uid;
+    renderFarmerEditableDirectory();
+  }
+
+  function cancelFarmerRowEdit() {
+    editingRowUid = null;
+    renderFarmerEditableDirectory();
+  }
+
+  async function saveFarmerRow(uid) {
+    const newName = document.getElementById(`row_name_${uid}`).value.trim();
+    const newPhone = cleanPhone(document.getElementById(`row_phone_${uid}`).value.trim());
+    const newPlot = document.getElementById(`row_plot_${uid}`).value.trim();
+    const newPin = document.getElementById(`row_pin_${uid}`).value.trim();
+
+    if (!newName || newPhone.length !== 10 || newPin.length < 4) {
+      alert("Valid Name, 10-digit Phone, and at least 4-digit PIN required.");
+      return;
+    }
+
+    await rtdb.ref(`/tubewell/farmers/${uid}`).update({
+      name: newName,
+      phone: newPhone,
+      plot: newPlot,
+      pin: newPin
+    });
+
+    editingRowUid = null;
+    alert(`Saved! Name and Phone updated for ${newName}.\nPast sessions remain permanently linked.`);
+  }
+
+  async function registerFarmerInCloud() {
+    const name = document.getElementById('reg_name').value.trim();
+    const phone = cleanPhone(document.getElementById('reg_phone').value.trim());
+    const plot = document.getElementById('reg_plot').value.trim();
+    const customPin = document.getElementById('reg_custom_pin').value.trim();
+
+    if (!name || phone.length !== 10) {
+      alert("Please provide a valid name and 10-digit mobile number.");
+      return;
+    }
+
+    const assignedPin = customPin.length >= 4 ? customPin : phone.slice(-4);
+    const count = Object.keys(cloudFarmers).length + 1;
+    const uid = 'FARM_' + Date.now();
+
+    await rtdb.ref('/tubewell/farmers/' + uid).set({
+      uid: uid,
+      queueOrder: count,
+      inQueue: true,
+      name,
+      phone,
+      plot: plot || "Standard Plot",
+      pin: assignedPin
+    });
+
+    alert(`Registered ${name} (+91-${phone}) with PIN: ${assignedPin}`);
+    document.getElementById('reg_name').value = '';
+    document.getElementById('reg_phone').value = '';
+    document.getElementById('reg_plot').value = '';
+    document.getElementById('reg_custom_pin').value = '';
+  }
+
+  async function removeFarmer(uid) {
+    if (confirm("Delete this farmer profile? Past records will remain archived in the ledger.")) {
+      await rtdb.ref('/tubewell/farmers/' + uid).remove();
+    }
+  }
+
+  // =========================================================================
+  // QUEUE & PRIVACY HELPERS
+  // =========================================================================
+  function updateQueueBadge() {
+    const badge = document.getElementById('queueModeBadge');
+    const toggleBtn = document.getElementById('btn_toggle_queue_mode');
+    if (isQueueAutoModeEnabled) {
+      badge.innerText = "Queue: ON (Auto-Transfer)";
+      badge.style.color = "var(--success)";
+      if (toggleBtn) {
+        toggleBtn.innerText = "Auto-Queue: ENABLED (Click to Disable)";
+        toggleBtn.className = "btn-s";
+      }
+    } else {
+      badge.innerText = "Queue: OFF (Manual Mode)";
+      badge.style.color = "var(--warning)";
+      if (toggleBtn) {
+        toggleBtn.innerText = "Auto-Queue: DISABLED (Click to Enable)";
+        toggleBtn.className = "btn-w";
+      }
+    }
+  }
+
+  async function toggleQueueMode() {
+    isQueueAutoModeEnabled = !isQueueAutoModeEnabled;
+    await rtdb.ref('/tubewell/system_meta/queueAutoMode').set(isQueueAutoModeEnabled);
+    updateQueueBadge();
+    updatePeerVisibilityCard();
+  }
+
+  function renderQueueTable() {
+    const tbody = document.getElementById('queueTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    const sorted = Object.keys(cloudFarmers).map(uid => cloudFarmers[uid]).sort((a, b) => (a.queueOrder || 99) - (b.queueOrder || 99));
+
+    sorted.forEach(f => {
+      const isCurrentActive = currentActiveTurn && currentActiveTurn.farmerUid === f.uid;
+      const inQueue = f.inQueue !== false;
+      
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <input type="number" value="${f.queueOrder || 1}" style="width: 55px; text-align:center; padding:3px;" 
+            onchange="updateFarmerQueue('${f.uid}', this.value)" min="1">
+        </td>
+        <td><strong>${f.name}</strong></td>
+        <td>${f.plot}</td>
+        <td>
+          <button class="${inQueue ? 'btn-p' : 'btn-w'}" style="padding: 3px 8px; font-size: 10px;" onclick="toggleFarmerQueueInclusion('${f.uid}', ${!inQueue})">
+            ${inQueue ? '✓ In Queue' : '⊘ Excluded'}
+          </button>
+        </td>
+        <td>
+          ${isCurrentActive 
+            ? `<button class="btn-d" style="padding:3px 7px; font-size:10px;" onclick="ownerForceEndTurn()">Stop & Close</button>`
+            : `<button class="btn-s" style="padding:3px 7px; font-size:10px;" onclick="executeMasterOverride('${f.uid}')">⚡ Activate Turn</button>`
+          }
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function updateFarmerQueue(uid, newOrder) {
+    await rtdb.ref(`/tubewell/farmers/${uid}/queueOrder`).set(parseInt(newOrder) || 1);
+  }
+
+  async function toggleFarmerQueueInclusion(uid, includeStatus) {
+    await rtdb.ref(`/tubewell/farmers/${uid}/inQueue`).set(includeStatus);
+  }
+
+  async function triggerAutomatedNextTurn() {
+    if (!isQueueAutoModeEnabled) return;
+
+    const activeQueueFarmers = Object.keys(cloudFarmers)
+      .map(uid => cloudFarmers[uid])
+      .filter(f => f.inQueue !== false)
+      .sort((a, b) => (a.queueOrder || 99) - (b.queueOrder || 99));
+
+    if (activeQueueFarmers.length === 0) return;
+
+    let nextFarmer = activeQueueFarmers[0];
+    if (currentActiveTurn) {
+      const currentIndex = activeQueueFarmers.findIndex(f => f.uid === currentActiveTurn.farmerUid);
+      if (currentIndex !== -1 && currentIndex + 1 < activeQueueFarmers.length) {
+        nextFarmer = activeQueueFarmers[currentIndex + 1];
+      }
+    }
+
+    if (nextFarmer) {
+      const now = Date.now();
+      const startTimeStr = new Date(now).toLocaleTimeString('en-IN', { hour12: true });
+
+      await rtdb.ref('/tubewell/active_turn').set({
+        farmerUid: nextFarmer.uid,
+        farmerPhone: nextFarmer.phone,
+        farmerName: nextFarmer.name,
+        plot: nextFarmer.plot,
+        isOwnerPersonalRun: false,
+        cycleStartTimestamp: now,
+        cycleStartTimeIso: startTimeStr,
+        accumulatedSecondsBeforeCurrentRun: 0,
+        isMotorRunning: false,
+        lastMotorStartTime: null
+      });
+    }
+  }
+
+  function updatePeerVisibilityCard() {
+    const peerCard = document.getElementById('farmerPeerQueueVisibilityBox');
+    if (!peerCard) return;
+
+    if (authenticatedUser && authenticatedUser.role === 'master') {
+      peerCard.style.display = 'none';
+      return;
+    }
+
+    if (!isQueueAutoModeEnabled) {
+      peerCard.style.display = 'none';
+      return;
+    }
+
+    peerCard.style.display = 'flex';
+    document.getElementById('lbl_peer_running').innerText = currentActiveTurn ? currentActiveTurn.farmerName : "None (Idle Standby)";
+
+    const sortedQueue = Object.keys(cloudFarmers)
+      .map(uid => cloudFarmers[uid])
+      .filter(f => f.inQueue !== false)
+      .sort((a, b) => (a.queueOrder || 99) - (b.queueOrder || 99));
+
+    let nextFarmerName = "End of Sequence";
+    if (currentActiveTurn && sortedQueue.length > 0) {
+      const activeIdx = sortedQueue.findIndex(f => f.uid === currentActiveTurn.farmerUid);
+      if (activeIdx !== -1 && activeIdx + 1 < sortedQueue.length) {
+        nextFarmerName = sortedQueue[activeIdx + 1].name;
+      } else if (sortedQueue.length > 0) {
+        nextFarmerName = sortedQueue[0].name;
+      }
+    } else if (sortedQueue.length > 0) {
+      nextFarmerName = sortedQueue[0].name;
+    }
+    document.getElementById('lbl_peer_next').innerText = nextFarmerName;
+  }
+
+  // =========================================================================
+  // DROPDOWNS & INVOICING
+  // =========================================================================
+  function populateImpersonationList() {
+    const sel = document.getElementById('sel_simulate_user');
+    const currentVal = currentActiveTurn ? (currentActiveTurn.isOwnerPersonalRun ? 'OWNER_DIRECT' : currentActiveTurn.farmerUid) : '';
+    
+    sel.innerHTML = '<option value="OWNER_DIRECT">⚡ Owner Personal Field (Self-Run)</option>';
+    
+    Object.keys(cloudFarmers).forEach(uid => {
+      const f = cloudFarmers[uid];
+      const opt = document.createElement('option');
+      opt.value = f.uid;
+      opt.textContent = `Turn For: ${f.name} (${f.plot})`;
+      sel.appendChild(opt);
+    });
+
+    sel.value = currentVal || 'OWNER_DIRECT';
+  }
+
+  function populateUserFilterDropdown() {
+    const sel = document.getElementById('sel_filter_user');
+    const prev = sel.value;
+    sel.innerHTML = '<option value="ALL">-- All Registered Farmers --</option><option value="OWNER_DIRECT">⚡ Owner Personal Field (Self-Runs)</option>';
+    
+    Object.keys(cloudFarmers).forEach(uid => {
+      const f = cloudFarmers[uid];
+      const opt = document.createElement('option');
+      opt.value = f.uid;
+      opt.textContent = `${f.name} (${f.plot})`;
+      sel.appendChild(opt);
+    });
+    sel.value = prev || 'ALL';
+  }
+
+  function handleLedgerFiltersChanged() {
+    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
+    let filtered = [...cloudSessions];
+
+    if (!isMaster) {
+      filtered = filtered.filter(s => s.userUid === authenticatedUser.uid || s.userPhone === authenticatedUser.phone);
+    } else {
+      const userFilter = document.getElementById('sel_filter_user').value;
+      if (userFilter === 'OWNER_DIRECT') {
+        filtered = filtered.filter(s => s.isOwnerPersonalRun === true || s.userUid === 'OWNER_DIRECT');
+      } else if (userFilter !== 'ALL') {
+        filtered = filtered.filter(s => s.userUid === userFilter || s.userPhone === userFilter);
+      }
+    }
+
+    const tbody = document.getElementById('ledgerTableBody');
+    tbody.innerHTML = '';
+
+    filtered.reverse().forEach(s => {
+      const isOwnerRun = s.isOwnerPersonalRun === true || s.userUid === 'OWNER_DIRECT';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><span style="font-family:monospace; color:var(--primary); font-weight:bold;">${s.cycleId || s.sessionId}</span></td>
+        <td><strong>${s.userName}</strong> ${isOwnerRun ? '<span style="font-size:9px; color:var(--warning);">(Owner Self-Run)</span>' : ''}</td>
+        <td style="color:var(--success); font-family:monospace;">${s.date} ${s.cycleStartIso || s.startIso}</td>
+        <td style="color:var(--danger); font-family:monospace;">${s.date} ${s.cycleEndIso || s.endIso}</td>
+        <td><strong>${(parseFloat(s.durationHours) || 0).toFixed(2)} hrs</strong></td>
+        <td>${(s.litersDischarged || 0).toLocaleString()} L</td>
+        <td style="font-weight:bold; color:var(--success);">₹${(parseFloat(s.fare) || 0).toFixed(2)}</td>
+        <td>
+          <span style="font-size:9px; padding:2px 5px; border-radius:4px; ${s.billed ? 'background:#15803d; color:#fff;' : 'background:#ca8a04; color:#fff;'}">
+            ${s.billed ? 'Billed' : 'Unbilled'}
+          </span>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function generateCycleBill() {
+    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
+    let targetUid = null;
+    let targetName = "";
+    let targetPlot = "";
+    let targetPhone = "";
+    let isOwnerRun = false;
+
+    if (!isMaster) {
+      targetUid = authenticatedUser.uid;
+      targetName = authenticatedUser.name;
+      targetPlot = authenticatedUser.plot;
+      targetPhone = authenticatedUser.phone;
+    } else {
+      const filterVal = document.getElementById('sel_filter_user').value;
+      if (filterVal === 'ALL') {
+        alert("Please select a specific farmer or 'Owner Personal Field' from the dropdown to generate an invoice.");
+        return;
+      }
+      
+      if (filterVal === 'OWNER_DIRECT') {
+        targetUid = 'OWNER_DIRECT';
+        targetName = 'Owner Personal Field (Self)';
+        targetPlot = 'Owner Estate Plot';
+        targetPhone = PRIMARY_MASTER;
+        isOwnerRun = true;
+      } else {
+        const f = cloudFarmers[filterVal];
+        if (!f) {
+          alert("Selected user record not found.");
+          return;
+        }
+        targetUid = f.uid;
+        targetName = f.name;
+        targetPlot = f.plot;
+        targetPhone = f.phone;
+      }
+    }
+
+    const unbilled = cloudSessions.filter(s => (s.userUid === targetUid || s.userPhone === targetPhone) && !s.billed);
+    if (unbilled.length === 0) {
+      alert(`No unbilled runs available for ${targetName}.`);
+      return;
+    }
+
+    let totalMins = 0, totalFare = 0, totalLit = 0;
+    const invTableBody = document.getElementById('invTableBody');
+    invTableBody.innerHTML = '';
+    const plainTextRows = [];
+
+    for (let s of unbilled) {
+      const sMins = parseInt(s.durationMins) || 0;
+      const sFare = parseFloat(s.fare) || 0;
+      const sLit = s.litersDischarged || 0;
+
+      totalMins += sMins;
+      totalFare += sFare;
+      totalLit += sLit;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${s.date}</td>
+        <td style="color:#059669; font-family:monospace;">${s.cycleStartIso || s.startIso}</td>
+        <td style="color:#dc2626; font-family:monospace;">${s.cycleEndIso || s.endIso}</td>
+        <td><strong>${parseFloat(s.durationHours).toFixed(2)} hrs</strong></td>
+        <td>${sLit.toLocaleString()} L</td>
+        <td style="text-align:right; font-weight:bold; color:#0f172a;">₹${sFare.toFixed(2)}</td>
+      `;
+      invTableBody.appendChild(tr);
+
+      plainTextRows.push(`• ${s.date} | Handover: ${s.cycleStartIso || s.startIso} | Surrendered: ${s.cycleEndIso || s.endIso} | Run: ${parseFloat(s.durationHours).toFixed(2)} hrs | Fare: ₹${sFare.toFixed(2)}`);
+      await rtdb.ref(`/tubewell/sessions/${s.sessionId}/billed`).set(true);
+    }
+
+    const billRef = (isOwnerRun ? 'OWN-INV-' : 'INV-') + Date.now().toString().slice(-6);
+    const currentDate = new Date().toLocaleDateString('en-IN');
+
+    document.getElementById('inv_ref_no').innerText = billRef;
+    document.getElementById('inv_date').innerText = `Date: ${currentDate}`;
+    document.getElementById('inv_farmer_name').innerText = targetName;
+    document.getElementById('inv_farmer_plot').innerText = `Plot: ${targetPlot}`;
+    document.getElementById('inv_farmer_phone').innerText = `Phone: +91-${targetPhone}`;
+    document.getElementById('inv_cycle_window').innerText = `Turn Cycle Window`;
+    document.getElementById('inv_total_fare').innerText = `₹${totalFare.toFixed(2)}`;
+    document.getElementById('inv_status_tag').innerText = isOwnerRun ? "OWNER COST AUDIT" : "ORIGINAL BILL";
+
+    generatedBillPlainText = 
+`========================================
+   ⚡ TUBEWELL WATER DISTRIBUTION INVOICE   
+========================================
+Invoice Ref   : ${billRef}
+Date          : ${currentDate}
+Account       : ${targetName}
+Plot Identity : ${targetPlot}
+Mobile Number : +91-${targetPhone}
+----------------------------------------
+Verified Pumping Time : ${(totalMins / 60).toFixed(2)} Hours (${totalMins} Mins)
+Water Volume Pumped   : ${totalLit.toLocaleString()} Litres
+Tariff Rate Applied   : ₹${systemTariffPerMinute.toFixed(2)}/min (₹${(systemTariffPerMinute * 60).toFixed(0)}/hr)
+----------------------------------------
+TURN CYCLE TIMESTAMPS:
+${plainTextRows.join('\n')}
+----------------------------------------
+TOTAL AMOUNT DUE      : ₹${totalFare.toFixed(2)}
+Type: ${isOwnerRun ? "OWNER INTERNAL COST AUDIT" : "ORIGINAL INVOICE (UNPAID)"}
+========================================
+Verified by Tubewell Smart Grid
+Master Station: +91-${PRIMARY_MASTER}`;
+
+    document.getElementById('printableInvoiceCard').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function dispatchDirectWhatsAppBill() {
+    if (!generatedBillPlainText) {
+      alert("Please generate the official bill first.");
+      return;
+    }
+
+    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
+    let phone = "";
+
+    if (!isMaster) {
+      phone = authenticatedUser.phone;
+    } else {
+      const filterVal = document.getElementById('sel_filter_user').value;
+      if (filterVal === 'OWNER_DIRECT') {
+        phone = PRIMARY_MASTER;
+      } else {
+        const f = cloudFarmers[filterVal];
+        phone = f ? f.phone : prompt("Enter recipient 10-digit WhatsApp number:", "");
+      }
+    }
+
+    if (!phone) return;
+    window.open(`https://wa.me/91${cleanPhone(phone)}?text=${encodeURIComponent(generatedBillPlainText)}`, '_blank');
+  }
+
+  async function saveNewMasterPin() {
+    const newPin = document.getElementById('edit_master_pin').value.trim();
+    if (newPin.length < 4) {
+      alert("Master PIN must be at least 4 digits.");
+      return;
+    }
+    await rtdb.ref('/tubewell/system_meta/masterPin').set(newPin);
+    document.getElementById('edit_master_pin').value = '';
+    alert("Master Security PIN updated successfully!");
+  }
+
+  async function updateSystemTariff() {
+    const val = parseFloat(document.getElementById('cfg_rate_minute').value);
+    if (val > 0) {
+      await rtdb.ref('/tubewell/system_meta/tariff').set(val);
+      alert(`Tariff updated to ₹${val.toFixed(2)}/min.`);
+    }
+  }
+</script>
+</body>
+</html>
