@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#070b14">
-  <title>Tubewell Smart Grid 17.0 - Active Turn & Master Override</title>
+  <title>Tubewell Smart Grid 19.0 - Dual-Master Synchronized Grid</title>
   
   <!-- Firebase App & Realtime Database SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -64,6 +64,7 @@
     .btn-s { background: var(--success); border-color: var(--success); color: #fff; }
     .btn-d { background: var(--danger); border-color: var(--danger); color: #fff; }
     .btn-w { background: var(--warning); border-color: var(--warning); color: #fff; }
+    .btn-ai { background: var(--purple); border-color: var(--purple); color: #fff; }
 
     .telemetry-grid {
       display: grid;
@@ -176,6 +177,7 @@
       .invoice-container { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
     }
 
+    /* 2-Step Login Modal */
     .auth-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -208,7 +210,7 @@
     <div style="font-size: 18px; font-weight: 800; color: var(--primary);">⚡ Tubewell Secured Terminal</div>
     <p style="font-size: 11.5px; color: var(--text-dim);">Enter registered mobile number and private PIN to sign in.</p>
     
-    <!-- Step 1: Phone Validation -->
+    <!-- Step 1: Mobile Number Validation -->
     <div id="step_phone">
       <label style="font-size: 11px; font-weight: bold; color: var(--text-dim);">Registered Mobile Number</label>
       <input type="tel" id="auth_phone_input" placeholder="10-digit mobile" style="width: 100%; margin-top: 4px;" value="8354816628">
@@ -223,7 +225,7 @@
       <input type="password" id="auth_pin_input" placeholder="••••" style="width: 100%; margin-top: 4px; font-size: 16px; letter-spacing: 4px; text-align: center;" maxlength="8">
       <div id="pin_hint_text" style="font-size: 10px; color: var(--text-dim); margin-top: 3px;"></div>
       <button class="btn-s" id="btn_sign_in" style="width: 100%; margin-top: 10px;" onclick="authenticateWithPin()">Sign In</button>
-      <button class="btn-w" style="width: 100%; margin-top: 6px; font-size: 11px;" onclick="resetLoginStep()">Back</button>
+      <button class="btn-w" style="width: 100%; margin-top: 6px; font-size: 11px;" onclick="resetLoginStep()">Back to Phone</button>
     </div>
   </div>
 </div>
@@ -232,8 +234,8 @@
   <header>
     <div class="brand">
       <span>⚡</span>
-      <span>Tubewell Grid 17.0 Pro</span>
-      <span class="badge" id="queueModeBadge">Queue: OFF (Manual Mode)</span>
+      <span>Tubewell Grid 19.0 Pro</span>
+      <span class="badge" id="queueModeBadge">Queue: OFF</span>
     </div>
     <div style="display: flex; align-items: center; gap: 8px;">
       <div class="badge" id="userBadge">Authenticating...</div>
@@ -295,10 +297,10 @@
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span style="color: var(--text-dim);">Turn Active For:</span>
-          <span style="font-weight: bold; color: var(--primary);" id="lbl_turn_state_desc">Standby (Owner Own-Field Default)</span>
+          <span style="font-weight: bold; color: var(--primary);" id="lbl_turn_state_desc">Standby (Owner Field Default)</span>
         </div>
         
-        <!-- Owner Internal Telemetry Box -->
+        <!-- Owner Internal Telemetry Box (Hidden from Farmers) -->
         <div id="ownerInternalMetricsBox" style="display: none; border-top: 1px dashed var(--border); padding-top: 6px; margin-top: 2px;">
           <div style="display: flex; justify-content: space-between;">
             <span style="color: var(--text-dim);">Current Run Pumping Time:</span>
@@ -311,7 +313,7 @@
         </div>
       </div>
 
-      <!-- Peer Visibility Box for Farmers (When Queue Mode is ON) -->
+      <!-- Peer Visibility Box for Farmers (Visible ONLY when Queue is Enabled) -->
       <div class="privacy-queue-box" id="farmerPeerQueueVisibilityBox" style="display: none;">
         <div style="font-size: 11px; font-weight: bold; color: #d8b4fe;">⚡ Neighborhood Turn Sequence:</div>
         <div style="display: flex; justify-content: space-between;">
@@ -346,13 +348,13 @@
       <div id="ownerImpersonationPanel" style="display: none; border-top: 1px solid var(--border); padding-top: 8px; flex-direction: column; gap: 6px;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span style="font-size: 11.5px; font-weight: bold; color: var(--primary);">⚡ Master Override: Select Field to Run</span>
-          <span id="override_status_tag" style="font-size: 10px; color: var(--warning); font-weight: bold;">Instant Switch</span>
+          <span style="font-size: 10px; color: var(--warning); font-weight: bold;">Instant Switch</span>
         </div>
         <select id="sel_simulate_user" onchange="executeMasterOverride(this.value)"></select>
       </div>
     </div>
 
-    <!-- Right Column: Queue Manager, Master Controls & Invoices -->
+    <!-- Right Column: Queue Manager, Dual-Master Settings & Invoices -->
     <div style="display: flex; flex-direction: column; gap: 12px;">
       
       <!-- OWNER QUEUE CONTROLLER & ROSTER MANAGEMENT -->
@@ -384,9 +386,51 @@
         </div>
       </div>
 
+      <!-- DUAL-MASTER & CO-MASTER SYNCHRONIZATION CONSOLE (PRIMARY MASTER ONLY) -->
+      <div class="panel" id="coMasterConsolePanel" style="display: none;">
+        <h3>
+          <span>👥 Dual-Master & Co-Owner Synchronization Console</span>
+          <span class="badge" style="color: var(--purple);">Primary Authority Only</span>
+        </h3>
+        <p style="font-size: 11px; color: var(--text-dim); margin-top: -4px;">
+          The Primary Master can authorize a <strong>Secondary Master / Partner</strong>. Both masters have synchronized controls over motor starts, turn handovers, queue order, and invoicing.
+        </p>
+
+        <!-- Current Co-Master Card -->
+        <div style="background: rgba(168, 85, 247, 0.08); border: 1px solid var(--purple); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; font-weight: bold; color: #d8b4fe;">Assigned Secondary Master:</span>
+            <span id="coMasterStatusTag" class="badge" style="color: var(--warning);">None Assigned</span>
+          </div>
+          <div style="font-size: 11.5px; color: var(--text);" id="coMasterDetailsText">
+            No secondary master active. Assign a trusted partner below.
+          </div>
+          
+          <!-- Assignment / Edit Form -->
+          <div style="display: grid; grid-template-columns: 1fr 120px 90px auto; gap: 6px; margin-top: 4px;">
+            <input type="text" id="co_name" placeholder="Co-Master Name (e.g. Brother/Partner)">
+            <input type="tel" id="co_phone" placeholder="10-digit Mobile">
+            <input type="text" id="co_pin" placeholder="PIN (4-digit)" maxlength="6">
+            <button class="btn-ai" onclick="saveSecondaryMaster()">Save Co-Master</button>
+          </div>
+          <div style="display: flex; justify-content: flex-end;">
+            <button id="btn_revoke_co_master" class="btn-d" style="padding: 4px 10px; font-size: 11px; display: none;" onclick="revokeSecondaryMaster()">Revoke Co-Master Rights</button>
+          </div>
+        </div>
+      </div>
+
       <!-- MASTER SETTINGS & IMMUTABLE DIRECTORY WITH SAFE EDIT/SAVE FORM -->
       <div class="panel" id="masterPanel" style="display: none;">
         <h3>Master Administration, User Directory & Tariff</h3>
+
+        <!-- OTA Auto-Update Push Tool for Owners -->
+        <div style="background: rgba(2, 132, 199, 0.08); border: 1px dashed var(--primary); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <div style="font-size: 11.5px; font-weight: bold; color: var(--primary);">📲 Push App Update to All Phones:</div>
+            <div style="font-size: 10px; color: var(--text-dim);">Forces all connected farmer dashboards to refresh and load your latest features.</div>
+          </div>
+          <button class="btn-p" onclick="pushGlobalAppUpdate()">Push Over-The-Air Update</button>
+        </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
           <div style="font-size: 11.5px; font-weight: bold;">🔑 Master PIN:</div>
@@ -558,6 +602,8 @@
   const rtdb = firebase.database();
 
   const PRIMARY_MASTER = "8354816628";
+  const LOCAL_APP_VERSION = "19.0";
+
   let authenticatedUser = null;
   let userInVerification = null;
   let systemTariffPerMinute = 2.00;
@@ -565,7 +611,9 @@
   let isPumpEngaged = false;
   let tickerTimer = null;
 
-  // Cache & Active States
+  // Dual Master Registry Cache
+  let secondaryMasterConfig = null;
+
   let cloudFarmers = {};
   let cloudSessions = [];
   let currentActiveTurn = null;
@@ -585,7 +633,7 @@
   }
 
   // =========================================================================
-  // HARDENED 2-STEP SECURE PIN AUTHENTICATION
+  // DUAL-MASTER AUTHENTICATION
   // =========================================================================
   async function verifyUserInCloud() {
     const btn = document.getElementById('btn_verify_phone');
@@ -599,23 +647,41 @@
     btn.disabled = true;
 
     try {
+      // 1. Fetch system meta for primary and secondary master records
+      let meta = {};
+      try {
+        const snap = await fetchWithTimeout(rtdb.ref('/tubewell/system_meta'), 2000);
+        meta = snap.val() || {};
+      } catch (e) {
+        console.warn("Using offline master bootstrap PIN (8354)");
+      }
+
+      const coMaster = meta.secondaryMaster || null;
+
+      // 2. Check if entered number is PRIMARY MASTER
       if (p === PRIMARY_MASTER) {
-        let meta = {};
-        try {
-          const snap = await fetchWithTimeout(rtdb.ref('/tubewell/system_meta'), 1500);
-          meta = snap.val() || {};
-        } catch (e) {
-          console.warn("Using offline master bootstrap PIN (8354)");
-        }
-        
         userInVerification = {
           role: 'master',
+          masterTier: 'primary',
           uid: 'MASTER_ROOT',
-          name: 'Authorized Grid Master',
+          name: 'Primary Grid Master',
           phone: PRIMARY_MASTER,
           pin: String(meta.masterPin || '8354')
         };
-      } else {
+      } 
+      // 3. Check if entered number is SECONDARY MASTER (Co-Master)
+      else if (coMaster && coMaster.active && cleanPhone(coMaster.phone) === p) {
+        userInVerification = {
+          role: 'master',
+          masterTier: 'secondary',
+          uid: 'CO_MASTER_' + p,
+          name: coMaster.name || 'Secondary Grid Master',
+          phone: p,
+          pin: String(coMaster.pin || '1234')
+        };
+      } 
+      // 4. Otherwise check standard registered farmers
+      else {
         const snap = await fetchWithTimeout(rtdb.ref('/tubewell/farmers'), 2500);
         const allFarmers = snap.val() || {};
         
@@ -646,18 +712,18 @@
       document.getElementById('auth_user_label').innerText = `${userInVerification.name} (+91-${userInVerification.phone})`;
       
       const pinHint = document.getElementById('pin_hint_text');
-      pinHint.innerText = (userInVerification.role === 'master') ? "Master PIN required." : "Enter your registered secret 4-digit PIN.";
+      pinHint.innerText = (userInVerification.role === 'master') ? "Master Authentication PIN required." : "Enter your registered secret 4-digit PIN.";
       document.getElementById('auth_pin_input').value = '';
       document.getElementById('auth_pin_input').focus();
     } catch (err) {
       if (p === PRIMARY_MASTER) {
-        userInVerification = { role: 'master', uid: 'MASTER_ROOT', name: 'Authorized Grid Master', phone: PRIMARY_MASTER, pin: '8354' };
+        userInVerification = { role: 'master', masterTier: 'primary', uid: 'MASTER_ROOT', name: 'Primary Grid Master', phone: PRIMARY_MASTER, pin: '8354' };
         document.getElementById('step_phone').style.display = 'none';
         document.getElementById('step_pin').style.display = 'block';
-        document.getElementById('auth_user_label').innerText = `Authorized Grid Master (+91-8354816628)`;
+        document.getElementById('auth_user_label').innerText = `Primary Grid Master (+91-8354816628)`;
         document.getElementById('pin_hint_text').innerText = "Default Master PIN: 8354";
       } else {
-        alert("Connection timeout. Please check your internet connection and retry.");
+        alert("Connection timeout. Please check internet connectivity and retry.");
       }
     } finally {
       btn.innerText = "Continue to PIN ➔";
@@ -679,7 +745,12 @@
 
     authenticatedUser = userInVerification;
     document.getElementById('authGateway').style.display = 'none';
-    document.getElementById('userBadge').innerText = `${authenticatedUser.name} (${authenticatedUser.role.toUpperCase()})`;
+    
+    const roleTitle = authenticatedUser.role === 'master' 
+      ? (authenticatedUser.masterTier === 'primary' ? 'PRIMARY MASTER' : 'CO-MASTER')
+      : 'FARMER';
+      
+    document.getElementById('userBadge').innerText = `${authenticatedUser.name} (${roleTitle})`;
 
     initUserInterface();
   }
@@ -701,23 +772,42 @@
   // =========================================================================
   function initUserInterface() {
     const isMaster = (authenticatedUser.role === 'master');
+    const isPrimaryMaster = (isMaster && authenticatedUser.masterTier === 'primary');
     
+    // Panels visible to both Masters
     document.getElementById('masterPanel').style.display = isMaster ? 'flex' : 'none';
     document.getElementById('queuePanel').style.display = isMaster ? 'flex' : 'none';
     document.getElementById('ownerImpersonationPanel').style.display = isMaster ? 'flex' : 'none';
     document.getElementById('ownerInternalMetricsBox').style.display = isMaster ? 'block' : 'none';
     document.getElementById('ledgerFilterRibbon').style.display = isMaster ? 'flex' : 'none';
 
+    // Panel visible exclusively to Primary Master
+    document.getElementById('coMasterConsolePanel').style.display = isPrimaryMaster ? 'flex' : 'none';
+
+    // System Settings Listener (Includes Co-Master Config)
     rtdb.ref('/tubewell/system_meta').on('value', snap => {
       const meta = snap.val() || {};
       systemTariffPerMinute = meta.tariff || 2.00;
       isQueueAutoModeEnabled = meta.queueAutoMode === true;
       document.getElementById('cfg_rate_minute').value = systemTariffPerMinute.toFixed(2);
+      
+      secondaryMasterConfig = meta.secondaryMaster || null;
+      renderCoMasterStatusUI();
+
+      // Revocation Security Guard: If secondary master gets logged out by primary
+      if (authenticatedUser && authenticatedUser.masterTier === 'secondary') {
+        if (!secondaryMasterConfig || !secondaryMasterConfig.active || cleanPhone(secondaryMasterConfig.phone) !== cleanPhone(authenticatedUser.phone)) {
+          alert("Your Co-Master privileges have been modified or revoked by the Primary Master.");
+          logout();
+          return;
+        }
+      }
+
       updateQueueBadge();
       updatePeerVisibilityCard();
     });
 
-    // Normalize Farmers into cloudFarmers with Guaranteed UID, Phone & Name
+    // Farmers Registry Listener
     rtdb.ref('/tubewell/farmers').on('value', snap => {
       const raw = snap.val() || {};
       cloudFarmers = {};
@@ -749,7 +839,7 @@
       updatePeerVisibilityCard();
     });
 
-    // Real-Time Turn Synchronization
+    // Active Turn Synchronizer (Shared between both Masters and Farmers)
     rtdb.ref('/tubewell/active_turn').on('value', snap => {
       currentActiveTurn = snap.val() || null;
       
@@ -795,10 +885,78 @@
       document.getElementById('v_y').innerText = `${telem.vY || 414} V`;
       document.getElementById('v_b').innerText = `${telem.vB || 410} V`;
     });
+
+    initAutoUpdateEngine();
   }
 
   // =========================================================================
-  // PRECISE RUNTIME TRACKING VIA EPOCH TIMESTAMPS
+  // CO-MASTER MANAGEMENT (PRIMARY MASTER EXCLUSIVE)
+  // =========================================================================
+  function renderCoMasterStatusUI() {
+    const statusTag = document.getElementById('coMasterStatusTag');
+    const detailsText = document.getElementById('coMasterDetailsText');
+    const revokeBtn = document.getElementById('btn_revoke_co_master');
+
+    if (secondaryMasterConfig && secondaryMasterConfig.active) {
+      statusTag.innerText = "Active Co-Master";
+      statusTag.className = "badge";
+      statusTag.style.color = "var(--success)";
+      
+      detailsText.innerHTML = `
+        <strong>${secondaryMasterConfig.name}</strong> (+91-${secondaryMasterConfig.phone}) | Assigned PIN: <code>${secondaryMasterConfig.pin}</code><br>
+        <span style="font-size:10px; color:var(--text-dim);">This co-master has full simultaneous control over the grid and contactor.</span>
+      `;
+      
+      document.getElementById('co_name').value = secondaryMasterConfig.name || '';
+      document.getElementById('co_phone').value = secondaryMasterConfig.phone || '';
+      document.getElementById('co_pin').value = secondaryMasterConfig.pin || '';
+      revokeBtn.style.display = 'inline-flex';
+    } else {
+      statusTag.innerText = "No Co-Master Active";
+      statusTag.className = "badge";
+      statusTag.style.color = "var(--warning)";
+      detailsText.innerText = "No secondary master authorized. You alone have administrative master rights.";
+      revokeBtn.style.display = 'none';
+    }
+  }
+
+  async function saveSecondaryMaster() {
+    const name = document.getElementById('co_name').value.trim();
+    const phone = cleanPhone(document.getElementById('co_phone').value.trim());
+    const pin = document.getElementById('co_pin').value.trim();
+
+    if (!name || phone.length !== 10 || pin.length < 4) {
+      alert("Please provide Co-Master Name, valid 10-digit mobile, and at least 4-digit PIN.");
+      return;
+    }
+
+    if (phone === PRIMARY_MASTER) {
+      alert("Primary master number cannot be assigned as secondary master.");
+      return;
+    }
+
+    await rtdb.ref('/tubewell/system_meta/secondaryMaster').set({
+      name: name,
+      phone: phone,
+      pin: pin,
+      active: true,
+      assignedAt: Date.now()
+    });
+
+    alert(`Co-Master Assigned!\n${name} (+91-${phone}) can now sign in with PIN: ${pin} as an authorized Co-Master with live synchronization.`);
+  }
+
+  async function revokeSecondaryMaster() {
+    if (!confirm("Revoke all Co-Master administrative privileges for this user?")) return;
+    await rtdb.ref('/tubewell/system_meta/secondaryMaster').remove();
+    document.getElementById('co_name').value = '';
+    document.getElementById('co_phone').value = '';
+    document.getElementById('co_pin').value = '';
+    alert("Co-Master privileges revoked.");
+  }
+
+  // =========================================================================
+  // RUNTIME CALCULATIONS
   // =========================================================================
   function getAccurateTurnSeconds() {
     if (!currentActiveTurn) return 0;
@@ -828,7 +986,7 @@
   }
 
   // =========================================================================
-  // MASTER OVERRIDE: DIRECT INSTANT HANDOVER (FIXED & TESTED)
+  // MASTER OVERRIDE: DIRECT INSTANT HANDOVER
   // =========================================================================
   async function executeMasterOverride(selectedUid) {
     if (!authenticatedUser || authenticatedUser.role !== 'master') return;
@@ -843,7 +1001,6 @@
     const startTimeStr = new Date(now).toLocaleTimeString('en-IN', { hour12: true });
 
     if (!selectedUid || selectedUid === 'OWNER_DIRECT') {
-      // Switched to Master's own field
       await rtdb.ref('/tubewell/active_turn').set({
         farmerUid: 'OWNER_DIRECT',
         farmerPhone: PRIMARY_MASTER,
@@ -859,12 +1016,8 @@
       alert("⚡ Active Turn Switched to: Owner Personal Field (Self-Run).\nContactor is ready to start.");
     } else {
       const targetFarmer = cloudFarmers[selectedUid];
-      if (!targetFarmer) {
-        alert("Farmer record not found. Please refresh and try again.");
-        return;
-      }
+      if (!targetFarmer) return;
 
-      // Immediately commit active turn to Firebase
       await rtdb.ref('/tubewell/active_turn').set({
         farmerUid: targetFarmer.uid,
         farmerPhone: targetFarmer.phone,
@@ -878,7 +1031,7 @@
         lastMotorStartTime: null
       });
 
-      alert(`⚡ Master Override Successful!\nTurn activated for: ${targetFarmer.name} (${targetFarmer.plot}).\nContactor is unlocked for both Owner and ${targetFarmer.name}.`);
+      alert(`⚡ Master Override Successful!\nTurn activated for: ${targetFarmer.name} (${targetFarmer.plot}).\nBoth Masters and ${targetFarmer.name} now share synchronized contactor access.`);
     }
   }
 
@@ -896,7 +1049,7 @@
       document.getElementById('ownerRevokeTurnBox').style.display = isMaster ? 'block' : 'none';
     } else {
       document.getElementById('lbl_cycle_start').innerText = "Standby";
-      document.getElementById('lbl_turn_state_desc').innerText = "Standby (Owner Own-Field Default)";
+      document.getElementById('lbl_turn_state_desc').innerText = "Standby (Owner Field Default)";
       document.getElementById('lbl_turn_state_desc').style.color = "var(--text-dim)";
       document.getElementById('farmerClosureBox').style.display = 'none';
       document.getElementById('ownerRevokeTurnBox').style.display = 'none';
@@ -909,7 +1062,7 @@
     const hasTurn = currentActiveTurn !== null;
     const isMyTurn = hasTurn && authenticatedUser && (authenticatedUser.uid === currentActiveTurn.farmerUid || (authenticatedUser.phone && cleanPhone(authenticatedUser.phone) === cleanPhone(currentActiveTurn.farmerPhone)));
 
-    // Permission check: Master can ALWAYS operate. Farmer operates only if it is their active turn.
+    // Permission check: Any Master can operate. Farmer operates only if it is their active turn.
     const allowed = isMaster ? true : isMyTurn;
 
     if (!allowed) {
@@ -940,7 +1093,7 @@
   }
 
   // =========================================================================
-  // CONTACTOR CONTROL & FAIL-SAFE START/STOP
+  // CONTACTOR CONTROL
   // =========================================================================
   async function togglePump() {
     const isMaster = authenticatedUser && authenticatedUser.role === 'master';
@@ -953,7 +1106,6 @@
       return;
     }
 
-    // Auto-bootstrap Owner Self-Run if Master clicks Start with no turn selected
     if (!isPumpEngaged && isMaster && !currentActiveTurn) {
       const now = Date.now();
       const startTimeStr = new Date(now).toLocaleTimeString('en-IN', { hour12: true });
@@ -972,14 +1124,12 @@
     }
 
     if (!isPumpEngaged) {
-      // START MOTOR
       await rtdb.ref('/tubewell/active_turn').update({
         isMotorRunning: true,
         lastMotorStartTime: Date.now()
       });
       rtdb.ref('/tubewell/control/trigger_start').set(true);
     } else {
-      // STOP MOTOR
       const elapsedThisRun = currentActiveTurn.lastMotorStartTime 
         ? Math.round((Date.now() - currentActiveTurn.lastMotorStartTime) / 1000) 
         : 0;
@@ -1000,7 +1150,6 @@
   async function completeAndCloseTurnCycle(closedBy = "farmer") {
     if (!currentActiveTurn) return;
 
-    // Calculate final total running seconds
     let finalSec = currentActiveTurn.accumulatedSecondsBeforeCurrentRun || 0;
     if (currentActiveTurn.isMotorRunning && currentActiveTurn.lastMotorStartTime) {
       finalSec += Math.round((Date.now() - currentActiveTurn.lastMotorStartTime) / 1000);
@@ -1054,7 +1203,7 @@
   }
 
   // =========================================================================
-  // SAFE TOGGLE EDIT / SAVE USER FORM (PREVENTS ACCIDENTAL OVERWRITING)
+  // SAFE EDIT / SAVE FORM (IMMUTABLE UID PRESERVED)
   // =========================================================================
   function renderFarmerEditableDirectory() {
     const tbody = document.getElementById('farmerEditableDirectoryBody');
@@ -1544,6 +1693,17 @@ Master Station: +91-${PRIMARY_MASTER}`;
       await rtdb.ref('/tubewell/system_meta/tariff').set(val);
       alert(`Tariff updated to ₹${val.toFixed(2)}/min.`);
     }
+  }
+
+  // Register Service Worker for offline resilience & updates
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => {
+          setInterval(() => { reg.update(); }, 15 * 60 * 1000);
+        })
+        .catch(err => console.log('SW registration skipped:', err));
+    });
   }
 </script>
 </body>
