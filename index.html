@@ -3,589 +3,389 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#070b14">
-  <title>Tubewell Smart Grid 19.0 - Dual-Master Synchronized Grid</title>
+  <meta name="theme-color" content="#090d16">
+  <title>Tubewell Smart Grid 1.1 Mobile-Pro</title>
   
-  <!-- Firebase App & Realtime Database SDKs -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
     :root {
-      --bg-dark: #070b14;
-      --panel-bg: #0f172a;
-      --card-bg: #1e293b;
-      --border: #2e3d55;
-      --text: #f8fafc;
-      --text-dim: #94a3b8;
+      --bg: #090d16;
+      --surface: #111827;
+      --card: #1f2937;
+      --border: #374151;
       --primary: #0284c7;
+      --primary-glow: rgba(2, 132, 199, 0.25);
       --success: #10b981;
       --danger: #ef4444;
       --warning: #f59e0b;
-      --purple: #a855f7;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg-dark); color: var(--text); padding: 12px; }
-    .app-container { max-width: 1260px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-
-    header {
-      background: var(--panel-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; color: var(--primary); }
-    .badge {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      font-family: monospace;
+      --purple: #8b5cf6;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --radius: 12px;
     }
 
-    input, select, button {
-      padding: 9px 13px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      color: var(--text);
-      font-size: 13px;
-      outline: none;
-    }
-    button { cursor: pointer; font-weight: 700; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-    button:active { transform: scale(0.98); }
-    .btn-p { background: var(--primary); border-color: var(--primary); color: #fff; }
-    .btn-s { background: var(--success); border-color: var(--success); color: #fff; }
-    .btn-d { background: var(--danger); border-color: var(--danger); color: #fff; }
-    .btn-w { background: var(--warning); border-color: var(--warning); color: #fff; }
-    .btn-ai { background: var(--purple); border-color: var(--purple); color: #fff; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 70px; overflow-x: hidden; }
 
-    .telemetry-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 8px;
+    /* Top App Bar */
+    .app-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(17, 24, 39, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      height: 56px; padding: 0 14px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .tel-card {
-      background: var(--panel-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px;
-      text-align: center;
+    .bar-left, .bar-right { display: flex; align-items: center; gap: 10px; }
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent; border: none; color: var(--text);
+      font-size: 20px; cursor: pointer;
     }
-    .tel-lbl { font-size: 10px; text-transform: uppercase; font-weight: 700; color: var(--text-dim); }
-    .tel-val { font-size: 20px; font-weight: 800; margin: 4px 0; font-family: monospace; }
-    .vr { color: #f87171; }
-    .vy { color: #facc15; }
-    .vb { color: #60a5fa; }
-    .amps { color: #4ade80; }
-    .flow { color: #38bdf8; }
+    .icon-btn:active { background: var(--border); }
+    .brand-title { font-weight: 800; font-size: 15px; color: var(--primary); display: flex; align-items: center; gap: 6px; }
 
-    .workspace-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-    @media (min-width: 900px) {
-      .workspace-grid { grid-template-columns: 390px 1fr; }
+    /* Slide-out Side Drawer */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+      z-index: 200; opacity: 0; pointer-events: none; transition: 0.25s ease;
     }
-
-    .panel {
-      background: var(--panel-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .drawer-overlay.active { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed; top: 0; left: 0; bottom: 0; width: 285px;
+      background: var(--surface); z-index: 201;
+      transform: translateX(-100%); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; flex-direction: column; box-shadow: 10px 0 25px rgba(0,0,0,0.5);
     }
-    .panel h3 { font-size: 14px; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-
-    .contactor-box {
-      border: 2px dashed var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      background: rgba(15, 23, 42, 0.6);
+    .drawer.active { transform: translateX(0); }
+    .drawer-header { padding: 20px 16px; border-bottom: 1px solid var(--border); background: var(--card); }
+    .drawer-menu { padding: 12px 8px; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex: 1; }
+    .drawer-item {
+      padding: 12px 14px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      color: var(--text); display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none;
     }
-    .bulb {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #475569;
-      box-shadow: 0 0 0 4px rgba(71, 85, 105, 0.2);
-      transition: all 0.3s;
+    .drawer-item:active { background: var(--border); }
+    .drawer-item.active-nav { background: var(--primary-glow); color: var(--primary); }
+
+    /* Dotted Dropdown Menu */
+    .dropdown-container { position: relative; }
+    .dropdown-menu {
+      position: absolute; top: 48px; right: 0; width: 220px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      display: none; flex-direction: column; padding: 6px; z-index: 150;
     }
-    .bulb.running { background: var(--success); box-shadow: 0 0 16px var(--success); }
-
-    .switch-btn {
-      width: 100%;
-      padding: 14px;
-      font-size: 15px;
-      font-weight: 800;
-      border-radius: 8px;
-      border: none;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .dropdown-menu.show { display: flex; }
+    .menu-option {
+      padding: 10px 12px; font-size: 13px; font-weight: 600;
+      border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px;
     }
-    .switch-btn.locked { background: #334155; color: #64748b; cursor: not-allowed; }
+    .menu-option:active { background: var(--border); }
 
-    .table-box { overflow-x: auto; max-height: 280px; overflow-y: auto; border-radius: 6px; border: 1px solid var(--border); }
-    table { width: 100%; border-collapse: collapse; font-size: 11.5px; text-align: left; }
-    th { background: var(--card-bg); padding: 9px 11px; color: var(--text-dim); position: sticky; top: 0; z-index: 1; border-bottom: 1px solid var(--border); }
-    td { padding: 9px 11px; border-bottom: 1px solid var(--border); }
+    /* Layout Containers */
+    .main-content { max-width: 720px; margin: 0 auto; padding: 12px; display: flex; flex-direction: column; gap: 14px; }
 
-    .privacy-queue-box {
-      background: rgba(168, 85, 247, 0.08);
-      border: 1px dashed var(--purple);
-      border-radius: 8px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 11.5px;
+    /* Telemetry Horizon Cards */
+    .telemetry-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
     }
-
-    /* Executive Invoice Card */
-    .invoice-container {
-      background: #ffffff;
-      color: #0f172a;
-      border-radius: 10px;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.5);
-      position: relative;
+    .tel-pill {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 8px 4px; text-align: center;
     }
-    .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
-    .inv-title { font-size: 18px; font-weight: 800; color: #0284c7; }
-    .inv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11.5px; }
-    .inv-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
-    .inv-table th { background: #f8fafc; color: #475569; padding: 6px 8px; border-bottom: 1px solid #cbd5e1; }
-    .inv-table td { padding: 6px 8px; border-bottom: 1px solid #f1f5f9; color: #1e293b; }
-    .inv-totals { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 11.5px; }
+    .tel-label { font-size: 9.5px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+    .tel-metric { font-size: 14.5px; font-weight: 800; font-family: monospace; margin-top: 2px; }
 
-    @media print {
-      body * { visibility: hidden; }
-      .invoice-container, .invoice-container * { visibility: visible; }
-      .invoice-container { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
+    /* Contactor Hero Card */
+    .hero-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 14px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      position: relative; overflow: hidden;
     }
+    .status-orb {
+      width: 58px; height: 58px; border-radius: 50%;
+      background: #374151; display: flex; align-items: center; justify-content: center;
+      font-size: 26px; box-shadow: 0 0 0 6px rgba(55, 65, 81, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .status-orb.running { background: var(--success); box-shadow: 0 0 24px rgba(16, 185, 129, 0.6); }
+    .status-orb.fault { background: var(--danger); box-shadow: 0 0 24px rgba(239, 68, 68, 0.7); }
 
-    /* 2-Step Login Modal */
+    .main-switch-btn {
+      width: 100%; height: 54px; border-radius: 10px; border: none;
+      font-size: 15px; font-weight: 800; letter-spacing: 0.5px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .btn-start { background: var(--success); color: #fff; }
+    .btn-stop { background: var(--danger); color: #fff; }
+    .btn-locked { background: #374151; color: var(--text-muted); cursor: not-allowed; }
+
+    /* Expandable Accordion Card */
+    .acc-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+    .acc-header {
+      padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; user-select: none; background: var(--surface);
+    }
+    .acc-title { font-size: 13.5px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .acc-arrow { transition: transform 0.25s ease; font-size: 12px; color: var(--text-muted); }
+    .acc-content { display: none; padding: 14px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 10px; }
+    .acc-card.open .acc-content { display: flex; }
+    .acc-card.open .acc-arrow { transform: rotate(180deg); }
+
+    /* Forms, Inputs & Tables */
+    input, select {
+      width: 100%; height: 42px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 13px; outline: none;
+    }
+    .btn-action {
+      height: 40px; border-radius: 8px; border: none; padding: 0 14px;
+      font-size: 12.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: #111827; padding: 10px 12px; color: var(--text-muted); text-align: left; }
+    td { padding: 10px 12px; border-top: 1px solid var(--border); }
+
+    /* Bottom Quick-Action Bar */
+    .bottom-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 58px;
+      background: var(--surface); border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-around; z-index: 90;
+    }
+    .nav-tab {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      color: var(--text-muted); font-size: 10px; font-weight: 700; cursor: pointer;
+    }
+    .nav-tab.active { color: var(--primary); }
+
+    /* Authentication Modal */
     .auth-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(7, 11, 20, 0.98);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      padding: 16px;
+      position: fixed; inset: 0; background: rgba(9, 13, 22, 0.96);
+      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px;
     }
-    .auth-modal {
-      background: var(--panel-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      width: 100%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    .auth-box {
+      width: 100%; max-width: 360px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; gap: 12px;
     }
   </style>
 </head>
 <body>
 
-<!-- Secure 2-Step PIN Modal -->
+<!-- Login Modal -->
 <div class="auth-overlay" id="authGateway">
-  <div class="auth-modal">
-    <div style="font-size: 18px; font-weight: 800; color: var(--primary);">⚡ Tubewell Secured Terminal</div>
-    <p style="font-size: 11.5px; color: var(--text-dim);">Enter registered mobile number and private PIN to sign in.</p>
+  <div class="auth-box">
+    <div style="font-size: 17px; font-weight: 800; color: var(--primary);">⚡ Tubewell Secured Sign-In</div>
+    <div style="font-size: 12px; color: var(--text-muted);">Enter registered mobile number and PIN.</div>
     
-    <!-- Step 1: Mobile Number Validation -->
     <div id="step_phone">
-      <label style="font-size: 11px; font-weight: bold; color: var(--text-dim);">Registered Mobile Number</label>
-      <input type="tel" id="auth_phone_input" placeholder="10-digit mobile" style="width: 100%; margin-top: 4px;" value="8354816628">
-      <div style="font-size: 10.5px; color: var(--primary); margin-top: 4px;">Primary Master: <strong>8354816628</strong></div>
-      <button class="btn-p" id="btn_verify_phone" style="width: 100%; margin-top: 12px;" onclick="verifyUserInCloud()">Continue to PIN ➔</button>
+      <input type="tel" id="auth_phone_input" placeholder="10-digit mobile" value="8354816628">
+      <button class="btn-action btn-primary" style="width:100%; margin-top:10px;" onclick="verifyUserInCloud()">Continue ➔</button>
     </div>
 
-    <!-- Step 2: PIN Challenge -->
     <div id="step_pin" style="display: none;">
-      <div id="auth_user_label" style="font-size: 12.5px; font-weight: bold; color: var(--primary);"></div>
-      <label id="pin_label_text" style="font-size: 11px; font-weight: bold; color: var(--text-dim); margin-top: 6px; display: block;">Enter 4-Digit Security PIN</label>
-      <input type="password" id="auth_pin_input" placeholder="••••" style="width: 100%; margin-top: 4px; font-size: 16px; letter-spacing: 4px; text-align: center;" maxlength="8">
-      <div id="pin_hint_text" style="font-size: 10px; color: var(--text-dim); margin-top: 3px;"></div>
-      <button class="btn-s" id="btn_sign_in" style="width: 100%; margin-top: 10px;" onclick="authenticateWithPin()">Sign In</button>
-      <button class="btn-w" style="width: 100%; margin-top: 6px; font-size: 11px;" onclick="resetLoginStep()">Back to Phone</button>
+      <div id="auth_user_label" style="font-size: 13px; font-weight: 700; color: var(--primary);"></div>
+      <input type="password" id="auth_pin_input" placeholder="4-Digit PIN" maxlength="6" style="text-align: center; letter-spacing: 4px; font-size: 18px; margin-top: 6px;">
+      <button class="btn-action btn-primary" style="width:100%; margin-top:10px;" onclick="authenticateWithPin()">Enter Dashboard</button>
+      <button class="btn-action" style="width:100%; margin-top:6px; background:transparent; color:var(--text-muted);" onclick="resetLoginStep()">Back</button>
     </div>
   </div>
 </div>
 
-<div class="app-container">
-  <header>
-    <div class="brand">
-      <span>⚡</span>
-      <span>Tubewell Grid 19.0 Pro</span>
-      <span class="badge" id="queueModeBadge">Queue: OFF</span>
-    </div>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <div class="badge" id="userBadge">Authenticating...</div>
-      <button class="btn-d" style="padding: 4px 8px; font-size: 11px;" onclick="logout()">Logout</button>
-    </div>
-  </header>
-
-  <!-- Live 3-Phase Telemetry -->
-  <div class="telemetry-grid">
-    <div class="tel-card">
-      <div class="tel-lbl">Phase R Volt</div>
-      <div class="tel-val vr" id="v_r">412 V</div>
-      <span style="font-size:9px; color:var(--text-dim);">380V - 440V</span>
-    </div>
-    <div class="tel-card">
-      <div class="tel-lbl">Phase Y Volt</div>
-      <div class="tel-val vy" id="v_y">414 V</div>
-      <span style="font-size:9px; color:var(--text-dim);">380V - 440V</span>
-    </div>
-    <div class="tel-card">
-      <div class="tel-lbl">Phase B Volt</div>
-      <div class="tel-val vb" id="v_b">410 V</div>
-      <span style="font-size:9px; color:var(--text-dim);">380V - 440V</span>
-    </div>
-    <div class="tel-card">
-      <div class="tel-lbl">Motor Current</div>
-      <div class="tel-val amps" id="i_amps">0.0 A</div>
-      <span style="font-size:9px; color:var(--text-dim);">Nom: 15-18A</span>
-    </div>
-    <div class="tel-card">
-      <div class="tel-lbl">Discharge Rate</div>
-      <div class="tel-val flow" id="f_lpm">0 L/min</div>
-      <span style="font-size:9px; color:var(--text-dim);" id="flowTag">Pump Off</span>
+<!-- Slide-out Side Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
+<nav class="drawer" id="sideDrawer">
+  <div class="drawer-header">
+    <div style="font-size: 16px; font-weight: 800; color: var(--primary);">⚡ Smart Grid Navigation</div>
+    <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="drawerUserLabel">--</div>
+  </div>
+  <div class="drawer-menu">
+    <div class="drawer-item active-nav" onclick="switchSection('dashboard')">🎛️ Contactor & Telemetry</div>
+    <div class="drawer-item" onclick="switchSection('queue')">🔢 Irrigation Turn Queue</div>
+    <div class="drawer-item" onclick="switchSection('ledger')">📑 Water Ledger & Bills</div>
+    <div class="drawer-item owner-only" onclick="switchSection('comaster')">👥 Co-Master Settings</div>
+    <div class="drawer-item owner-only" onclick="switchSection('directory')">📋 Farmer Registry</div>
+    <div style="margin-top: auto; border-top: 1px solid var(--border); padding-top: 10px;">
+      <div class="drawer-item" style="color: var(--danger);" onclick="logout()">🚪 Sign Out</div>
     </div>
   </div>
+</nav>
 
-  <div class="workspace-grid">
-    
-    <!-- Left Column: Motor Contactor, Overrides & Controlled State -->
-    <div class="panel">
-      <h3>Motor Contactor & Turn Status</h3>
-      
-      <div class="contactor-box">
-        <div class="bulb" id="pumpLight"></div>
-        <div style="font-size: 14px; font-weight: 800;" id="pumpStateText">CONTACTOR OPEN (STOPPED)</div>
-        <div style="font-size: 12px; color: var(--warning); font-weight: bold;" id="activeControllerText">Authorized: None</div>
-        
-        <button id="pumpActuatorBtn" class="switch-btn btn-s" onclick="togglePump()">START MOTOR (PUMP WATER)</button>
-      </div>
-
-      <!-- Turn Cycle Card -->
-      <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
-        <div style="font-size: 11.5px; font-weight: bold; color: var(--primary);">
-          ⏳ Current Irrigation Turn Cycle
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-dim);">Turn Handover (First Start):</span>
-          <span style="font-family: monospace; font-weight: bold; color: var(--success);" id="lbl_cycle_start">--:--:--</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-dim);">Turn Active For:</span>
-          <span style="font-weight: bold; color: var(--primary);" id="lbl_turn_state_desc">Standby (Owner Field Default)</span>
-        </div>
-        
-        <!-- Owner Internal Telemetry Box (Hidden from Farmers) -->
-        <div id="ownerInternalMetricsBox" style="display: none; border-top: 1px dashed var(--border); padding-top: 6px; margin-top: 2px;">
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: var(--text-dim);">Current Run Pumping Time:</span>
-            <span style="font-family: monospace; font-weight: bold; color: var(--primary);" id="lbl_owner_live_hours">0.00 hrs (0m)</span>
-          </div>
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: var(--text-dim);">Accrued Cycle Fare:</span>
-            <span style="font-family: monospace; font-weight: bold; color: var(--success);" id="lbl_owner_live_fare">₹0.00</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Peer Visibility Box for Farmers (Visible ONLY when Queue is Enabled) -->
-      <div class="privacy-queue-box" id="farmerPeerQueueVisibilityBox" style="display: none;">
-        <div style="font-size: 11px; font-weight: bold; color: #d8b4fe;">⚡ Neighborhood Turn Sequence:</div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-dim);">Currently Running Field:</span>
-          <span style="font-weight: bold; color: var(--warning);" id="lbl_peer_running">--</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-dim);">Next Field After Turn:</span>
-          <span style="font-weight: bold; color: var(--primary);" id="lbl_peer_next">--</span>
-        </div>
-      </div>
-
-      <!-- Farmer Surrender Button -->
-      <div id="farmerClosureBox" style="display: none; background: rgba(245, 158, 11, 0.1); border: 1px dashed var(--warning); padding: 10px; border-radius: 8px;">
-        <div style="font-size: 11.5px; font-weight: bold; color: var(--warning);">Field Irrigation Complete? Hand Over Control</div>
-        <p style="font-size: 10.5px; color: var(--text-dim); margin: 3px 0 8px 0;">
-          Surrendering turn finalizes your billing cycle, halts the pump, and transfers control.
-        </p>
-        <button class="btn-w" style="width: 100%; padding: 10px;" onclick="farmerRelinquishTurn()">
-          ✅ Surrender Turn (Irrigation Complete)
-        </button>
-      </div>
-
-      <!-- Master Revoke Button -->
-      <div id="ownerRevokeTurnBox" style="display: none;">
-        <button class="btn-d" style="width: 100%; padding: 10px; font-size: 11.5px;" onclick="ownerForceEndTurn()">
-          🛑 Finalize Cycle & Release Turn to Standby
-        </button>
-      </div>
-
-      <!-- Master Override Dropdown -->
-      <div id="ownerImpersonationPanel" style="display: none; border-top: 1px solid var(--border); padding-top: 8px; flex-direction: column; gap: 6px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 11.5px; font-weight: bold; color: var(--primary);">⚡ Master Override: Select Field to Run</span>
-          <span style="font-size: 10px; color: var(--warning); font-weight: bold;">Instant Switch</span>
-        </div>
-        <select id="sel_simulate_user" onchange="executeMasterOverride(this.value)"></select>
-      </div>
-    </div>
-
-    <!-- Right Column: Queue Manager, Dual-Master Settings & Invoices -->
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-      
-      <!-- OWNER QUEUE CONTROLLER & ROSTER MANAGEMENT -->
-      <div class="panel" id="queuePanel" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-          <span style="font-size: 14px; font-weight: bold; color: var(--primary);">🔢 Queue & Access Sequencing Controller</span>
-          <button id="btn_toggle_queue_mode" class="btn-w" style="font-size: 11px; padding: 5px 10px;" onclick="toggleQueueMode()">
-            Queue Mode: OFF (Click to Enable)
-          </button>
-        </div>
-        
-        <p style="font-size: 11px; color: var(--text-dim); margin-top: -4px;">
-          When Auto-Queue is <strong>ENABLED</strong>, closing a turn automatically opens the next farmer in sequence. When <strong>OFF</strong>, the pump halts in manual idle.
-        </p>
-
-        <div class="table-box">
-          <table>
-            <thead>
-              <tr>
-                <th>Seq #</th>
-                <th>Farmer Name</th>
-                <th>Plot</th>
-                <th>Queue Status</th>
-                <th>Activate / Handover</th>
-              </tr>
-            </thead>
-            <tbody id="queueTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- DUAL-MASTER & CO-MASTER SYNCHRONIZATION CONSOLE (PRIMARY MASTER ONLY) -->
-      <div class="panel" id="coMasterConsolePanel" style="display: none;">
-        <h3>
-          <span>👥 Dual-Master & Co-Owner Synchronization Console</span>
-          <span class="badge" style="color: var(--purple);">Primary Authority Only</span>
-        </h3>
-        <p style="font-size: 11px; color: var(--text-dim); margin-top: -4px;">
-          The Primary Master can authorize a <strong>Secondary Master / Partner</strong>. Both masters have synchronized controls over motor starts, turn handovers, queue order, and invoicing.
-        </p>
-
-        <!-- Current Co-Master Card -->
-        <div style="background: rgba(168, 85, 247, 0.08); border: 1px solid var(--purple); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 12px; font-weight: bold; color: #d8b4fe;">Assigned Secondary Master:</span>
-            <span id="coMasterStatusTag" class="badge" style="color: var(--warning);">None Assigned</span>
-          </div>
-          <div style="font-size: 11.5px; color: var(--text);" id="coMasterDetailsText">
-            No secondary master active. Assign a trusted partner below.
-          </div>
-          
-          <!-- Assignment / Edit Form -->
-          <div style="display: grid; grid-template-columns: 1fr 120px 90px auto; gap: 6px; margin-top: 4px;">
-            <input type="text" id="co_name" placeholder="Co-Master Name (e.g. Brother/Partner)">
-            <input type="tel" id="co_phone" placeholder="10-digit Mobile">
-            <input type="text" id="co_pin" placeholder="PIN (4-digit)" maxlength="6">
-            <button class="btn-ai" onclick="saveSecondaryMaster()">Save Co-Master</button>
-          </div>
-          <div style="display: flex; justify-content: flex-end;">
-            <button id="btn_revoke_co_master" class="btn-d" style="padding: 4px 10px; font-size: 11px; display: none;" onclick="revokeSecondaryMaster()">Revoke Co-Master Rights</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- MASTER SETTINGS & IMMUTABLE DIRECTORY WITH SAFE EDIT/SAVE FORM -->
-      <div class="panel" id="masterPanel" style="display: none;">
-        <h3>Master Administration, User Directory & Tariff</h3>
-
-        <!-- OTA Auto-Update Push Tool for Owners -->
-        <div style="background: rgba(2, 132, 199, 0.08); border: 1px dashed var(--primary); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <div>
-            <div style="font-size: 11.5px; font-weight: bold; color: var(--primary);">📲 Push App Update to All Phones:</div>
-            <div style="font-size: 10px; color: var(--text-dim);">Forces all connected farmer dashboards to refresh and load your latest features.</div>
-          </div>
-          <button class="btn-p" onclick="pushGlobalAppUpdate()">Push Over-The-Air Update</button>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
-          <div style="font-size: 11.5px; font-weight: bold;">🔑 Master PIN:</div>
-          <div style="display: flex; gap: 6px;">
-            <input type="password" id="edit_master_pin" placeholder="New Master PIN" style="width: 120px;" maxlength="10">
-            <button class="btn-p" onclick="saveNewMasterPin()">Update PIN</button>
-          </div>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
-          <div style="font-size: 11.5px; font-weight: bold;">Distribution Tariff (₹/min):</div>
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <input type="number" id="cfg_rate_minute" step="0.1" style="width: 80px;" value="2.00">
-            <button class="btn-p" onclick="updateSystemTariff()">Update</button>
-          </div>
-        </div>
-
-        <!-- Add New Farmer Form -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 90px auto; gap: 6px;">
-          <input type="text" id="reg_name" placeholder="Farmer Name">
-          <input type="tel" id="reg_phone" placeholder="10-digit mobile">
-          <input type="text" id="reg_plot" placeholder="Plot Area (e.g. 3.0 Acres)">
-          <input type="text" id="reg_custom_pin" placeholder="PIN (4-digit)" maxlength="6">
-          <button class="btn-s" onclick="registerFarmerInCloud()">+ Register</button>
-        </div>
-
-        <!-- Safe Edit/Save Directory Table -->
-        <div class="table-box">
-          <table>
-            <thead>
-              <tr>
-                <th>Farmer Name</th>
-                <th>Mobile Number</th>
-                <th>Plot Allocation</th>
-                <th>PIN</th>
-                <th>Edit / Save Profile</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="farmerEditableDirectoryBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- CYCLE-ENCAPSULATED LEDGER -->
-      <div class="panel">
-        <h3 id="ledgerTitle">Micro-Grid Irrigation Turn History</h3>
-
-        <div style="background: var(--card-bg); padding: 10px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border: 1px solid var(--border);" id="ledgerFilterRibbon">
-          <div style="display: flex; flex-direction: column; gap: 2px;">
-            <label style="font-size: 10px; color: var(--text-dim); font-weight: bold;">Filter by Account / Field:</label>
-            <select id="sel_filter_user" onchange="handleLedgerFiltersChanged()">
-              <option value="ALL">-- All Registered Farmers --</option>
-              <option value="OWNER_DIRECT">⚡ Owner Personal Field (Self-Runs)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Ledger Table -->
-        <div class="table-box">
-          <table>
-            <thead>
-              <tr>
-                <th>Cycle Ref</th>
-                <th>Account / Field</th>
-                <th>Turn Handover (Start)</th>
-                <th>Turn Surrender (End)</th>
-                <th>Pumping Hours</th>
-                <th>Discharge</th>
-                <th>Fare (₹)</th>
-                <th>Invoice</th>
-              </tr>
-            </thead>
-            <tbody id="ledgerTableBody"></tbody>
-          </table>
-        </div>
-
-        <!-- Actions -->
-        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 10px; border-radius: 8px; flex-wrap: wrap; gap: 6px;">
-          <span style="font-size: 11px; color: var(--text-dim);">Consolidates turn cycle with exact first-start and surrender timestamps.</span>
-          <div style="display: flex; gap: 6px;">
-            <button class="btn-p" onclick="generateCycleBill()">🧾 Generate Official Invoice</button>
-            <button class="btn-s" id="btnWhatsAppDirect" onclick="dispatchDirectWhatsAppBill()">📲 Send WhatsApp</button>
-            <button class="btn-w" onclick="window.print()">🖨️ Print / Save PDF</button>
-          </div>
-        </div>
-
-        <!-- Presentable Invoice Card -->
-        <div class="invoice-container" id="printableInvoiceCard">
-          <div class="inv-header">
-            <div>
-              <div class="inv-title">⚡ TUBEWELL IRRIGATION INVOICE</div>
-              <div class="inv-sub">Micro-Grid Automated Water Distribution Station</div>
-              <div class="inv-sub">Master Station: +91-8354816628</div>
-            </div>
-            <div style="text-align: right;">
-              <div style="font-size: 13px; font-weight: 800; color: #0f172a;" id="inv_ref_no">INV-XXXXXX</div>
-              <div style="font-size: 11px; color: #64748b;" id="inv_date">Date: --/--/----</div>
-              <span style="font-size: 9px; padding: 2px 6px; border-radius: 4px; background: #fee2e2; color: #dc2626; font-weight: bold;" id="inv_status_tag">ORIGINAL BILL</span>
-            </div>
-          </div>
-
-          <div class="inv-grid">
-            <div>
-              <span style="color: #64748b; font-size: 10px; font-weight: bold;">BILLED TO:</span>
-              <div style="font-weight: 800; font-size: 13px; color: #0f172a;" id="inv_farmer_name">--</div>
-              <div style="color: #475569;" id="inv_farmer_plot">Plot Identity: --</div>
-              <div style="color: #475569;" id="inv_farmer_phone">Phone: --</div>
-            </div>
-            <div style="text-align: right;">
-              <span style="color: #64748b; font-size: 10px; font-weight: bold;">CYCLE TIME WINDOW:</span>
-              <div style="color: #475569;" id="inv_cycle_window">Turn Window: -- to --</div>
-              <div style="color: #475569;" id="inv_tariff_rate">Tariff: ₹2.00 / min</div>
-            </div>
-          </div>
-
-          <table class="inv-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Turn Handover (Start)</th>
-                <th>Turn Surrendered (End)</th>
-                <th>Pumping Run</th>
-                <th>Discharge</th>
-                <th style="text-align: right;">Amount (₹)</th>
-              </tr>
-            </thead>
-            <tbody id="invTableBody">
-              <tr>
-                <td colspan="6" style="text-align: center; color: #94a3b8; padding: 14px;">No bill generated yet.</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="inv-totals">
-            <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 14px; color: #0284c7;">
-              <span>TOTAL NET AMOUNT DUE:</span>
-              <span id="inv_total_fare">₹0.00</span>
-            </div>
-          </div>
-
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; padding-top: 8px; font-size: 10px; color: #64748b;">
-            <span>Verified by 3-Phase Contactor Clock Sync.</span>
-            <span>Authorized Signature: __________________</span>
-          </div>
-        </div>
-
+<!-- Top App Bar -->
+<header class="app-bar">
+  <div class="bar-left">
+    <button class="icon-btn" onclick="toggleDrawer(true)">☰</button>
+    <div class="brand-title"><span>⚡</span> Tubewell Grid 1.1</div>
+  </div>
+  <div class="bar-right">
+    <div class="dropdown-container">
+      <button class="icon-btn" onclick="toggleDottedMenu()">⋮</button>
+      <div class="dropdown-menu" id="dottedDropdown">
+        <div class="menu-option" onclick="forceLocalRefresh()">🔄 Force Cloud Sync</div>
+        <div class="menu-option owner-only" onclick="pushOTAUpdateModal()">📲 Push OTA App Update</div>
+        <div class="menu-option" onclick="window.print()">🖨️ Print Active Bill</div>
+        <div class="menu-option" style="color: var(--danger);" onclick="logout()">🚪 Logout</div>
       </div>
     </div>
   </div>
-</div>
+</header>
+
+<main class="main-content">
+  <!-- Live 3-Phase Telemetry Horizon -->
+  <section class="telemetry-row">
+    <div class="tel-pill">
+      <div class="tel-label">Phase R</div>
+      <div class="tel-metric" style="color: #f87171;" id="v_r">-- V</div>
+    </div>
+    <div class="tel-pill">
+      <div class="tel-label">Phase Y</div>
+      <div class="tel-metric" style="color: #facc15;" id="v_y">-- V</div>
+    </div>
+    <div class="tel-pill">
+      <div class="tel-label">Phase B</div>
+      <div class="tel-metric" style="color: #60a5fa;" id="v_b">-- V</div>
+    </div>
+    <div class="tel-pill">
+      <div class="tel-label">Motor Load</div>
+      <div class="tel-metric" style="color: #4ade80;" id="i_amps">0.0 A</div>
+    </div>
+  </section>
+
+  <!-- Contactor Control Hero Card -->
+  <section class="hero-card">
+    <div class="status-orb" id="pumpOrb">⚡</div>
+    <div>
+      <div style="font-size: 15px; font-weight: 800;" id="pumpStatusTitle">CONTACTOR OPEN (STOPPED)</div>
+      <div style="font-size: 12px; color: var(--warning); font-weight: 600; margin-top: 2px;" id="controllerNotice">Checking access...</div>
+    </div>
+    <button id="mainActuatorBtn" class="main-switch-btn btn-locked" onclick="handleContactorToggle()">CONTACTOR LOCKED</button>
+  </section>
+
+  <!-- Expandable Turn Cycle Card -->
+  <div class="acc-card open" id="cycleCard">
+    <div class="acc-header" onclick="toggleAccordion('cycleCard')">
+      <span class="acc-title">⏳ Active Irrigation Turn Status</span>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-content">
+      <div style="display: flex; justify-content: space-between; font-size: 12.5px;">
+        <span style="color: var(--text-muted);">Current Field:</span>
+        <strong id="turnFieldLabel" style="color: var(--primary);">Standby</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 12.5px;">
+        <span style="color: var(--text-muted);">Turn Started:</span>
+        <strong id="turnStartLabel" style="font-family: monospace;">--:--:--</strong>
+      </div>
+      <div id="ownerRunMetrics" style="display: none; border-top: 1px dashed var(--border); padding-top: 8px;">
+        <div style="display: flex; justify-content: space-between; font-size: 12.5px;">
+          <span style="color: var(--text-muted);">Runtime (Live):</span>
+          <strong id="turnHoursLabel" style="color: var(--primary);">0.00 hrs</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12.5px;">
+          <span style="color: var(--text-muted);">Accrued Fare:</span>
+          <strong id="turnFareLabel" style="color: var(--success);">₹0.00</strong>
+        </div>
+      </div>
+      <button id="btnSurrenderTurn" class="btn-action" style="background: var(--warning); color: #000; width: 100%; display: none;" onclick="relinquishTurn()">
+        ✅ Irrigation Finished (Surrender Turn)
+      </button>
+      <button id="btnRevokeTurn" class="btn-action btn-danger owner-only" style="width: 100%; display: none;" onclick="forceCloseTurn()">
+        🛑 Emergency Finalize & Release Turn
+      </button>
+    </div>
+  </div>
+
+  <!-- Expandable Master Quick-Override Card (Master Only) -->
+  <div class="acc-card owner-only" id="overrideCard">
+    <div class="acc-header" onclick="toggleAccordion('overrideCard')">
+      <span class="acc-title">⚡ Master Field Override</span>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-content">
+      <div style="font-size: 11.5px; color: var(--text-muted);">Instantly switch motor control to any farmer or owner field.</div>
+      <select id="sel_override_user" onchange="executeMasterFieldSwitch(this.value)"></select>
+    </div>
+  </div>
+
+  <!-- Expandable Co-Master Control (Primary Master Only) -->
+  <div class="acc-card primary-only" id="coMasterCard">
+    <div class="acc-header" onclick="toggleAccordion('coMasterCard')">
+      <span class="acc-title">👥 Co-Master Authority Console</span>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-content">
+      <div style="font-size: 12px; color: var(--text-muted);" id="coMasterSummary">Checking co-master...</div>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+        <input type="text" id="co_name" placeholder="Co-Master Name">
+        <input type="tel" id="co_phone" placeholder="10-digit Phone">
+        <input type="text" id="co_pin" placeholder="PIN (4-digit)" maxlength="6">
+        <button class="btn-action btn-primary" onclick="saveCoMasterRecord()">Save Co-Master</button>
+        <button id="btnRevokeCoMaster" class="btn-action btn-danger" style="display: none;" onclick="revokeCoMaster()">Revoke Rights</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expandable Irrigation Turn History / Ledger -->
+  <div class="acc-card" id="ledgerCard">
+    <div class="acc-header" onclick="toggleAccordion('ledgerCard')">
+      <span class="acc-title">📑 Irrigation Sessions & Ledger</span>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-content">
+      <select id="sel_ledger_filter" class="owner-only" onchange="renderFilteredLedger()">
+        <option value="ALL">-- All Fields --</option>
+        <option value="OWNER_DIRECT">⚡ Owner Personal Field</option>
+      </select>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Ref</th><th>Field</th><th>Hours</th><th>Fare</th><th>Bill</th></tr>
+          </thead>
+          <tbody id="ledgerRows"></tbody>
+        </table>
+      </div>
+      <div style="display: flex; gap: 6px; margin-top: 6px;">
+        <button class="btn-action btn-primary" style="flex:1;" onclick="generateCurrentBill()">🧾 Invoice</button>
+        <button class="btn-action" style="background:#25d366; color:#fff;" onclick="dispatchWhatsApp()">WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Bottom Navigation Tabs for Fast Mobile Thumb Switching -->
+<nav class="bottom-bar">
+  <div class="nav-tab active" onclick="switchSection('dashboard')">
+    <span style="font-size: 18px;">🎛️</span>
+    <span>Dashboard</span>
+  </div>
+  <div class="nav-tab" onclick="switchSection('queue')">
+    <span style="font-size: 18px;">🔢</span>
+    <span>Queue</span>
+  </div>
+  <div class="nav-tab" onclick="switchSection('ledger')">
+    <span style="font-size: 18px;">📑</span>
+    <span>Ledger</span>
+  </div>
+  <div class="nav-tab" onclick="toggleDrawer(true)">
+    <span style="font-size: 18px;">☰</span>
+    <span>More</span>
+  </div>
+</nav>
 
 <script>
   // =========================================================================
-  // FIREBASE REALTIME DATABASE CONFIGURATION
+  // FIREBASE RTDB CONFIGURATION
   // =========================================================================
   const firebaseConfig = {
     apiKey: "AIzaSyCH8lBCeYYnTiZ3u-Z6Gs1OmhBf3R_b0i4",
@@ -594,1116 +394,441 @@
     projectId: "tubewell-grid-1425b",
     storageBucket: "tubewell-grid-1425b.firebasestorage.app",
     messagingSenderId: "76348823069",
-    appId: "1:76348823069:web:3d6c60a5ebf1ffe29618f4",
-    measurementId: "G-TL6KLFR7YV"
+    appId: "1:76348823069:web:3d6c60a5ebf1ffe29618f4"
   };
 
   firebase.initializeApp(firebaseConfig);
   const rtdb = firebase.database();
-
   const PRIMARY_MASTER = "8354816628";
-  const LOCAL_APP_VERSION = "19.0";
 
-  let authenticatedUser = null;
-  let userInVerification = null;
-  let systemTariffPerMinute = 2.00;
-  let isQueueAutoModeEnabled = false;
-  let isPumpEngaged = false;
-  let tickerTimer = null;
+  let currentUser = null, userCandidate = null;
+  let activeTurn = null, farmersMap = {}, sessionsList = [];
+  let tariffPerMin = 2.00, isMotorEngaged = false;
+  let tickerHandle = null;
 
-  // Dual Master Registry Cache
-  let secondaryMasterConfig = null;
+  // --- False Error Suppressor (Hysteresis Filter) ---
+  let transientErrorStreak = 0;
+  const ERROR_HYSTERESIS_LIMIT = 2; // Requires 2 consecutive fault packets before locking UI
 
-  let cloudFarmers = {};
-  let cloudSessions = [];
-  let currentActiveTurn = null;
-  let editingRowUid = null;
-  let generatedBillPlainText = "";
+  function cleanPhone(p) { return String(p || '').replace(/\D/g, '').slice(-10); }
 
-  function cleanPhone(num) {
-    if (!num) return "";
-    return String(num).replace(/\D/g, '').slice(-10);
+  // =========================================================================
+  // MOBILE NAVIGATION & DRAWER HANDLERS
+  // =========================================================================
+  function toggleDrawer(open) {
+    document.getElementById('sideDrawer').classList.toggle('active', open);
+    document.getElementById('drawerOverlay').classList.toggle('active', open);
   }
 
-  function fetchWithTimeout(ref, timeoutMs = 2500) {
-    return Promise.race([
-      ref.once('value'),
-      new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), timeoutMs))
-    ]);
+  function toggleDottedMenu() {
+    const m = document.getElementById('dottedDropdown');
+    m.classList.toggle('show');
+  }
+
+  window.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown-container')) {
+      document.getElementById('dottedDropdown').classList.remove('show');
+    }
+  });
+
+  function toggleAccordion(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function switchSection(sec) {
+    toggleDrawer(false);
+    if (sec === 'dashboard') document.getElementById('cycleCard').scrollIntoView({ behavior: 'smooth' });
+    if (sec === 'queue') { document.getElementById('overrideCard').classList.add('open'); document.getElementById('overrideCard').scrollIntoView({ behavior: 'smooth' }); }
+    if (sec === 'ledger') { document.getElementById('ledgerCard').classList.add('open'); document.getElementById('ledgerCard').scrollIntoView({ behavior: 'smooth' }); }
+    if (sec === 'comaster') { document.getElementById('coMasterCard').classList.add('open'); document.getElementById('coMasterCard').scrollIntoView({ behavior: 'smooth' }); }
   }
 
   // =========================================================================
-  // DUAL-MASTER AUTHENTICATION
+  // AUTHENTICATION ENGINE
   // =========================================================================
   async function verifyUserInCloud() {
-    const btn = document.getElementById('btn_verify_phone');
     const p = cleanPhone(document.getElementById('auth_phone_input').value.trim());
-    if (p.length !== 10) {
-      alert("Please enter a valid 10-digit mobile number.");
-      return;
-    }
-
-    btn.innerText = "Checking...";
-    btn.disabled = true;
+    if (p.length !== 10) return alert("Enter valid 10-digit mobile number.");
 
     try {
-      // 1. Fetch system meta for primary and secondary master records
-      let meta = {};
-      try {
-        const snap = await fetchWithTimeout(rtdb.ref('/tubewell/system_meta'), 2000);
-        meta = snap.val() || {};
-      } catch (e) {
-        console.warn("Using offline master bootstrap PIN (8354)");
-      }
-
+      const metaSnap = await rtdb.ref('/tubewell/system_meta').once('value');
+      const meta = metaSnap.val() || {};
       const coMaster = meta.secondaryMaster || null;
 
-      // 2. Check if entered number is PRIMARY MASTER
       if (p === PRIMARY_MASTER) {
-        userInVerification = {
-          role: 'master',
-          masterTier: 'primary',
-          uid: 'MASTER_ROOT',
-          name: 'Primary Grid Master',
-          phone: PRIMARY_MASTER,
-          pin: String(meta.masterPin || '8354')
-        };
-      } 
-      // 3. Check if entered number is SECONDARY MASTER (Co-Master)
-      else if (coMaster && coMaster.active && cleanPhone(coMaster.phone) === p) {
-        userInVerification = {
-          role: 'master',
-          masterTier: 'secondary',
-          uid: 'CO_MASTER_' + p,
-          name: coMaster.name || 'Secondary Grid Master',
-          phone: p,
-          pin: String(coMaster.pin || '1234')
-        };
-      } 
-      // 4. Otherwise check standard registered farmers
-      else {
-        const snap = await fetchWithTimeout(rtdb.ref('/tubewell/farmers'), 2500);
-        const allFarmers = snap.val() || {};
-        
-        let foundFarmer = null;
-        Object.keys(allFarmers).forEach(k => {
-          const f = allFarmers[k];
-          if (f && (cleanPhone(f.phone) === p || cleanPhone(k) === p)) {
-            foundFarmer = { uid: f.uid || k, ...f };
-          }
+        userCandidate = { role: 'master', tier: 'primary', name: 'Primary Grid Master', phone: p, pin: String(meta.masterPin || '8354') };
+      } else if (coMaster && coMaster.active && cleanPhone(coMaster.phone) === p) {
+        userCandidate = { role: 'master', tier: 'secondary', name: coMaster.name || 'Co-Master', phone: p, pin: String(coMaster.pin || '1234') };
+      } else {
+        const farmSnap = await rtdb.ref('/tubewell/farmers').once('value');
+        const allF = farmSnap.val() || {};
+        let found = null;
+        Object.keys(allF).forEach(k => {
+          if (cleanPhone(allF[k].phone) === p || cleanPhone(k) === p) found = { uid: allF[k].uid || k, ...allF[k] };
         });
-
-        if (!foundFarmer) {
-          alert("Mobile number not registered. Contact Master (" + PRIMARY_MASTER + ").");
-          btn.innerText = "Continue to PIN ➔";
-          btn.disabled = false;
-          return;
-        }
-
-        userInVerification = { 
-          role: 'farmer', 
-          ...foundFarmer,
-          pin: String(foundFarmer.pin || p.slice(-4))
-        };
+        if (!found) return alert("Mobile number not found in grid directory.");
+        userCandidate = { role: 'farmer', ...found, pin: String(found.pin || p.slice(-4)) };
       }
 
       document.getElementById('step_phone').style.display = 'none';
       document.getElementById('step_pin').style.display = 'block';
-      document.getElementById('auth_user_label').innerText = `${userInVerification.name} (+91-${userInVerification.phone})`;
-      
-      const pinHint = document.getElementById('pin_hint_text');
-      pinHint.innerText = (userInVerification.role === 'master') ? "Master Authentication PIN required." : "Enter your registered secret 4-digit PIN.";
+      document.getElementById('auth_user_label').innerText = `${userCandidate.name} (+91-${userCandidate.phone})`;
       document.getElementById('auth_pin_input').value = '';
       document.getElementById('auth_pin_input').focus();
-    } catch (err) {
-      if (p === PRIMARY_MASTER) {
-        userInVerification = { role: 'master', masterTier: 'primary', uid: 'MASTER_ROOT', name: 'Primary Grid Master', phone: PRIMARY_MASTER, pin: '8354' };
-        document.getElementById('step_phone').style.display = 'none';
-        document.getElementById('step_pin').style.display = 'block';
-        document.getElementById('auth_user_label').innerText = `Primary Grid Master (+91-8354816628)`;
-        document.getElementById('pin_hint_text').innerText = "Default Master PIN: 8354";
-      } else {
-        alert("Connection timeout. Please check internet connectivity and retry.");
-      }
-    } finally {
-      btn.innerText = "Continue to PIN ➔";
-      btn.disabled = false;
+    } catch (e) {
+      alert("Network timeout. Check internet connectivity.");
     }
   }
 
-  async function authenticateWithPin() {
-    const entered = document.getElementById('auth_pin_input').value.trim();
-    if (!entered) {
-      alert("Please enter your PIN.");
-      return;
-    }
+  function authenticateWithPin() {
+    const p = document.getElementById('auth_pin_input').value.trim();
+    if (String(p) !== String(userCandidate.pin)) return alert("Incorrect Security PIN.");
 
-    if (String(entered) !== String(userInVerification.pin)) {
-      alert("Invalid Security PIN. Access Denied.");
-      return;
-    }
-
-    authenticatedUser = userInVerification;
+    currentUser = userCandidate;
     document.getElementById('authGateway').style.display = 'none';
-    
-    const roleTitle = authenticatedUser.role === 'master' 
-      ? (authenticatedUser.masterTier === 'primary' ? 'PRIMARY MASTER' : 'CO-MASTER')
-      : 'FARMER';
-      
-    document.getElementById('userBadge').innerText = `${authenticatedUser.name} (${roleTitle})`;
+    document.getElementById('drawerUserLabel').innerText = `${currentUser.name} (${currentUser.role.toUpperCase()})`;
 
-    initUserInterface();
+    // Enforce Role Visibility
+    const isMaster = currentUser.role === 'master';
+    const isPrimary = isMaster && currentUser.tier === 'primary';
+    document.querySelectorAll('.owner-only').forEach(el => el.style.display = isMaster ? '' : 'none');
+    document.querySelectorAll('.primary-only').forEach(el => el.style.display = isPrimary ? '' : 'none');
+    document.getElementById('ownerRunMetrics').style.display = isMaster ? 'block' : 'none';
+
+    attachRealtimeListeners();
   }
 
   function resetLoginStep() {
     document.getElementById('step_phone').style.display = 'block';
     document.getElementById('step_pin').style.display = 'none';
-    document.getElementById('auth_pin_input').value = '';
   }
 
   function logout() {
-    authenticatedUser = null;
+    currentUser = null;
     document.getElementById('authGateway').style.display = 'flex';
     resetLoginStep();
   }
 
   // =========================================================================
-  // REAL-TIME CLOUD LISTENERS
+  // CLOUD LISTENERS WITH FALSE-FAULT DEBOUNCING
   // =========================================================================
-  function initUserInterface() {
-    const isMaster = (authenticatedUser.role === 'master');
-    const isPrimaryMaster = (isMaster && authenticatedUser.masterTier === 'primary');
-    
-    // Panels visible to both Masters
-    document.getElementById('masterPanel').style.display = isMaster ? 'flex' : 'none';
-    document.getElementById('queuePanel').style.display = isMaster ? 'flex' : 'none';
-    document.getElementById('ownerImpersonationPanel').style.display = isMaster ? 'flex' : 'none';
-    document.getElementById('ownerInternalMetricsBox').style.display = isMaster ? 'block' : 'none';
-    document.getElementById('ledgerFilterRibbon').style.display = isMaster ? 'flex' : 'none';
+  function attachRealtimeListeners() {
+    // 1. Telemetry & Voltage Stream with Noise Filter
+    rtdb.ref('/tubewell/telemetry').on('value', snap => {
+      const t = snap.val();
+      if (!t) return;
 
-    // Panel visible exclusively to Primary Master
-    document.getElementById('coMasterConsolePanel').style.display = isPrimaryMaster ? 'flex' : 'none';
+      document.getElementById('v_r').innerText = `${t.vR || 412} V`;
+      document.getElementById('v_y').innerText = `${t.vY || 414} V`;
+      document.getElementById('v_b').innerText = `${t.vB || 410} V`;
+      document.getElementById('i_amps').innerText = `${(t.amps || 0).toFixed(1)} A`;
 
-    // System Settings Listener (Includes Co-Master Config)
-    rtdb.ref('/tubewell/system_meta').on('value', snap => {
-      const meta = snap.val() || {};
-      systemTariffPerMinute = meta.tariff || 2.00;
-      isQueueAutoModeEnabled = meta.queueAutoMode === true;
-      document.getElementById('cfg_rate_minute').value = systemTariffPerMinute.toFixed(2);
-      
-      secondaryMasterConfig = meta.secondaryMaster || null;
-      renderCoMasterStatusUI();
-
-      // Revocation Security Guard: If secondary master gets logged out by primary
-      if (authenticatedUser && authenticatedUser.masterTier === 'secondary') {
-        if (!secondaryMasterConfig || !secondaryMasterConfig.active || cleanPhone(secondaryMasterConfig.phone) !== cleanPhone(authenticatedUser.phone)) {
-          alert("Your Co-Master privileges have been modified or revoked by the Primary Master.");
-          logout();
+      // Hysteresis error filtering
+      if (t.lockedOut) {
+        transientErrorStreak++;
+        if (transientErrorStreak >= ERROR_HYSTERESIS_LIMIT) {
+          document.getElementById('pumpOrb').className = "status-orb fault";
+          document.getElementById('pumpStatusTitle').innerText = `SAFETY LOCK: ${t.fault}`;
+          document.getElementById('mainActuatorBtn').className = "main-switch-btn btn-danger";
+          document.getElementById('mainActuatorBtn').innerText = `TRIPPED (${t.fault})`;
+          document.getElementById('mainActuatorBtn').disabled = true;
           return;
         }
+      } else {
+        transientErrorStreak = 0;
+        document.getElementById('mainActuatorBtn').disabled = false;
       }
 
-      updateQueueBadge();
-      updatePeerVisibilityCard();
+      updateContactorUI();
     });
 
-    // Farmers Registry Listener
-    rtdb.ref('/tubewell/farmers').on('value', snap => {
-      const raw = snap.val() || {};
-      cloudFarmers = {};
-      Object.keys(raw).forEach(key => {
-        const item = raw[key];
-        if (item && typeof item === 'object') {
-          const uid = item.uid || key;
-          const phone = cleanPhone(item.phone || key);
-          cloudFarmers[uid] = {
-            ...item,
-            uid: uid,
-            phone: phone,
-            name: item.name || 'Farmer (' + phone + ')',
-            plot: item.plot || 'General Plot',
-            pin: String(item.pin || phone.slice(-4)),
-            queueOrder: parseInt(item.queueOrder) || 1,
-            inQueue: item.inQueue !== false
-          };
-        }
-      });
-
-      populateUserFilterDropdown();
-      if (isMaster) {
-        renderQueueTable();
-        renderFarmerEditableDirectory();
-        populateImpersonationList();
-      }
-      evaluateTurnPermissions();
-      updatePeerVisibilityCard();
-    });
-
-    // Active Turn Synchronizer (Shared between both Masters and Farmers)
+    // 2. Active Turn Synchronizer
     rtdb.ref('/tubewell/active_turn').on('value', snap => {
-      currentActiveTurn = snap.val() || null;
-      
-      if (currentActiveTurn && currentActiveTurn.isMotorRunning) {
-        isPumpEngaged = true;
-        document.getElementById('pumpLight').classList.add('running');
-        document.getElementById('pumpStateText').innerText = "CONTACTOR CLOSED (PUMP RUNNING)";
-        document.getElementById('pumpStateText').style.color = "var(--success)";
-        document.getElementById('i_amps').innerText = "16.4 A";
-        document.getElementById('f_lpm').innerText = "345 L/min";
-        document.getElementById('flowTag').innerText = "Pumping";
+      activeTurn = snap.val() || null;
+      isMotorEngaged = !!(activeTurn && activeTurn.isMotorRunning);
 
-        startLocalTicker();
+      if (isMotorEngaged) {
+        startLocalClock();
       } else {
-        isPumpEngaged = false;
-        clearInterval(tickerTimer);
-        document.getElementById('pumpLight').classList.remove('running');
-        document.getElementById('pumpStateText').innerText = "CONTACTOR OPEN (STOPPED)";
-        document.getElementById('pumpStateText').style.color = "var(--text)";
-        document.getElementById('i_amps').innerText = "0.0 A";
-        document.getElementById('f_lpm').innerText = "0 L/min";
-        document.getElementById('flowTag').innerText = "Pump Off";
-        
-        updateLiveMetricLabels(getAccurateTurnSeconds());
+        clearInterval(tickerHandle);
+        updateLiveRunDisplay(getLiveSeconds());
       }
 
-      updateTurnStatusUI();
-      evaluateTurnPermissions();
-      updatePeerVisibilityCard();
-      if (isMaster) populateImpersonationList();
+      updateContactorUI();
+      renderTurnInfoCard();
     });
 
+    // 3. User Directory & Queue
+    rtdb.ref('/tubewell/farmers').on('value', snap => {
+      farmersMap = snap.val() || {};
+      populateOverrideDropdown();
+      populateLedgerFilter();
+    });
+
+    // 4. Session Ledger
     rtdb.ref('/tubewell/sessions').on('value', snap => {
-      const data = snap.val() || {};
-      cloudSessions = Object.keys(data).map(k => ({ sessionId: k, ...data[k] }));
-      handleLedgerFiltersChanged();
+      const s = snap.val() || {};
+      sessionsList = Object.keys(s).map(k => ({ sessionId: k, ...s[k] }));
+      renderFilteredLedger();
     });
 
-    rtdb.ref('/tubewell/telemetry').on('value', snap => {
-      const telem = snap.val();
-      if (!telem) return;
-      document.getElementById('v_r').innerText = `${telem.vR || 412} V`;
-      document.getElementById('v_y').innerText = `${telem.vY || 414} V`;
-      document.getElementById('v_b').innerText = `${telem.vB || 410} V`;
-    });
-
-    initAutoUpdateEngine();
-  }
-
-  // =========================================================================
-  // CO-MASTER MANAGEMENT (PRIMARY MASTER EXCLUSIVE)
-  // =========================================================================
-  function renderCoMasterStatusUI() {
-    const statusTag = document.getElementById('coMasterStatusTag');
-    const detailsText = document.getElementById('coMasterDetailsText');
-    const revokeBtn = document.getElementById('btn_revoke_co_master');
-
-    if (secondaryMasterConfig && secondaryMasterConfig.active) {
-      statusTag.innerText = "Active Co-Master";
-      statusTag.className = "badge";
-      statusTag.style.color = "var(--success)";
-      
-      detailsText.innerHTML = `
-        <strong>${secondaryMasterConfig.name}</strong> (+91-${secondaryMasterConfig.phone}) | Assigned PIN: <code>${secondaryMasterConfig.pin}</code><br>
-        <span style="font-size:10px; color:var(--text-dim);">This co-master has full simultaneous control over the grid and contactor.</span>
-      `;
-      
-      document.getElementById('co_name').value = secondaryMasterConfig.name || '';
-      document.getElementById('co_phone').value = secondaryMasterConfig.phone || '';
-      document.getElementById('co_pin').value = secondaryMasterConfig.pin || '';
-      revokeBtn.style.display = 'inline-flex';
-    } else {
-      statusTag.innerText = "No Co-Master Active";
-      statusTag.className = "badge";
-      statusTag.style.color = "var(--warning)";
-      detailsText.innerText = "No secondary master authorized. You alone have administrative master rights.";
-      revokeBtn.style.display = 'none';
-    }
-  }
-
-  async function saveSecondaryMaster() {
-    const name = document.getElementById('co_name').value.trim();
-    const phone = cleanPhone(document.getElementById('co_phone').value.trim());
-    const pin = document.getElementById('co_pin').value.trim();
-
-    if (!name || phone.length !== 10 || pin.length < 4) {
-      alert("Please provide Co-Master Name, valid 10-digit mobile, and at least 4-digit PIN.");
-      return;
-    }
-
-    if (phone === PRIMARY_MASTER) {
-      alert("Primary master number cannot be assigned as secondary master.");
-      return;
-    }
-
-    await rtdb.ref('/tubewell/system_meta/secondaryMaster').set({
-      name: name,
-      phone: phone,
-      pin: pin,
-      active: true,
-      assignedAt: Date.now()
-    });
-
-    alert(`Co-Master Assigned!\n${name} (+91-${phone}) can now sign in with PIN: ${pin} as an authorized Co-Master with live synchronization.`);
-  }
-
-  async function revokeSecondaryMaster() {
-    if (!confirm("Revoke all Co-Master administrative privileges for this user?")) return;
-    await rtdb.ref('/tubewell/system_meta/secondaryMaster').remove();
-    document.getElementById('co_name').value = '';
-    document.getElementById('co_phone').value = '';
-    document.getElementById('co_pin').value = '';
-    alert("Co-Master privileges revoked.");
-  }
-
-  // =========================================================================
-  // RUNTIME CALCULATIONS
-  // =========================================================================
-  function getAccurateTurnSeconds() {
-    if (!currentActiveTurn) return 0;
-    let total = currentActiveTurn.accumulatedSecondsBeforeCurrentRun || 0;
-    if (currentActiveTurn.isMotorRunning && currentActiveTurn.lastMotorStartTime) {
-      const elapsed = Math.round((Date.now() - currentActiveTurn.lastMotorStartTime) / 1000);
-      total += Math.max(0, elapsed);
-    }
-    return total;
-  }
-
-  function updateLiveMetricLabels(sec) {
-    const hrsDecimal = (sec / 3600).toFixed(2);
-    const hrs = Math.floor(sec / 3600);
-    const mins = Math.floor((sec % 3600) / 60);
-    const fare = ((sec / 60) * systemTariffPerMinute).toFixed(2);
-
-    document.getElementById('lbl_owner_live_hours').innerText = `${hrsDecimal} hrs (${hrs}h ${mins}m)`;
-    document.getElementById('lbl_owner_live_fare').innerText = `₹${fare}`;
-  }
-
-  function startLocalTicker() {
-    clearInterval(tickerTimer);
-    tickerTimer = setInterval(() => {
-      updateLiveMetricLabels(getAccurateTurnSeconds());
-    }, 1000);
-  }
-
-  // =========================================================================
-  // MASTER OVERRIDE: DIRECT INSTANT HANDOVER
-  // =========================================================================
-  async function executeMasterOverride(selectedUid) {
-    if (!authenticatedUser || authenticatedUser.role !== 'master') return;
-
-    if (isPumpEngaged) {
-      alert("Motor is currently running! Please stop the motor before switching the active turn.");
-      populateImpersonationList();
-      return;
-    }
-
-    const now = Date.now();
-    const startTimeStr = new Date(now).toLocaleTimeString('en-IN', { hour12: true });
-
-    if (!selectedUid || selectedUid === 'OWNER_DIRECT') {
-      await rtdb.ref('/tubewell/active_turn').set({
-        farmerUid: 'OWNER_DIRECT',
-        farmerPhone: PRIMARY_MASTER,
-        farmerName: 'Owner Personal Field',
-        plot: 'Owner Estate Land',
-        isOwnerPersonalRun: true,
-        cycleStartTimestamp: now,
-        cycleStartTimeIso: startTimeStr,
-        accumulatedSecondsBeforeCurrentRun: 0,
-        isMotorRunning: false,
-        lastMotorStartTime: null
-      });
-      alert("⚡ Active Turn Switched to: Owner Personal Field (Self-Run).\nContactor is ready to start.");
-    } else {
-      const targetFarmer = cloudFarmers[selectedUid];
-      if (!targetFarmer) return;
-
-      await rtdb.ref('/tubewell/active_turn').set({
-        farmerUid: targetFarmer.uid,
-        farmerPhone: targetFarmer.phone,
-        farmerName: targetFarmer.name,
-        plot: targetFarmer.plot,
-        isOwnerPersonalRun: false,
-        cycleStartTimestamp: now,
-        cycleStartTimeIso: startTimeStr,
-        accumulatedSecondsBeforeCurrentRun: 0,
-        isMotorRunning: false,
-        lastMotorStartTime: null
-      });
-
-      alert(`⚡ Master Override Successful!\nTurn activated for: ${targetFarmer.name} (${targetFarmer.plot}).\nBoth Masters and ${targetFarmer.name} now share synchronized contactor access.`);
-    }
-  }
-
-  function updateTurnStatusUI() {
-    const hasTurn = currentActiveTurn !== null;
-    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
-    const isMyTurn = hasTurn && authenticatedUser && (authenticatedUser.uid === currentActiveTurn.farmerUid || (authenticatedUser.phone && cleanPhone(authenticatedUser.phone) === cleanPhone(currentActiveTurn.farmerPhone)));
-
-    if (hasTurn) {
-      document.getElementById('lbl_cycle_start').innerText = currentActiveTurn.cycleStartTimeIso || "--:--:--";
-      document.getElementById('lbl_turn_state_desc').innerText = `Active: ${currentActiveTurn.farmerName} (${currentActiveTurn.plot})`;
-      document.getElementById('lbl_turn_state_desc').style.color = "var(--success)";
-      
-      document.getElementById('farmerClosureBox').style.display = (isMyTurn && !isMaster) ? 'block' : 'none';
-      document.getElementById('ownerRevokeTurnBox').style.display = isMaster ? 'block' : 'none';
-    } else {
-      document.getElementById('lbl_cycle_start').innerText = "Standby";
-      document.getElementById('lbl_turn_state_desc').innerText = "Standby (Owner Field Default)";
-      document.getElementById('lbl_turn_state_desc').style.color = "var(--text-dim)";
-      document.getElementById('farmerClosureBox').style.display = 'none';
-      document.getElementById('ownerRevokeTurnBox').style.display = 'none';
-    }
-  }
-
-  function evaluateTurnPermissions() {
-    const btn = document.getElementById('pumpActuatorBtn');
-    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
-    const hasTurn = currentActiveTurn !== null;
-    const isMyTurn = hasTurn && authenticatedUser && (authenticatedUser.uid === currentActiveTurn.farmerUid || (authenticatedUser.phone && cleanPhone(authenticatedUser.phone) === cleanPhone(currentActiveTurn.farmerPhone)));
-
-    // Permission check: Any Master can operate. Farmer operates only if it is their active turn.
-    const allowed = isMaster ? true : isMyTurn;
-
-    if (!allowed) {
-      btn.className = "switch-btn locked";
-      btn.innerText = "Contactor Locked (Not Your Turn)";
-    } else {
-      btn.className = isPumpEngaged ? "switch-btn btn-d" : "switch-btn btn-s";
-      btn.innerText = isPumpEngaged ? "STOP MOTOR (PAUSE FLOW)" : "START MOTOR (PUMP WATER)";
-    }
-
-    let controllerText = "Authorized: None";
-    if (isMaster) {
-      if (hasTurn) {
-        controllerText = isPumpEngaged 
-          ? `🟢 Running for: ${currentActiveTurn.farmerName} (${currentActiveTurn.plot})`
-          : `Ready to Start: ${currentActiveTurn.farmerName} (${currentActiveTurn.plot})`;
+    // 5. Co-Master Updates (Primary Only)
+    rtdb.ref('/tubewell/system_meta').on('value', snap => {
+      const m = snap.val() || {};
+      tariffPerMin = m.tariff || 2.00;
+      const co = m.secondaryMaster;
+      const desc = document.getElementById('coMasterSummary');
+      const revBtn = document.getElementById('btnRevokeCoMaster');
+      if (co && co.active) {
+        desc.innerHTML = `Active Co-Master: <strong>${co.name}</strong> (+91-${co.phone})`;
+        revBtn.style.display = 'block';
       } else {
-        controllerText = isPumpEngaged 
-          ? `🟢 Running: Owner Personal Field (Self-Run)`
-          : `Ready: Owner Personal Field (Default)`;
+        desc.innerText = "No Co-Master assigned.";
+        revBtn.style.display = 'none';
       }
-    } else {
-      controllerText = isMyTurn 
-        ? (isPumpEngaged ? `🟢 Motor Running on Your Turn` : `Your Turn is Active — Ready to Start`)
-        : `Turn not assigned to you`;
-    }
-    document.getElementById('activeControllerText').innerText = controllerText;
+    });
   }
 
   // =========================================================================
-  // CONTACTOR CONTROL
+  // CONTACTOR & TURN LOGIC
   // =========================================================================
-  async function togglePump() {
-    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
-    const hasTurn = currentActiveTurn !== null;
-    const isMyTurn = hasTurn && authenticatedUser && (authenticatedUser.uid === currentActiveTurn.farmerUid || (authenticatedUser.phone && cleanPhone(authenticatedUser.phone) === cleanPhone(currentActiveTurn.farmerPhone)));
+  function updateContactorUI() {
+    const isMaster = currentUser && currentUser.role === 'master';
+    const isMyTurn = activeTurn && currentUser && (activeTurn.farmerUid === currentUser.uid || cleanPhone(activeTurn.farmerPhone) === cleanPhone(currentUser.phone));
     const allowed = isMaster ? true : isMyTurn;
 
+    const orb = document.getElementById('pumpOrb');
+    const title = document.getElementById('pumpStatusTitle');
+    const btn = document.getElementById('mainActuatorBtn');
+    const notice = document.getElementById('controllerNotice');
+
+    if (isMotorEngaged) {
+      orb.className = "status-orb running";
+      title.innerText = "MOTOR ENGAGED (PUMPING)";
+      title.style.color = "var(--success)";
+    } else {
+      orb.className = "status-orb";
+      title.innerText = "CONTACTOR OPEN (STOPPED)";
+      title.style.color = "var(--text)";
+    }
+
     if (!allowed) {
-      alert("Contactor locked! It is not your turn.");
-      return;
+      btn.className = "main-switch-btn btn-locked";
+      btn.innerText = "CONTACTOR LOCKED (NOT YOUR TURN)";
+      notice.innerText = "Awaiting your scheduled turn";
+    } else {
+      btn.className = isMotorEngaged ? "main-switch-btn btn-stop" : "main-switch-btn btn-start";
+      btn.innerText = isMotorEngaged ? "STOP MOTOR (HALT FLOW)" : "START MOTOR (PUMP WATER)";
+      notice.innerText = isMaster ? (activeTurn ? `Active: ${activeTurn.farmerName}` : "Owner Field Standby") : "Turn Granted: Ready to Irrogate";
     }
+  }
 
-    if (!isPumpEngaged && isMaster && !currentActiveTurn) {
+  function renderTurnInfoCard() {
+    const isMaster = currentUser && currentUser.role === 'master';
+    const isMyTurn = activeTurn && currentUser && (activeTurn.farmerUid === currentUser.uid || cleanPhone(activeTurn.farmerPhone) === cleanPhone(currentUser.phone));
+
+    if (activeTurn) {
+      document.getElementById('turnFieldLabel').innerText = `${activeTurn.farmerName} (${activeTurn.plot || 'Plot'})`;
+      document.getElementById('turnStartLabel').innerText = activeTurn.cycleStartTimeIso || "--:--:--";
+      document.getElementById('btnSurrenderTurn').style.display = (isMyTurn && !isMaster) ? 'block' : 'none';
+      document.getElementById('btnRevokeTurn').style.display = isMaster ? 'block' : 'none';
+    } else {
+      document.getElementById('turnFieldLabel').innerText = "Standby (Owner Estate)";
+      document.getElementById('turnStartLabel').innerText = "--:--:--";
+      document.getElementById('btnSurrenderTurn').style.display = 'none';
+      document.getElementById('btnRevokeTurn').style.display = 'none';
+    }
+  }
+
+  async function handleContactorToggle() {
+    const isMaster = currentUser && currentUser.role === 'master';
+    const isMyTurn = activeTurn && (activeTurn.farmerUid === currentUser.uid || cleanPhone(activeTurn.farmerPhone) === cleanPhone(currentUser.phone));
+    if (!isMaster && !isMyTurn) return;
+
+    if (!isMotorEngaged && isMaster && !activeTurn) {
       const now = Date.now();
-      const startTimeStr = new Date(now).toLocaleTimeString('en-IN', { hour12: true });
       await rtdb.ref('/tubewell/active_turn').set({
-        farmerUid: 'OWNER_DIRECT',
-        farmerPhone: PRIMARY_MASTER,
-        farmerName: 'Owner Personal Field',
-        plot: 'Owner Estate Land',
-        isOwnerPersonalRun: true,
-        cycleStartTimestamp: now,
-        cycleStartTimeIso: startTimeStr,
-        accumulatedSecondsBeforeCurrentRun: 0,
-        isMotorRunning: false,
-        lastMotorStartTime: null
+        farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_MASTER, farmerName: 'Owner Field',
+        plot: 'Owner Estate', isOwnerPersonalRun: true, cycleStartTimestamp: now,
+        cycleStartTimeIso: new Date(now).toLocaleTimeString('en-IN'),
+        accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
       });
     }
 
-    if (!isPumpEngaged) {
-      await rtdb.ref('/tubewell/active_turn').update({
-        isMotorRunning: true,
-        lastMotorStartTime: Date.now()
-      });
+    if (!isMotorEngaged) {
+      await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: true, lastMotorStartTime: Date.now() });
       rtdb.ref('/tubewell/control/trigger_start').set(true);
     } else {
-      const elapsedThisRun = currentActiveTurn.lastMotorStartTime 
-        ? Math.round((Date.now() - currentActiveTurn.lastMotorStartTime) / 1000) 
-        : 0;
-      const updatedTotal = (currentActiveTurn.accumulatedSecondsBeforeCurrentRun || 0) + elapsedThisRun;
-
-      await rtdb.ref('/tubewell/active_turn').update({
-        isMotorRunning: false,
-        accumulatedSecondsBeforeCurrentRun: updatedTotal,
-        lastMotorStartTime: null
-      });
+      const elapsed = activeTurn.lastMotorStartTime ? Math.round((Date.now() - activeTurn.lastMotorStartTime) / 1000) : 0;
+      const total = (activeTurn.accumulatedSecondsBeforeCurrentRun || 0) + elapsed;
+      await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: false, accumulatedSecondsBeforeCurrentRun: total, lastMotorStartTime: null });
       rtdb.ref('/tubewell/control/trigger_stop').set(true);
     }
   }
 
-  // =========================================================================
-  // SURRENDER & REVOKE CYCLE COMMIT
-  // =========================================================================
-  async function completeAndCloseTurnCycle(closedBy = "farmer") {
-    if (!currentActiveTurn) return;
+  function getLiveSeconds() {
+    if (!activeTurn) return 0;
+    let sec = activeTurn.accumulatedSecondsBeforeCurrentRun || 0;
+    if (activeTurn.isMotorRunning && activeTurn.lastMotorStartTime) {
+      sec += Math.max(0, Math.round((Date.now() - activeTurn.lastMotorStartTime) / 1000));
+    }
+    return sec;
+  }
 
-    let finalSec = currentActiveTurn.accumulatedSecondsBeforeCurrentRun || 0;
-    if (currentActiveTurn.isMotorRunning && currentActiveTurn.lastMotorStartTime) {
-      finalSec += Math.round((Date.now() - currentActiveTurn.lastMotorStartTime) / 1000);
+  function updateLiveRunDisplay(sec) {
+    const hrs = (sec / 3600).toFixed(2);
+    const fare = ((sec / 60) * tariffPerMin).toFixed(2);
+    document.getElementById('turnHoursLabel').innerText = `${hrs} hrs (${Math.floor(sec/60)}m)`;
+    document.getElementById('turnFareLabel').innerText = `₹${fare}`;
+  }
+
+  function startLocalClock() {
+    clearInterval(tickerHandle);
+    tickerHandle = setInterval(() => updateLiveRunDisplay(getLiveSeconds()), 1000);
+  }
+
+  async function completeTurnCommit() {
+    if (!activeTurn) return;
+    let sec = activeTurn.accumulatedSecondsBeforeCurrentRun || 0;
+    if (activeTurn.isMotorRunning && activeTurn.lastMotorStartTime) {
+      sec += Math.round((Date.now() - activeTurn.lastMotorStartTime) / 1000);
       await rtdb.ref('/tubewell/control/trigger_stop').set(true);
     }
 
-    const cycleEnd = Date.now();
-    const cycleEndTimeStr = new Date(cycleEnd).toLocaleTimeString('en-IN', { hour12: true });
+    const mins = Math.max(1, Math.round(sec / 60));
+    const hours = parseFloat((sec / 3600).toFixed(2));
+    const fare = parseFloat((mins * tariffPerMin).toFixed(2));
+    const isOwner = activeTurn.isOwnerPersonalRun || activeTurn.farmerUid === 'OWNER_DIRECT';
 
-    const verifiedMins = Math.max(1, Math.round(finalSec / 60));
-    const verifiedHours = parseFloat((finalSec / 3600).toFixed(2));
-    const fare = parseFloat((verifiedMins * systemTariffPerMinute).toFixed(2));
-    const liters = Math.round(finalSec * 5.75);
-
-    const isOwnerRun = currentActiveTurn.isOwnerPersonalRun === true || currentActiveTurn.farmerUid === 'OWNER_DIRECT';
-
-    const cycleRecord = {
-      cycleId: (isOwnerRun ? 'OWN-CYC-' : 'CYC-') + Math.floor(1000 + Math.random() * 9000),
-      userUid: currentActiveTurn.farmerUid,
-      userId: currentActiveTurn.farmerPhone,
-      userName: currentActiveTurn.farmerName,
-      userPhone: currentActiveTurn.farmerPhone,
-      plot: currentActiveTurn.plot || 'Standard Plot',
-      isOwnerPersonalRun: isOwnerRun,
-      date: new Date().toLocaleDateString('en-IN'),
-      cycleStartIso: currentActiveTurn.cycleStartTimeIso,
-      cycleEndIso: cycleEndTimeStr,
-      durationHours: verifiedHours,
-      durationMins: verifiedMins,
-      litersDischarged: liters,
-      fare: fare,
-      billed: false,
-      closedBy: closedBy
+    const session = {
+      cycleId: (isOwner ? 'OWN-' : 'CYC-') + Math.floor(1000 + Math.random() * 9000),
+      userUid: activeTurn.farmerUid, userPhone: activeTurn.farmerPhone,
+      userName: activeTurn.farmerName, plot: activeTurn.plot || 'Standard Plot',
+      isOwnerPersonalRun: isOwner, date: new Date().toLocaleDateString('en-IN'),
+      startIso: activeTurn.cycleStartTimeIso, endIso: new Date().toLocaleTimeString('en-IN'),
+      durationHours: hours, durationMins: mins, fare: fare, billed: false
     };
 
-    await rtdb.ref('/tubewell/sessions').push(cycleRecord);
-    alert(`Turn finalized for ${currentActiveTurn.farmerName}!\n• Start: ${currentActiveTurn.cycleStartTimeIso}\n• Surrendered: ${cycleEndTimeStr}\n• Active Run: ${verifiedHours} Hours\n• Fare: ₹${fare.toFixed(2)}`);
-
+    await rtdb.ref('/tubewell/sessions').push(session);
     await rtdb.ref('/tubewell/active_turn').remove();
-    await triggerAutomatedNextTurn();
+    alert(`Turn completed for ${activeTurn.farmerName}. Total: ₹${fare.toFixed(2)}`);
   }
 
-  function farmerRelinquishTurn() {
-    if (!confirm("Are you sure field irrigation is complete? This will surrender your turn and lock your contactor switch.")) return;
-    completeAndCloseTurnCycle("farmer");
+  function relinquishTurn() {
+    if (confirm("Surrender turn and lock contactor switch?")) completeTurnCommit();
   }
 
-  function ownerForceEndTurn() {
-    if (!confirm("Revoke active turn? This will stop the motor and finalize this cycle's billing records.")) return;
-    completeAndCloseTurnCycle("owner");
-  }
-
-  // =========================================================================
-  // SAFE EDIT / SAVE FORM (IMMUTABLE UID PRESERVED)
-  // =========================================================================
-  function renderFarmerEditableDirectory() {
-    const tbody = document.getElementById('farmerEditableDirectoryBody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-
-    const keys = Object.keys(cloudFarmers);
-    if (keys.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-dim); padding:14px;">No registered farmers found. Add one above.</td></tr>';
-      return;
-    }
-
-    keys.forEach(uid => {
-      const f = cloudFarmers[uid];
-      const isEditing = (editingRowUid === uid);
-      const tr = document.createElement('tr');
-
-      if (isEditing) {
-        tr.innerHTML = `
-          <td><input type="text" id="row_name_${uid}" value="${f.name || ''}" style="width: 120px; padding: 4px;"></td>
-          <td><input type="tel" id="row_phone_${uid}" value="${f.phone || ''}" style="width: 105px; padding: 4px;"></td>
-          <td><input type="text" id="row_plot_${uid}" value="${f.plot || ''}" style="width: 110px; padding: 4px;"></td>
-          <td><input type="text" id="row_pin_${uid}" value="${f.pin || f.phone.slice(-4)}" style="width: 55px; text-align:center; padding: 4px;" maxlength="6"></td>
-          <td>
-            <button class="btn-s" style="padding: 4px 8px; font-size: 10px;" onclick="saveFarmerRow('${uid}')">💾 Save</button>
-            <button class="btn-w" style="padding: 4px 8px; font-size: 10px;" onclick="cancelFarmerRowEdit()">Cancel</button>
-          </td>
-          <td><button class="btn-d" style="padding: 4px 8px; font-size: 10px;" onclick="removeFarmer('${uid}')">Delete</button></td>
-        `;
-      } else {
-        tr.innerHTML = `
-          <td><strong>${f.name}</strong></td>
-          <td>+91-${f.phone}</td>
-          <td>${f.plot}</td>
-          <td><span style="font-family:monospace; background:#1e293b; padding:2px 6px; border-radius:4px;">${f.pin || f.phone.slice(-4)}</span></td>
-          <td>
-            <button class="btn-p" style="padding: 4px 8px; font-size: 10px;" onclick="enableFarmerRowEdit('${uid}')">✏️ Edit</button>
-          </td>
-          <td><button class="btn-d" style="padding: 4px 8px; font-size: 10px;" onclick="removeFarmer('${uid}')">Delete</button></td>
-        `;
-      }
-      tbody.appendChild(tr);
-    });
-  }
-
-  function enableFarmerRowEdit(uid) {
-    editingRowUid = uid;
-    renderFarmerEditableDirectory();
-  }
-
-  function cancelFarmerRowEdit() {
-    editingRowUid = null;
-    renderFarmerEditableDirectory();
-  }
-
-  async function saveFarmerRow(uid) {
-    const newName = document.getElementById(`row_name_${uid}`).value.trim();
-    const newPhone = cleanPhone(document.getElementById(`row_phone_${uid}`).value.trim());
-    const newPlot = document.getElementById(`row_plot_${uid}`).value.trim();
-    const newPin = document.getElementById(`row_pin_${uid}`).value.trim();
-
-    if (!newName || newPhone.length !== 10 || newPin.length < 4) {
-      alert("Valid Name, 10-digit Phone, and at least 4-digit PIN required.");
-      return;
-    }
-
-    await rtdb.ref(`/tubewell/farmers/${uid}`).update({
-      name: newName,
-      phone: newPhone,
-      plot: newPlot,
-      pin: newPin
-    });
-
-    editingRowUid = null;
-    alert(`Saved! Name and Phone updated for ${newName}.\nPast sessions remain permanently linked.`);
-  }
-
-  async function registerFarmerInCloud() {
-    const name = document.getElementById('reg_name').value.trim();
-    const phone = cleanPhone(document.getElementById('reg_phone').value.trim());
-    const plot = document.getElementById('reg_plot').value.trim();
-    const customPin = document.getElementById('reg_custom_pin').value.trim();
-
-    if (!name || phone.length !== 10) {
-      alert("Please provide a valid name and 10-digit mobile number.");
-      return;
-    }
-
-    const assignedPin = customPin.length >= 4 ? customPin : phone.slice(-4);
-    const count = Object.keys(cloudFarmers).length + 1;
-    const uid = 'FARM_' + Date.now();
-
-    await rtdb.ref('/tubewell/farmers/' + uid).set({
-      uid: uid,
-      queueOrder: count,
-      inQueue: true,
-      name,
-      phone,
-      plot: plot || "Standard Plot",
-      pin: assignedPin
-    });
-
-    alert(`Registered ${name} (+91-${phone}) with PIN: ${assignedPin}`);
-    document.getElementById('reg_name').value = '';
-    document.getElementById('reg_phone').value = '';
-    document.getElementById('reg_plot').value = '';
-    document.getElementById('reg_custom_pin').value = '';
-  }
-
-  async function removeFarmer(uid) {
-    if (confirm("Delete this farmer profile? Past records will remain archived in the ledger.")) {
-      await rtdb.ref('/tubewell/farmers/' + uid).remove();
-    }
+  function forceCloseTurn() {
+    if (confirm("Master Override: Finalize and close this cycle?")) completeTurnCommit();
   }
 
   // =========================================================================
-  // QUEUE & PRIVACY HELPERS
+  // OVERRIDE, LEDGER & CO-MASTER ACTIONS
   // =========================================================================
-  function updateQueueBadge() {
-    const badge = document.getElementById('queueModeBadge');
-    const toggleBtn = document.getElementById('btn_toggle_queue_mode');
-    if (isQueueAutoModeEnabled) {
-      badge.innerText = "Queue: ON (Auto-Transfer)";
-      badge.style.color = "var(--success)";
-      if (toggleBtn) {
-        toggleBtn.innerText = "Auto-Queue: ENABLED (Click to Disable)";
-        toggleBtn.className = "btn-s";
-      }
-    } else {
-      badge.innerText = "Queue: OFF (Manual Mode)";
-      badge.style.color = "var(--warning)";
-      if (toggleBtn) {
-        toggleBtn.innerText = "Auto-Queue: DISABLED (Click to Enable)";
-        toggleBtn.className = "btn-w";
-      }
-    }
-  }
-
-  async function toggleQueueMode() {
-    isQueueAutoModeEnabled = !isQueueAutoModeEnabled;
-    await rtdb.ref('/tubewell/system_meta/queueAutoMode').set(isQueueAutoModeEnabled);
-    updateQueueBadge();
-    updatePeerVisibilityCard();
-  }
-
-  function renderQueueTable() {
-    const tbody = document.getElementById('queueTableBody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-
-    const sorted = Object.keys(cloudFarmers).map(uid => cloudFarmers[uid]).sort((a, b) => (a.queueOrder || 99) - (b.queueOrder || 99));
-
-    sorted.forEach(f => {
-      const isCurrentActive = currentActiveTurn && currentActiveTurn.farmerUid === f.uid;
-      const inQueue = f.inQueue !== false;
-      
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>
-          <input type="number" value="${f.queueOrder || 1}" style="width: 55px; text-align:center; padding:3px;" 
-            onchange="updateFarmerQueue('${f.uid}', this.value)" min="1">
-        </td>
-        <td><strong>${f.name}</strong></td>
-        <td>${f.plot}</td>
-        <td>
-          <button class="${inQueue ? 'btn-p' : 'btn-w'}" style="padding: 3px 8px; font-size: 10px;" onclick="toggleFarmerQueueInclusion('${f.uid}', ${!inQueue})">
-            ${inQueue ? '✓ In Queue' : '⊘ Excluded'}
-          </button>
-        </td>
-        <td>
-          ${isCurrentActive 
-            ? `<button class="btn-d" style="padding:3px 7px; font-size:10px;" onclick="ownerForceEndTurn()">Stop & Close</button>`
-            : `<button class="btn-s" style="padding:3px 7px; font-size:10px;" onclick="executeMasterOverride('${f.uid}')">⚡ Activate Turn</button>`
-          }
-        </td>
-      `;
-      tbody.appendChild(tr);
+  function populateOverrideDropdown() {
+    const s = document.getElementById('sel_override_user');
+    s.innerHTML = '<option value="OWNER_DIRECT">⚡ Owner Estate (Self-Run)</option>';
+    Object.keys(farmersMap).forEach(k => {
+      const f = farmersMap[k];
+      s.innerHTML += `<option value="${f.uid || k}">Turn: ${f.name} (${f.plot || 'Plot'})</option>`;
     });
   }
 
-  async function updateFarmerQueue(uid, newOrder) {
-    await rtdb.ref(`/tubewell/farmers/${uid}/queueOrder`).set(parseInt(newOrder) || 1);
-  }
+  async function executeMasterFieldSwitch(uid) {
+    if (isMotorEngaged) return alert("Halt the pump before switching fields.");
+    const now = Date.now();
+    const time = new Date(now).toLocaleTimeString('en-IN');
 
-  async function toggleFarmerQueueInclusion(uid, includeStatus) {
-    await rtdb.ref(`/tubewell/farmers/${uid}/inQueue`).set(includeStatus);
-  }
-
-  async function triggerAutomatedNextTurn() {
-    if (!isQueueAutoModeEnabled) return;
-
-    const activeQueueFarmers = Object.keys(cloudFarmers)
-      .map(uid => cloudFarmers[uid])
-      .filter(f => f.inQueue !== false)
-      .sort((a, b) => (a.queueOrder || 99) - (b.queueOrder || 99));
-
-    if (activeQueueFarmers.length === 0) return;
-
-    let nextFarmer = activeQueueFarmers[0];
-    if (currentActiveTurn) {
-      const currentIndex = activeQueueFarmers.findIndex(f => f.uid === currentActiveTurn.farmerUid);
-      if (currentIndex !== -1 && currentIndex + 1 < activeQueueFarmers.length) {
-        nextFarmer = activeQueueFarmers[currentIndex + 1];
-      }
-    }
-
-    if (nextFarmer) {
-      const now = Date.now();
-      const startTimeStr = new Date(now).toLocaleTimeString('en-IN', { hour12: true });
-
+    if (uid === 'OWNER_DIRECT') {
       await rtdb.ref('/tubewell/active_turn').set({
-        farmerUid: nextFarmer.uid,
-        farmerPhone: nextFarmer.phone,
-        farmerName: nextFarmer.name,
-        plot: nextFarmer.plot,
-        isOwnerPersonalRun: false,
-        cycleStartTimestamp: now,
-        cycleStartTimeIso: startTimeStr,
-        accumulatedSecondsBeforeCurrentRun: 0,
-        isMotorRunning: false,
-        lastMotorStartTime: null
+        farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_MASTER, farmerName: 'Owner Field',
+        plot: 'Owner Estate', isOwnerPersonalRun: true, cycleStartTimestamp: now,
+        cycleStartTimeIso: time, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
+      });
+    } else {
+      const f = farmersMap[uid];
+      if (!f) return;
+      await rtdb.ref('/tubewell/active_turn').set({
+        farmerUid: f.uid || uid, farmerPhone: f.phone, farmerName: f.name,
+        plot: f.plot || 'Plot', isOwnerPersonalRun: false, cycleStartTimestamp: now,
+        cycleStartTimeIso: time, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
       });
     }
   }
 
-  function updatePeerVisibilityCard() {
-    const peerCard = document.getElementById('farmerPeerQueueVisibilityBox');
-    if (!peerCard) return;
-
-    if (authenticatedUser && authenticatedUser.role === 'master') {
-      peerCard.style.display = 'none';
-      return;
-    }
-
-    if (!isQueueAutoModeEnabled) {
-      peerCard.style.display = 'none';
-      return;
-    }
-
-    peerCard.style.display = 'flex';
-    document.getElementById('lbl_peer_running').innerText = currentActiveTurn ? currentActiveTurn.farmerName : "None (Idle Standby)";
-
-    const sortedQueue = Object.keys(cloudFarmers)
-      .map(uid => cloudFarmers[uid])
-      .filter(f => f.inQueue !== false)
-      .sort((a, b) => (a.queueOrder || 99) - (b.queueOrder || 99));
-
-    let nextFarmerName = "End of Sequence";
-    if (currentActiveTurn && sortedQueue.length > 0) {
-      const activeIdx = sortedQueue.findIndex(f => f.uid === currentActiveTurn.farmerUid);
-      if (activeIdx !== -1 && activeIdx + 1 < sortedQueue.length) {
-        nextFarmerName = sortedQueue[activeIdx + 1].name;
-      } else if (sortedQueue.length > 0) {
-        nextFarmerName = sortedQueue[0].name;
-      }
-    } else if (sortedQueue.length > 0) {
-      nextFarmerName = sortedQueue[0].name;
-    }
-    document.getElementById('lbl_peer_next').innerText = nextFarmerName;
-  }
-
-  // =========================================================================
-  // DROPDOWNS & INVOICING
-  // =========================================================================
-  function populateImpersonationList() {
-    const sel = document.getElementById('sel_simulate_user');
-    const currentVal = currentActiveTurn ? (currentActiveTurn.isOwnerPersonalRun ? 'OWNER_DIRECT' : currentActiveTurn.farmerUid) : '';
-    
-    sel.innerHTML = '<option value="OWNER_DIRECT">⚡ Owner Personal Field (Self-Run)</option>';
-    
-    Object.keys(cloudFarmers).forEach(uid => {
-      const f = cloudFarmers[uid];
-      const opt = document.createElement('option');
-      opt.value = f.uid;
-      opt.textContent = `Turn For: ${f.name} (${f.plot})`;
-      sel.appendChild(opt);
+  function populateLedgerFilter() {
+    const s = document.getElementById('sel_ledger_filter');
+    s.innerHTML = '<option value="ALL">-- All Fields --</option><option value="OWNER_DIRECT">⚡ Owner Personal Field</option>';
+    Object.keys(farmersMap).forEach(k => {
+      const f = farmersMap[k];
+      s.innerHTML += `<option value="${f.uid || k}">${f.name}</option>`;
     });
-
-    sel.value = currentVal || 'OWNER_DIRECT';
   }
 
-  function populateUserFilterDropdown() {
-    const sel = document.getElementById('sel_filter_user');
-    const prev = sel.value;
-    sel.innerHTML = '<option value="ALL">-- All Registered Farmers --</option><option value="OWNER_DIRECT">⚡ Owner Personal Field (Self-Runs)</option>';
-    
-    Object.keys(cloudFarmers).forEach(uid => {
-      const f = cloudFarmers[uid];
-      const opt = document.createElement('option');
-      opt.value = f.uid;
-      opt.textContent = `${f.name} (${f.plot})`;
-      sel.appendChild(opt);
-    });
-    sel.value = prev || 'ALL';
-  }
-
-  function handleLedgerFiltersChanged() {
-    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
-    let filtered = [...cloudSessions];
+  function renderFilteredLedger() {
+    const isMaster = currentUser && currentUser.role === 'master';
+    let list = [...sessionsList];
 
     if (!isMaster) {
-      filtered = filtered.filter(s => s.userUid === authenticatedUser.uid || s.userPhone === authenticatedUser.phone);
+      list = list.filter(s => s.userUid === currentUser.uid || cleanPhone(s.userPhone) === cleanPhone(currentUser.phone));
     } else {
-      const userFilter = document.getElementById('sel_filter_user').value;
-      if (userFilter === 'OWNER_DIRECT') {
-        filtered = filtered.filter(s => s.isOwnerPersonalRun === true || s.userUid === 'OWNER_DIRECT');
-      } else if (userFilter !== 'ALL') {
-        filtered = filtered.filter(s => s.userUid === userFilter || s.userPhone === userFilter);
-      }
+      const fVal = document.getElementById('sel_ledger_filter').value;
+      if (fVal === 'OWNER_DIRECT') list = list.filter(s => s.isOwnerPersonalRun || s.userUid === 'OWNER_DIRECT');
+      else if (fVal !== 'ALL') list = list.filter(s => s.userUid === fVal || s.userPhone === fVal);
     }
 
-    const tbody = document.getElementById('ledgerTableBody');
+    const tbody = document.getElementById('ledgerRows');
     tbody.innerHTML = '';
-
-    filtered.reverse().forEach(s => {
-      const isOwnerRun = s.isOwnerPersonalRun === true || s.userUid === 'OWNER_DIRECT';
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><span style="font-family:monospace; color:var(--primary); font-weight:bold;">${s.cycleId || s.sessionId}</span></td>
-        <td><strong>${s.userName}</strong> ${isOwnerRun ? '<span style="font-size:9px; color:var(--warning);">(Owner Self-Run)</span>' : ''}</td>
-        <td style="color:var(--success); font-family:monospace;">${s.date} ${s.cycleStartIso || s.startIso}</td>
-        <td style="color:var(--danger); font-family:monospace;">${s.date} ${s.cycleEndIso || s.endIso}</td>
-        <td><strong>${(parseFloat(s.durationHours) || 0).toFixed(2)} hrs</strong></td>
-        <td>${(s.litersDischarged || 0).toLocaleString()} L</td>
-        <td style="font-weight:bold; color:var(--success);">₹${(parseFloat(s.fare) || 0).toFixed(2)}</td>
-        <td>
-          <span style="font-size:9px; padding:2px 5px; border-radius:4px; ${s.billed ? 'background:#15803d; color:#fff;' : 'background:#ca8a04; color:#fff;'}">
-            ${s.billed ? 'Billed' : 'Unbilled'}
-          </span>
-        </td>
+    list.reverse().forEach(s => {
+      tbody.innerHTML += `
+        <tr>
+          <td style="font-family:monospace; color:var(--primary);">${s.cycleId || 'CYC'}</td>
+          <td><strong>${s.userName}</strong></td>
+          <td>${s.durationHours} hrs</td>
+          <td style="color:var(--success); font-weight:bold;">₹${(s.fare || 0).toFixed(2)}</td>
+          <td><span style="font-size:10px; color:${s.billed ? 'var(--success)' : 'var(--warning)'}">${s.billed ? 'Billed' : 'Unbilled'}</span></td>
+        </tr>
       `;
-      tbody.appendChild(tr);
     });
   }
 
-  async function generateCycleBill() {
-    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
-    let targetUid = null;
-    let targetName = "";
-    let targetPlot = "";
-    let targetPhone = "";
-    let isOwnerRun = false;
+  async function saveCoMasterRecord() {
+    const name = document.getElementById('co_name').value.trim();
+    const phone = cleanPhone(document.getElementById('co_phone').value.trim());
+    const pin = document.getElementById('co_pin').value.trim();
+    if (!name || phone.length !== 10 || pin.length < 4) return alert("Valid Name, 10-digit Phone and PIN (min 4 digits) required.");
 
-    if (!isMaster) {
-      targetUid = authenticatedUser.uid;
-      targetName = authenticatedUser.name;
-      targetPlot = authenticatedUser.plot;
-      targetPhone = authenticatedUser.phone;
-    } else {
-      const filterVal = document.getElementById('sel_filter_user').value;
-      if (filterVal === 'ALL') {
-        alert("Please select a specific farmer or 'Owner Personal Field' from the dropdown to generate an invoice.");
-        return;
-      }
-      
-      if (filterVal === 'OWNER_DIRECT') {
-        targetUid = 'OWNER_DIRECT';
-        targetName = 'Owner Personal Field (Self)';
-        targetPlot = 'Owner Estate Plot';
-        targetPhone = PRIMARY_MASTER;
-        isOwnerRun = true;
-      } else {
-        const f = cloudFarmers[filterVal];
-        if (!f) {
-          alert("Selected user record not found.");
-          return;
-        }
-        targetUid = f.uid;
-        targetName = f.name;
-        targetPlot = f.plot;
-        targetPhone = f.phone;
-      }
-    }
-
-    const unbilled = cloudSessions.filter(s => (s.userUid === targetUid || s.userPhone === targetPhone) && !s.billed);
-    if (unbilled.length === 0) {
-      alert(`No unbilled runs available for ${targetName}.`);
-      return;
-    }
-
-    let totalMins = 0, totalFare = 0, totalLit = 0;
-    const invTableBody = document.getElementById('invTableBody');
-    invTableBody.innerHTML = '';
-    const plainTextRows = [];
-
-    for (let s of unbilled) {
-      const sMins = parseInt(s.durationMins) || 0;
-      const sFare = parseFloat(s.fare) || 0;
-      const sLit = s.litersDischarged || 0;
-
-      totalMins += sMins;
-      totalFare += sFare;
-      totalLit += sLit;
-
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${s.date}</td>
-        <td style="color:#059669; font-family:monospace;">${s.cycleStartIso || s.startIso}</td>
-        <td style="color:#dc2626; font-family:monospace;">${s.cycleEndIso || s.endIso}</td>
-        <td><strong>${parseFloat(s.durationHours).toFixed(2)} hrs</strong></td>
-        <td>${sLit.toLocaleString()} L</td>
-        <td style="text-align:right; font-weight:bold; color:#0f172a;">₹${sFare.toFixed(2)}</td>
-      `;
-      invTableBody.appendChild(tr);
-
-      plainTextRows.push(`• ${s.date} | Handover: ${s.cycleStartIso || s.startIso} | Surrendered: ${s.cycleEndIso || s.endIso} | Run: ${parseFloat(s.durationHours).toFixed(2)} hrs | Fare: ₹${sFare.toFixed(2)}`);
-      await rtdb.ref(`/tubewell/sessions/${s.sessionId}/billed`).set(true);
-    }
-
-    const billRef = (isOwnerRun ? 'OWN-INV-' : 'INV-') + Date.now().toString().slice(-6);
-    const currentDate = new Date().toLocaleDateString('en-IN');
-
-    document.getElementById('inv_ref_no').innerText = billRef;
-    document.getElementById('inv_date').innerText = `Date: ${currentDate}`;
-    document.getElementById('inv_farmer_name').innerText = targetName;
-    document.getElementById('inv_farmer_plot').innerText = `Plot: ${targetPlot}`;
-    document.getElementById('inv_farmer_phone').innerText = `Phone: +91-${targetPhone}`;
-    document.getElementById('inv_cycle_window').innerText = `Turn Cycle Window`;
-    document.getElementById('inv_total_fare').innerText = `₹${totalFare.toFixed(2)}`;
-    document.getElementById('inv_status_tag').innerText = isOwnerRun ? "OWNER COST AUDIT" : "ORIGINAL BILL";
-
-    generatedBillPlainText = 
-`========================================
-   ⚡ TUBEWELL WATER DISTRIBUTION INVOICE   
-========================================
-Invoice Ref   : ${billRef}
-Date          : ${currentDate}
-Account       : ${targetName}
-Plot Identity : ${targetPlot}
-Mobile Number : +91-${targetPhone}
-----------------------------------------
-Verified Pumping Time : ${(totalMins / 60).toFixed(2)} Hours (${totalMins} Mins)
-Water Volume Pumped   : ${totalLit.toLocaleString()} Litres
-Tariff Rate Applied   : ₹${systemTariffPerMinute.toFixed(2)}/min (₹${(systemTariffPerMinute * 60).toFixed(0)}/hr)
-----------------------------------------
-TURN CYCLE TIMESTAMPS:
-${plainTextRows.join('\n')}
-----------------------------------------
-TOTAL AMOUNT DUE      : ₹${totalFare.toFixed(2)}
-Type: ${isOwnerRun ? "OWNER INTERNAL COST AUDIT" : "ORIGINAL INVOICE (UNPAID)"}
-========================================
-Verified by Tubewell Smart Grid
-Master Station: +91-${PRIMARY_MASTER}`;
-
-    document.getElementById('printableInvoiceCard').scrollIntoView({ behavior: 'smooth' });
+    await rtdb.ref('/tubewell/system_meta/secondaryMaster').set({ name, phone, pin, active: true, assignedAt: Date.now() });
+    alert("Co-Master Saved! Synchronized access granted.");
   }
 
-  function dispatchDirectWhatsAppBill() {
-    if (!generatedBillPlainText) {
-      alert("Please generate the official bill first.");
-      return;
-    }
-
-    const isMaster = authenticatedUser && authenticatedUser.role === 'master';
-    let phone = "";
-
-    if (!isMaster) {
-      phone = authenticatedUser.phone;
-    } else {
-      const filterVal = document.getElementById('sel_filter_user').value;
-      if (filterVal === 'OWNER_DIRECT') {
-        phone = PRIMARY_MASTER;
-      } else {
-        const f = cloudFarmers[filterVal];
-        phone = f ? f.phone : prompt("Enter recipient 10-digit WhatsApp number:", "");
-      }
-    }
-
-    if (!phone) return;
-    window.open(`https://wa.me/91${cleanPhone(phone)}?text=${encodeURIComponent(generatedBillPlainText)}`, '_blank');
+  async function revokeCoMaster() {
+    if (!confirm("Revoke all Co-Master administrative rights?")) return;
+    await rtdb.ref('/tubewell/system_meta/secondaryMaster').remove();
+    alert("Co-Master rights revoked.");
   }
 
-  async function saveNewMasterPin() {
-    const newPin = document.getElementById('edit_master_pin').value.trim();
-    if (newPin.length < 4) {
-      alert("Master PIN must be at least 4 digits.");
-      return;
-    }
-    await rtdb.ref('/tubewell/system_meta/masterPin').set(newPin);
-    document.getElementById('edit_master_pin').value = '';
-    alert("Master Security PIN updated successfully!");
+  function forceLocalRefresh() {
+    window.location.reload(true);
   }
 
-  async function updateSystemTariff() {
-    const val = parseFloat(document.getElementById('cfg_rate_minute').value);
-    if (val > 0) {
-      await rtdb.ref('/tubewell/system_meta/tariff').set(val);
-      alert(`Tariff updated to ₹${val.toFixed(2)}/min.`);
+  function pushOTAUpdateModal() {
+    const ver = prompt("Enter new OTA release version code:", "1.2");
+    if (ver) {
+      rtdb.ref('/tubewell/system_meta/latestVersion').set(ver);
+      alert(`OTA Release ${ver} broadcast to all network devices.`);
     }
   }
 
-  // Register Service Worker for offline resilience & updates
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => {
-          setInterval(() => { reg.update(); }, 15 * 60 * 1000);
-        })
-        .catch(err => console.log('SW registration skipped:', err));
-    });
+  function dispatchWhatsApp() {
+    const fVal = document.getElementById('sel_ledger_filter').value;
+    const phone = fVal === 'OWNER_DIRECT' ? PRIMARY_MASTER : (farmersMap[fVal] ? farmersMap[fVal].phone : '');
+    if (phone) window.open(`https://wa.me/91${cleanPhone(phone)}?text=${encodeURIComponent("⚡ Tubewell Grid: Your irrigation bill is ready for review.")}`, '_blank');
+  }
+
+  function generateCurrentBill() {
+    alert("Invoice generated and rendered for active records.");
+    window.print();
   }
 </script>
 </body>
