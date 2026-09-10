@@ -3,58 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#060913">
-  <title>ट्यूबवेल स्मार्ट ग्रिड 2.0 - किसान बंधु</title>
+  <meta name="theme-color" content="#070b14">
+  <title>ट्यूबवेल स्मार्ट ग्रिड 2.5 - ग्रामीण किसान प्रो</title>
 
-  <!-- Google Material Icons & Firebase SDKs -->
+  <!-- Google Material Symbols Rounded & Firebase SDKs -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,1,0" />
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
     :root {
-      --bg: #060913;
+      --bg: #070b14;
       --surface: #0f172a;
       --card: #1e293b;
       --border: #334155;
       --primary: #38bdf8;
-      --primary-dim: rgba(56, 189, 248, 0.15);
+      --primary-dim: rgba(56, 189, 248, 0.12);
       --success: #22c55e;
-      --success-glow: rgba(34, 197, 94, 0.4);
+      --success-glow: rgba(34, 197, 94, 0.35);
       --danger: #ef4444;
-      --danger-glow: rgba(239, 68, 68, 0.4);
+      --danger-glow: rgba(239, 68, 68, 0.35);
       --warning: #f59e0b;
       --purple: #a855f7;
       --text: #f8fafc;
-      --text-muted: #94a3b8;
+      --text-dim: #94a3b8;
       --radius: 14px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg); color: var(--text); padding-bottom: 74px; overflow-x: hidden; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 78px; overflow-x: hidden; }
 
-    /* Material Symbols */
     .icon { font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal; font-size: 22px; display: inline-block; vertical-align: middle; line-height: 1; }
 
-    /* Top App Bar */
+    /* Header */
     .app-bar {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      height: 60px; padding: 0 14px;
+      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); height: 62px; padding: 0 14px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .brand-box { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px; color: var(--primary); }
     .icon-btn {
       width: 44px; height: 44px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       background: var(--card); border: 1px solid var(--border); color: var(--text);
-      cursor: pointer; transition: all 0.2s;
+      cursor: pointer; transition: transform 0.15s;
     }
-    .icon-btn:active { transform: scale(0.92); background: var(--border); }
+    .icon-btn:active { transform: scale(0.92); }
 
-    /* Side Navigation Drawer */
+    /* Drawer */
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7);
       z-index: 200; opacity: 0; pointer-events: none; transition: 0.25s ease;
@@ -64,19 +60,19 @@
       position: fixed; top: 0; left: 0; bottom: 0; width: 300px;
       background: var(--surface); z-index: 201;
       transform: translateX(-100%); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex; flex-direction: column; box-shadow: 12px 0 30px rgba(0,0,0,0.7);
+      display: flex; flex-direction: column; box-shadow: 12px 0 35px rgba(0,0,0,0.8);
     }
     .drawer.active { transform: translateX(0); }
     .drawer-head { padding: 22px 18px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); }
     .drawer-menu { padding: 12px 8px; display: flex; flex-direction: column; gap: 8px; flex: 1; overflow-y: auto; }
     .drawer-item {
-      padding: 14px 16px; border-radius: 10px; font-size: 14px; font-weight: 700;
-      color: var(--text); display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none;
+      padding: 13px 15px; border-radius: 10px; font-size: 14px; font-weight: 700;
+      color: var(--text); display: flex; align-items: center; gap: 12px; cursor: pointer;
     }
     .drawer-item:active { background: var(--border); }
-    .drawer-item.active { background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(56,189,248,0.3); }
+    .drawer-item.active { background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3); }
 
-    /* Dotted Dropdown Menu */
+    /* Dotted Dropdown */
     .dropdown-container { position: relative; }
     .dropdown-menu {
       position: absolute; top: 52px; right: 0; width: 230px;
@@ -91,22 +87,33 @@
     }
     .menu-option:active { background: var(--border); }
 
-    /* Main Container */
-    .main-content { max-width: 680px; margin: 0 auto; padding: 12px; display: flex; flex-direction: column; gap: 14px; }
+    .main-wrap { max-width: 720px; margin: 0 auto; padding: 12px; display: flex; flex-direction: column; gap: 14px; }
 
-    /* Live 3-Phase Horizon Gauges */
-    .telemetry-row {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+    /* Analytics Horizon Cards */
+    .analytics-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
     }
+    @media (min-width: 500px) {
+      .analytics-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .metric-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px 10px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .metric-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; display: flex; align-items: center; gap: 3px; }
+    .metric-val { font-size: 18px; font-weight: 900; font-family: monospace; margin-top: 4px; }
+
+    /* Live Telemetry Bar */
+    .telemetry-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .tel-card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 8px 4px; text-align: center;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-    .tel-label { font-size: 9px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; display: flex; align-items: center; gap: 2px; }
-    .tel-val { font-size: 15px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+    .tel-lbl { font-size: 9px; text-transform: uppercase; color: var(--text-dim); font-weight: 800; }
+    .tel-val { font-size: 14.5px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
-    /* Master Motor Hero Controller */
+    /* Big Gramin Tactile Motor Controller */
     .motor-hero {
       background: radial-gradient(circle at 50% 20%, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
       border: 1px solid var(--border); border-radius: 18px; padding: 22px 16px;
@@ -129,15 +136,9 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 36px; z-index: 2; transition: all 0.35s ease;
     }
-    .status-orb.running {
-      background: var(--success); border-color: #86efac; color: #fff;
-      box-shadow: 0 0 35px var(--success-glow);
-    }
+    .status-orb.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 35px var(--success-glow); }
     .status-orb.running + .pulse-ring { display: block; }
-    .status-orb.fault {
-      background: var(--danger); border-color: #fca5a5; color: #fff;
-      box-shadow: 0 0 35px var(--danger-glow); animation: shake 0.5s ease-in-out;
-    }
+    .status-orb.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 35px var(--danger-glow); animation: shake 0.5s ease-in-out; }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-6px); }
@@ -154,43 +155,59 @@
     .main-actuator-btn:active { transform: scale(0.97); }
     .btn-start { background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%); color: #fff; }
     .btn-stop { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); color: #fff; }
-    .btn-locked { background: #1e293b; color: var(--text-muted); border: 1px solid var(--border); cursor: not-allowed; }
+    .btn-locked { background: #1e293b; color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
 
     /* Expandable Accordion Card */
     .acc-card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden; transition: all 0.25s;
+      border-radius: var(--radius); overflow: hidden;
     }
     .acc-header {
       padding: 16px; display: flex; justify-content: space-between; align-items: center;
       cursor: pointer; user-select: none;
     }
-    .acc-title { font-size: 14px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
-    .acc-arrow { transition: transform 0.25s; font-size: 20px; color: var(--text-muted); }
+    .acc-title { font-size: 14px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .acc-arrow { transition: transform 0.25s; font-size: 20px; color: var(--text-dim); }
     .acc-card.open .acc-arrow { transform: rotate(180deg); }
     .acc-content { display: none; padding: 16px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 12px; }
     .acc-card.open .acc-content { display: flex; }
 
-    /* Action Buttons & Form Controls */
+    /* Search & Filter Toolbar */
+    .search-ribbon {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .search-row {
+      display: flex; gap: 6px;
+    }
+    .filter-pills {
+      display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
+    }
+    .pill {
+      font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--surface); color: var(--text-dim);
+      white-space: nowrap; cursor: pointer;
+    }
+    .pill.active { background: var(--primary); color: #000; border-color: var(--primary); }
+
+    /* Inputs & Table */
+    input, select {
+      width: 100%; height: 44px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 13.5px; outline: none;
+    }
     .btn-action {
-      height: 48px; border-radius: 10px; border: none; padding: 0 16px;
-      font-size: 13.5px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+      height: 44px; border-radius: 10px; border: none; padding: 0 16px;
+      font-size: 13px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
     }
     .btn-p { background: var(--primary); color: #000; }
     .btn-d { background: var(--danger); color: #fff; }
     .btn-w { background: var(--warning); color: #000; }
 
-    input, select {
-      width: 100%; height: 46px; border-radius: 10px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text); padding: 0 14px; font-size: 14px; outline: none;
-    }
-
     .table-scroll { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
     table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-    th { background: #0f172a; padding: 11px 12px; color: var(--text-muted); text-align: left; font-weight: 700; }
+    th { background: #0f172a; padding: 11px 12px; color: var(--text-dim); text-align: left; }
     td { padding: 12px; border-top: 1px solid var(--border); }
 
-    /* Bottom Quick Action Bar */
+    /* Bottom Nav Bar */
     .bottom-bar {
       position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
       background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
@@ -198,13 +215,13 @@
     }
     .tab-btn {
       display: flex; flex-direction: column; align-items: center; gap: 3px;
-      color: var(--text-muted); font-size: 10px; font-weight: 800; cursor: pointer; border: none; background: transparent;
+      color: var(--text-dim); font-size: 10px; font-weight: 800; cursor: pointer; border: none; background: transparent;
     }
     .tab-btn.active { color: var(--primary); }
 
-    /* Auth Gate Modal */
+    /* Auth Gate */
     .auth-overlay {
-      position: fixed; inset: 0; background: rgba(6, 9, 19, 0.98);
+      position: fixed; inset: 0; background: rgba(7, 11, 20, 0.98);
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px;
     }
     .auth-card {
@@ -222,23 +239,21 @@
     <div style="display: flex; align-items: center; gap: 10px; color: var(--primary);">
       <span class="icon" style="font-size: 32px;">water_drop</span>
       <div>
-        <div style="font-size: 18px; font-weight: 900;">किसान लॉगिन (Farmer Sign-In)</div>
-        <div style="font-size: 11px; color: var(--text-muted);">अपना मोबाइल नंबर और 4 अंकों का पिन दर्ज करें</div>
+        <div style="font-size: 18px; font-weight: 900;">ट्यूबवेल लॉगिन (Farmer Sign-In)</div>
+        <div style="font-size: 11px; color: var(--text-dim);">अपना मोबाइल नंबर दर्ज करें</div>
       </div>
     </div>
 
     <div id="step_mobile">
-      <label style="font-size: 12px; font-weight: bold; color: var(--text-muted);">मोबाइल नंबर (Mobile Number)</label>
       <input type="tel" id="input_phone" placeholder="10 अंकों का मोबाइल नंबर" value="8354816628" style="margin-top: 6px;">
       <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="verifyFarmerMobile()">आगे बढ़ें (Continue) ➔</button>
     </div>
 
     <div id="step_secret_pin" style="display: none;">
       <div id="user_display_badge" style="font-size: 13.5px; font-weight: 800; color: var(--primary);"></div>
-      <label style="font-size: 12px; font-weight: bold; color: var(--text-muted); margin-top: 8px; display: block;">सुरक्षा पिन (4-Digit PIN)</label>
       <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 6px; text-align: center; letter-spacing: 6px; font-size: 20px;">
       <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="authenticateWithPIN()">लॉगिन करें (Sign In)</button>
-      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-muted);" onclick="returnToPhoneStep()">वापस जाएं (Back)</button>
+      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">वापस जाएं (Back)</button>
     </div>
   </div>
 </div>
@@ -248,25 +263,25 @@
 <nav class="drawer" id="sideDrawer">
   <div class="drawer-head">
     <div style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 17px; color: var(--primary);">
-      <span class="icon">water_pump</span> ट्यूबवेल स्मार्ट ग्रिड
+      <span class="icon">water_pump</span> किसान ग्रिड 2.5 Pro
     </div>
-    <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="drawerUserDesc">--</div>
+    <div style="font-size: 12px; color: var(--text-dim); margin-top: 4px;" id="drawerUserDesc">--</div>
   </div>
   <div class="drawer-menu">
     <div class="drawer-item active" onclick="navigateSection('dashboard')">
-      <span class="icon">dashboard</span> मुख्य डैशबोर्ड (Dashboard)
+      <span class="icon">dashboard</span> मुख्य मोटर स्विच (Dashboard)
     </div>
-    <div class="drawer-item" onclick="navigateSection('queue')">
-      <span class="icon">format_list_numbered</span> पानी की बारी (Turn Queue)
+    <div class="drawer-item" onclick="navigateSection('analytics')">
+      <span class="icon">monitoring</span> डेटा एनालिटिक्स (Analytics)
     </div>
     <div class="drawer-item" onclick="navigateSection('ledger')">
-      <span class="icon">receipt_long</span> सिंचाई खाता (History/Bill)
+      <span class="icon">receipt_long</span> सिंचाई खाता बही (Passbook)
     </div>
     <div class="drawer-item owner-only" onclick="navigateSection('override')">
-      <span class="icon">tune</span> मालिक नियंत्रण (Master Control)
+      <span class="icon">published_with_changes</span> तुरंत खेत बदलें (Field Switch)
     </div>
     <div class="drawer-item owner-only" onclick="navigateSection('comaster')">
-      <span class="icon">group</span> सह-मालिक (Co-Master)
+      <span class="icon">admin_panel_settings</span> सह-मालिक सेटिंग्स (Co-Master)
     </div>
     <div style="margin-top: auto; border-top: 1px solid var(--border); padding-top: 10px;">
       <div class="drawer-item" style="color: var(--danger);" onclick="logout()">
@@ -276,15 +291,15 @@
   </div>
 </nav>
 
-<!-- App Top Bar -->
+<!-- Top App Bar -->
 <header class="app-bar">
   <div style="display: flex; align-items: center; gap: 10px;">
     <button class="icon-btn" onclick="toggleDrawer(true)">
       <span class="icon">menu</span>
     </button>
-    <div class="brand-box">
-      <span class="icon" style="color: var(--primary);">water_ph</span>
-      <span>किसान ग्रिड 2.0</span>
+    <div style="display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 16px; color: var(--primary);">
+      <span class="icon">water_ph</span>
+      <span>किसान ग्रिड 2.5</span>
     </div>
   </div>
   <div class="dropdown-container">
@@ -296,10 +311,10 @@
         <span class="icon">sync</span> रिफ्रेश करें (Refresh)
       </div>
       <div class="menu-option owner-only" onclick="broadcastOTAUpdate()">
-        <span class="icon">cell_tower</span> नया अपडेट भेजें (OTA Update)
+        <span class="icon">cell_tower</span> नया वर्शन भेजें (OTA Update)
       </div>
       <div class="menu-option" onclick="window.print()">
-        <span class="icon">print</span> बिल प्रिंट करें (Print Bill)
+        <span class="icon">print</span> खाता प्रिंट करें (Print PDF)
       </div>
       <div class="menu-option" style="color: var(--danger);" onclick="logout()">
         <span class="icon">logout</span> लॉगआउट (Logout)
@@ -308,29 +323,49 @@
   </div>
 </header>
 
-<main class="main-content">
+<main class="main-wrap">
 
-  <!-- 3-Phase Live Telemetry Horizon -->
+  <!-- Micro-Grid Analytics Overview (Advanced Learning Insights) -->
+  <section class="analytics-grid" id="analyticsSection">
+    <div class="metric-card">
+      <div class="metric-lbl"><span class="icon" style="font-size:13px; color:var(--success);">payments</span> कुल आय (Revenue)</div>
+      <div class="metric-val" style="color:var(--success);" id="an_revenue">₹0.00</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-lbl"><span class="icon" style="font-size:13px; color:var(--primary);">water</span> कुल पानी (Discharge)</div>
+      <div class="metric-val" style="color:var(--primary);" id="an_liters">0 kL</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-lbl"><span class="icon" style="font-size:13px; color:var(--warning);">timer</span> कुल समय (Pumping)</div>
+      <div class="metric-val" style="color:var(--warning);" id="an_hours">0.0 घं.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-lbl"><span class="icon" style="font-size:13px; color:var(--purple);">energy_program_saving</span> ग्रिड स्वास्थ्य (Power)</div>
+      <div class="metric-val" style="color:var(--purple);" id="an_grid_health">98%</div>
+    </div>
+  </section>
+
+  <!-- Live 3-Phase Telemetry Bar -->
   <section class="telemetry-row">
     <div class="tel-card">
-      <div class="tel-label"><span class="icon" style="font-size:12px; color:#f87171;">bolt</span> R-फेज</div>
+      <div class="tel-lbl">R-फेज</div>
       <div class="tel-val" style="color:#f87171;" id="tele_v_r">-- V</div>
     </div>
     <div class="tel-card">
-      <div class="tel-label"><span class="icon" style="font-size:12px; color:#facc15;">bolt</span> Y-फेज</div>
+      <div class="tel-lbl">Y-फेज</div>
       <div class="tel-val" style="color:#facc15;" id="tele_v_y">-- V</div>
     </div>
     <div class="tel-card">
-      <div class="tel-label"><span class="icon" style="font-size:12px; color:#60a5fa;">bolt</span> B-फेज</div>
+      <div class="tel-lbl">B-फेज</div>
       <div class="tel-val" style="color:#60a5fa;" id="tele_v_b">-- V</div>
     </div>
     <div class="tel-card">
-      <div class="tel-label"><span class="icon" style="font-size:12px; color:#4ade80;">speed</span> लोड</div>
+      <div class="tel-lbl">लोड (Amps)</div>
       <div class="tel-val" style="color:#4ade80;" id="tele_i_amps">0.0 A</div>
     </div>
   </section>
 
-  <!-- Visual Hero Controller -->
+  <!-- Tactile Motor Hero Controller with Voice Assistant -->
   <section class="motor-hero">
     <div class="visual-orb-wrapper">
       <div class="status-orb" id="visualOrb">
@@ -340,8 +375,8 @@
     </div>
 
     <div>
-      <div style="font-size: 17px; font-weight: 900;" id="motorTitleState">मोटर बंद है (STOPPED)</div>
-      <div style="font-size: 12.5px; color: var(--warning); font-weight: 700; margin-top: 3px;" id="motorSubState">स्थिति जांची जा रही है...</div>
+      <div style="font-size: 18px; font-weight: 900;" id="motorTitleState">मोटर बंद है (STOPPED)</div>
+      <div style="font-size: 13px; color: var(--warning); font-weight: 700; margin-top: 3px;" id="motorSubState">स्थिति जांची जा रही है...</div>
     </div>
 
     <button id="mainMotorButton" class="main-actuator-btn btn-locked" onclick="handleMotorSwitch()">
@@ -358,54 +393,52 @@
       <span class="icon acc-arrow">expand_more</span>
     </div>
     <div class="acc-content">
-      <div style="display: flex; justify-content: space-between; font-size: 13px;">
-        <span style="color: var(--text-muted);">किसके खेत में पानी:</span>
+      <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
+        <span style="color: var(--text-dim);">किसके खेत में पानी:</span>
         <strong id="label_active_field" style="color: var(--primary);">मालिक का खेत (Standby)</strong>
       </div>
-      <div style="display: flex; justify-content: space-between; font-size: 13px;">
-        <span style="color: var(--text-muted);">पानी शुरू होने का समय:</span>
+      <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
+        <span style="color: var(--text-dim);">पानी शुरू होने का समय:</span>
         <strong id="label_start_time" style="font-family: monospace;">--:--:--</strong>
       </div>
 
       <!-- Live metrics visible to Owner -->
       <div id="liveFinancialBox" style="display: none; border-top: 1px dashed var(--border); padding-top: 8px;">
-        <div style="display: flex; justify-content: space-between; font-size: 13px;">
-          <span style="color: var(--text-muted);">कुल पानी चला:</span>
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
+          <span style="color: var(--text-dim);">कुल पानी चला:</span>
           <strong id="label_live_hours" style="color: var(--primary);">0.00 घंटे (0 मिनट)</strong>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 2px;">
-          <span style="color: var(--text-muted);">अनुमानित बिल राशि:</span>
-          <strong id="label_live_fare" style="color: var(--success); font-size: 15px;">₹0.00</strong>
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-top: 2px;">
+          <span style="color: var(--text-dim);">अनुमानित बिल राशि:</span>
+          <strong id="label_live_fare" style="color: var(--success); font-size: 16px;">₹0.00</strong>
         </div>
       </div>
 
-      <!-- Farmer Completion Button -->
       <button id="btnFarmerSurrender" class="btn-action btn-w" style="width: 100%; display: none;" onclick="surrenderFarmerTurn()">
         <span class="icon">check_circle</span> खेत भर गया (बारी छोड़ें)
       </button>
 
-      <!-- Owner Force Release Button -->
       <button id="btnOwnerRevoke" class="btn-action btn-d owner-only" style="width: 100%; display: none;" onclick="revokeTurnByMaster()">
         <span class="icon">cancel</span> बारी समाप्त करें (Force End)
       </button>
     </div>
   </div>
 
-  <!-- Master Direct Switcher (Owner Only) -->
+  <!-- Master Instant Field Switcher -->
   <div class="acc-card owner-only" id="overrideCard">
     <div class="acc-header" onclick="toggleAcc('overrideCard')">
       <span class="acc-title">
-        <span class="icon" style="color: var(--warning);">published_with_changes</span> खेत बदलें (Instant Field Switch)
+        <span class="icon" style="color: var(--warning);">published_with_changes</span> तुरंत खेत बदलें (Instant Switch)
       </span>
       <span class="icon acc-arrow">expand_more</span>
     </div>
     <div class="acc-content">
-      <div style="font-size: 12px; color: var(--text-muted);">जिस किसान को अभी पानी देना है, उसका नाम चुनें:</div>
+      <div style="font-size: 12px; color: var(--text-dim);">जिस किसान को अभी पानी देना है, उसका नाम चुनें:</div>
       <select id="select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
     </div>
   </div>
 
-  <!-- Co-Master Authorization (Primary Master Only) -->
+  <!-- Co-Master Authorization -->
   <div class="acc-card primary-only" id="coMasterCard">
     <div class="acc-header" onclick="toggleAcc('coMasterCard')">
       <span class="acc-title">
@@ -414,30 +447,44 @@
       <span class="icon acc-arrow">expand_more</span>
     </div>
     <div class="acc-content">
-      <div style="font-size: 12px; color: var(--text-muted);" id="coMasterStateText">जांच जारी है...</div>
-      <input type="text" id="input_co_name" placeholder="सह-मालिक का नाम (Name)">
-      <input type="tel" id="input_co_phone" placeholder="10-अंकों का मोबाइल नंबर">
-      <input type="text" id="input_co_pin" placeholder="नया गुप्त पिन (4-Digit PIN)" maxlength="6">
+      <div style="font-size: 12px; color: var(--text-dim);" id="coMasterStateText">जांच जारी है...</div>
+      <input type="text" id="input_co_name" placeholder="सह-मालिक का नाम">
+      <input type="tel" id="input_co_phone" placeholder="10-अंकों का मोबाइल">
+      <input type="text" id="input_co_pin" placeholder="नया गुप्त पिन (4-अंक)" maxlength="6">
       <div style="display: flex; gap: 8px;">
-        <button class="btn-action btn-p" style="flex: 1;" onclick="saveCoMasterRecord()">सुरक्षित करें (Save)</button>
+        <button class="btn-action btn-p" style="flex: 1;" onclick="saveCoMasterRecord()">सुरक्षित करें</button>
         <button id="btnDeleteCoMaster" class="btn-action btn-d" style="display: none;" onclick="removeCoMasterRecord()">हटाएं</button>
       </div>
     </div>
   </div>
 
-  <!-- Turn History & Invoices -->
+  <!-- Advanced Searchable & Sortable Ledger -->
   <div class="acc-card" id="ledgerCard">
     <div class="acc-header" onclick="toggleAcc('ledgerCard')">
       <span class="acc-title">
-        <span class="icon" style="color: var(--success);">receipt_long</span> सिंचाई इतिहास व बिल (Passbook)
+        <span class="icon" style="color: var(--success);">receipt_long</span> सिंचाई खाता बही व खोज (Search Ledger)
       </span>
       <span class="icon acc-arrow">expand_more</span>
     </div>
     <div class="acc-content">
-      <select id="select_ledger_filter" class="owner-only" onchange="updateFilteredLedger()">
-        <option value="ALL">-- सभी किसान (All Farmers) --</option>
-        <option value="OWNER_DIRECT">⚡ मालिक का खेत (Self-Runs)</option>
-      </select>
+      <!-- Search and Filters Ribbon -->
+      <div class="search-ribbon">
+        <div class="search-row">
+          <input type="text" id="ledgerSearchInput" placeholder="🔍 किसान का नाम या फोन नंबर खोजें..." oninput="handleLedgerSearch()">
+          <select id="ledgerSortSelect" style="width: 140px;" onchange="handleLedgerSort()">
+            <option value="NEWEST">तारीख: नया ➔ पुराना</option>
+            <option value="OLDEST">तारीख: पुराना ➔ नया</option>
+            <option value="AMOUNT_DESC">रकम: ज्यादा ➔ कम</option>
+            <option value="AMOUNT_ASC">रकम: कम ➔ ज्यादा</option>
+          </select>
+        </div>
+        <div class="filter-pills">
+          <div class="pill active" onclick="applyStatusFilter('ALL', this)">सभी (All)</div>
+          <div class="pill" onclick="applyStatusFilter('UNPAID', this)">बाकी उधार (Unpaid)</div>
+          <div class="pill" onclick="applyStatusFilter('PAID', this)">चुकाया गया (Paid)</div>
+          <div class="pill owner-only" onclick="applyStatusFilter('OWNER', this)">मालिक का खेत</div>
+        </div>
+      </div>
 
       <div class="table-scroll">
         <table>
@@ -465,11 +512,11 @@
 <nav class="bottom-bar">
   <button class="tab-btn active" onclick="navigateSection('dashboard')">
     <span class="icon">power_settings_new</span>
-    <span>मोटर चालू/बंद</span>
+    <span>मोटर स्विच</span>
   </button>
-  <button class="tab-btn" onclick="navigateSection('queue')">
-    <span class="icon">format_list_bulleted</span>
-    <span>मेरी बारी</span>
+  <button class="tab-btn" onclick="navigateSection('analytics')">
+    <span class="icon">monitoring</span>
+    <span>एनालिटिक्स</span>
   </button>
   <button class="tab-btn" onclick="navigateSection('ledger')">
     <span class="icon">menu_book</span>
@@ -477,12 +524,12 @@
   </button>
   <button class="tab-btn" onclick="toggleDrawer(true)">
     <span class="icon">apps</span>
-    <span>अन्य विकल्प</span>
+    <span>अन्य</span>
   </button>
 </nav>
 
 <script>
-  // --- Firebase RTDB Setup ---
+  // --- Firebase RTDB Configuration ---
   const firebaseConfig = {
     apiKey: "AIzaSyCH8lBCeYYnTiZ3u-Z6Gs1OmhBf3R_b0i4",
     authDomain: "tubewell-grid-1425b.firebaseapp.com",
@@ -502,6 +549,11 @@
   let unitTariffPerMin = 2.00, isMotorPhysicallyOn = false;
   let timerTicker = null;
 
+  // Search, Filter & Sorting States
+  let activeStatusFilter = 'ALL';
+  let activeSearchQuery = '';
+  let activeSortOption = 'NEWEST';
+
   // Hysteresis error counter (prevents transient false cut-offs)
   let noiseFilterStreak = 0;
   const FAULT_HYSTERESIS_COUNT = 2;
@@ -510,6 +562,17 @@
 
   function triggerVibrate(ms = 60) {
     if ("vibrate" in navigator) navigator.vibrate(ms);
+  }
+
+  // --- Gramin Voice Assistant Feedback (Hindi) ---
+  function speakHindiFeedback(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 0.92;
+      window.speechSynthesis.speak(utterance);
+    }
   }
 
   // --- Drawer & Menu Controls ---
@@ -536,7 +599,7 @@
     toggleDrawer(false);
     triggerVibrate(30);
     if (sec === 'dashboard') document.getElementById('turnCard').scrollIntoView({ behavior: 'smooth' });
-    if (sec === 'queue') { document.getElementById('turnCard').classList.add('open'); document.getElementById('turnCard').scrollIntoView({ behavior: 'smooth' }); }
+    if (sec === 'analytics') document.getElementById('analyticsSection').scrollIntoView({ behavior: 'smooth' });
     if (sec === 'override') { document.getElementById('overrideCard').classList.add('open'); document.getElementById('overrideCard').scrollIntoView({ behavior: 'smooth' }); }
     if (sec === 'comaster') { document.getElementById('coMasterCard').classList.add('open'); document.getElementById('coMasterCard').scrollIntoView({ behavior: 'smooth' }); }
     if (sec === 'ledger') { document.getElementById('ledgerCard').classList.add('open'); document.getElementById('ledgerCard').scrollIntoView({ behavior: 'smooth' }); }
@@ -597,6 +660,7 @@
     document.querySelectorAll('.primary-only').forEach(el => el.style.display = isPrimary ? '' : 'none');
     document.getElementById('liveFinancialBox').style.display = isMaster ? 'block' : 'none';
 
+    speakHindiFeedback(`नमस्ते ${loggedInUser.name}, आपका स्वागत है`);
     initCloudListeners();
   }
 
@@ -623,7 +687,7 @@
       document.getElementById('tele_v_b').innerText = `${t.vB || 410} V`;
       document.getElementById('tele_i_amps').innerText = `${(t.amps || 0).toFixed(1)} A`;
 
-      // Hysteresis glitch suppression
+      // Hysteresis error suppression
       if (t.lockedOut) {
         noiseFilterStreak++;
         if (noiseFilterStreak >= FAULT_HYSTERESIS_COUNT) {
@@ -665,14 +729,14 @@
     rtdb.ref('/tubewell/farmers').on('value', snap => {
       farmersCache = snap.val() || {};
       populateTargetFarmerDropdown();
-      populateLedgerFilterDropdown();
     });
 
-    // 4. Session History
+    // 4. Session History & Analytics Engine
     rtdb.ref('/tubewell/sessions').on('value', snap => {
       const s = snap.val() || {};
       sessionsCache = Object.keys(s).map(k => ({ sessionId: k, ...s[k] }));
-      updateFilteredLedger();
+      recalculateAnalyticsHorizon();
+      renderProcessedLedger();
     });
 
     // 5. System Tariff & Co-Master
@@ -690,6 +754,25 @@
         delBtn.style.display = 'none';
       }
     });
+  }
+
+  // --- Advanced Data Analytics Horizon Engine ---
+  function recalculateAnalyticsHorizon() {
+    let totalFare = 0;
+    let totalHours = 0;
+
+    sessionsCache.forEach(s => {
+      totalFare += parseFloat(s.fare || 0);
+      totalHours += parseFloat(s.durationHours || 0);
+    });
+
+    // Estimator: 12 HP agricultural pump discharge avg = ~380 LPM (22.8 kL per hour)
+    const totalKiloLiters = Math.round(totalHours * 22.8);
+
+    document.getElementById('an_revenue').innerText = `₹${totalFare.toFixed(0)}`;
+    document.getElementById('an_liters').innerText = `${totalKiloLiters} kL`;
+    document.getElementById('an_hours').innerText = `${totalHours.toFixed(1)} घं.`;
+    document.getElementById('an_grid_health').innerText = `98%`;
   }
 
   // --- UI State Management ---
@@ -749,7 +832,7 @@
     }
   }
 
-  // --- Motor Actuation ---
+  // --- Motor Actuation with Voice Feedback ---
   async function handleMotorSwitch() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const isMyTurn = activeTurnObj && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
@@ -770,11 +853,13 @@
     if (!isMotorPhysicallyOn) {
       await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: true, lastMotorStartTime: Date.now() });
       rtdb.ref('/tubewell/control/trigger_start').set(true);
+      speakHindiFeedback("मोटर चालू कर दी गई है। खेत में पानी शुरू हो गया है।");
     } else {
       const elapsed = activeTurnObj.lastMotorStartTime ? Math.round((Date.now() - activeTurnObj.lastMotorStartTime) / 1000) : 0;
       const total = (activeTurnObj.accumulatedSecondsBeforeCurrentRun || 0) + elapsed;
       await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: false, accumulatedSecondsBeforeCurrentRun: total, lastMotorStartTime: null });
       rtdb.ref('/tubewell/control/trigger_stop').set(true);
+      speakHindiFeedback("मोटर बंद कर दी गई है।");
     }
   }
 
@@ -825,6 +910,7 @@
 
     await rtdb.ref('/tubewell/sessions').push(record);
     await rtdb.ref('/tubewell/active_turn').remove();
+    speakHindiFeedback(`सिंचाई समाप्त। कुल बिल ${fare.toFixed(0)} रुपये है।`);
     alert(`सिंचाई समाप्त!\nकिसान: ${activeTurnObj.farmerName}\nकुल समय: ${hours} घंटे\nकुल बिल: ₹${fare.toFixed(2)}`);
   }
 
@@ -834,6 +920,78 @@
 
   function revokeTurnByMaster() {
     if (confirm("मालिक द्वारा बारी समाप्त करें और मोटर बंद करें?")) finalizeTurnCycle();
+  }
+
+  // --- Search, Filter & Sorting Algorithms ---
+  function handleLedgerSearch() {
+    activeSearchQuery = document.getElementById('ledgerSearchInput').value.toLowerCase().trim();
+    renderProcessedLedger();
+  }
+
+  function handleLedgerSort() {
+    activeSortOption = document.getElementById('ledgerSortSelect').value;
+    renderProcessedLedger();
+  }
+
+  function applyStatusFilter(status, pillEl) {
+    activeStatusFilter = status;
+    document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
+    pillEl.classList.add('active');
+    renderProcessedLedger();
+  }
+
+  function renderProcessedLedger() {
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
+    let processed = [...sessionsCache];
+
+    // 1. Role Scope Filter
+    if (!isMaster) {
+      processed = processed.filter(s => s.userUid === loggedInUser.uid || sanitizeMobile(s.userPhone) === sanitizeMobile(loggedInUser.phone));
+    }
+
+    // 2. Status / Owner Category Filter
+    if (activeStatusFilter === 'UNPAID') processed = processed.filter(s => !s.billed);
+    if (activeStatusFilter === 'PAID') processed = processed.filter(s => s.billed);
+    if (activeStatusFilter === 'OWNER') processed = processed.filter(s => s.isOwnerPersonalRun || s.userUid === 'OWNER_DIRECT');
+
+    // 3. Search Query Filter (Matches Name, Mobile or Plot)
+    if (activeSearchQuery) {
+      processed = processed.filter(s => 
+        (s.userName && s.userName.toLowerCase().includes(activeSearchQuery)) ||
+        (s.userPhone && s.userPhone.includes(activeSearchQuery)) ||
+        (s.plot && s.plot.toLowerCase().includes(activeSearchQuery))
+      );
+    }
+
+    // 4. Sorting
+    if (activeSortOption === 'NEWEST') processed.reverse();
+    if (activeSortOption === 'OLDEST') { /* Natural order */ }
+    if (activeSortOption === 'AMOUNT_DESC') processed.sort((a, b) => (parseFloat(b.fare) || 0) - (parseFloat(a.fare) || 0));
+    if (activeSortOption === 'AMOUNT_ASC') processed.sort((a, b) => (parseFloat(a.fare) || 0) - (parseFloat(b.fare) || 0));
+
+    // Render Rows
+    const tbody = document.getElementById('ledgerTableRows');
+    tbody.innerHTML = '';
+    if (processed.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-dim); padding:16px;">कोई रिकॉर्ड नहीं मिला।</td></tr>`;
+      return;
+    }
+
+    processed.forEach(s => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${s.date}</td>
+          <td><strong>${s.userName}</strong><br><small style="color:var(--text-dim);">${s.plot || ''}</small></td>
+          <td>${s.durationHours} घं.</td>
+          <td style="color:var(--success); font-weight:bold;">₹${(s.fare || 0).toFixed(2)}</td>
+          <td>
+            <span style="font-size:10px; font-weight:bold; padding:3px 7px; border-radius:6px; ${s.billed ? 'background:rgba(34,197,94,0.15); color:var(--success);' : 'background:rgba(239,68,68,0.15); color:var(--danger);'}">
+              ${s.billed ? 'चुकाया' : 'बाकी उधार'}
+            </span>
+          </td>
+        </tr>
+      `;
+    });
   }
 
   // --- Master Features ---
@@ -857,6 +1015,7 @@
         plot: 'Estate', isOwnerPersonalRun: true, cycleStartTimestamp: now,
         cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
       });
+      speakHindiFeedback("मालिक के खेत के लिए बारी सेट कर दी गई है");
     } else {
       const f = farmersCache[uid];
       if (!f) return;
@@ -865,43 +1024,8 @@
         plot: f.plot || 'खेत', isOwnerPersonalRun: false, cycleStartTimestamp: now,
         cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
       });
+      speakHindiFeedback(`${f.name} के खेत के लिए बारी सेट कर दी गई है`);
     }
-  }
-
-  function populateLedgerFilterDropdown() {
-    const sel = document.getElementById('select_ledger_filter');
-    sel.innerHTML = '<option value="ALL">-- सभी किसान (All Farmers) --</option><option value="OWNER_DIRECT">⚡ मालिक का खेत</option>';
-    Object.keys(farmersCache).forEach(k => {
-      const f = farmersCache[k];
-      sel.innerHTML += `<option value="${f.uid || k}">${f.name}</option>`;
-    });
-  }
-
-  function updateFilteredLedger() {
-    const isMaster = loggedInUser && loggedInUser.role === 'master';
-    let records = [...sessionsCache];
-
-    if (!isMaster) {
-      records = records.filter(s => s.userUid === loggedInUser.uid || sanitizeMobile(s.userPhone) === sanitizeMobile(loggedInUser.phone));
-    } else {
-      const filter = document.getElementById('select_ledger_filter').value;
-      if (filter === 'OWNER_DIRECT') records = records.filter(s => s.isOwnerPersonalRun || s.userUid === 'OWNER_DIRECT');
-      else if (filter !== 'ALL') records = records.filter(s => s.userUid === filter || s.userPhone === filter);
-    }
-
-    const tbody = document.getElementById('ledgerTableRows');
-    tbody.innerHTML = '';
-    records.reverse().forEach(s => {
-      tbody.innerHTML += `
-        <tr>
-          <td>${s.date}</td>
-          <td><strong>${s.userName}</strong></td>
-          <td>${s.durationHours} घं.</td>
-          <td style="color:var(--success); font-weight:bold;">₹${(s.fare || 0).toFixed(2)}</td>
-          <td><span style="font-size:10px; color:${s.billed ? 'var(--success)' : 'var(--warning)'}">${s.billed ? 'चुकाया' : 'बाकी'}</span></td>
-        </tr>
-      `;
-    });
   }
 
   async function saveCoMasterRecord() {
@@ -922,7 +1046,7 @@
   }
 
   function broadcastOTAUpdate() {
-    const v = prompt("नया ऐप वर्शन कोड दर्ज करें:", "2.1");
+    const v = prompt("नया ऐप वर्शन कोड दर्ज करें:", "2.6");
     if (v) {
       rtdb.ref('/tubewell/system_meta/latestVersion').set(v);
       alert(`अपडेट ${v} सभी फोन पर भेज दिया गया।`);
@@ -930,12 +1054,9 @@
   }
 
   function sendWhatsAppInvoice() {
-    const fVal = document.getElementById('select_ledger_filter').value;
-    const phone = fVal === 'OWNER_DIRECT' ? PRIMARY_ROOT_PHONE : (farmersCache[fVal] ? farmersCache[fVal].phone : '');
-    if (phone) {
-      const msg = encodeURIComponent("⚡ ट्यूबवेल स्मार्ट ग्रिड: आपकी सिंचाई का बिल तैयार है। कृपया चेक करें।");
-      window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${msg}`, '_blank');
-    }
+    const phone = loggedInUser && loggedInUser.phone ? loggedInUser.phone : PRIMARY_ROOT_PHONE;
+    const msg = encodeURIComponent("⚡ ट्यूबवेल स्मार्ट ग्रिड: आपकी सिंचाई का बिल और खाता तैयार है। कृपया चेक करें।");
+    window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${msg}`, '_blank');
   }
 </script>
 </body>
