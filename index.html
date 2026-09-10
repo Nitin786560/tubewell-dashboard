@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#070b14">
-  <title>ट्यूबवेल स्मार्ट ग्रिड 2.5 - ग्रामीण किसान प्रो</title>
+  <title>ट्यूबवेल स्मार्ट ग्रिड 2.6 - अवधी किसान प्रो</title>
 
   <!-- Google Material Symbols Rounded & Firebase SDKs -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,1,0" />
@@ -35,7 +35,7 @@
 
     .icon { font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal; font-size: 22px; display: inline-block; vertical-align: middle; line-height: 1; }
 
-    /* Header */
+    /* Top Navigation Bar */
     .app-bar {
       position: sticky; top: 0; z-index: 100;
       background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px);
@@ -50,7 +50,7 @@
     }
     .icon-btn:active { transform: scale(0.92); }
 
-    /* Drawer */
+    /* Side Navigation Drawer */
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7);
       z-index: 200; opacity: 0; pointer-events: none; transition: 0.25s ease;
@@ -72,7 +72,7 @@
     .drawer-item:active { background: var(--border); }
     .drawer-item.active { background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3); }
 
-    /* Dotted Dropdown */
+    /* Dotted Dropdown Menu */
     .dropdown-container { position: relative; }
     .dropdown-menu {
       position: absolute; top: 52px; right: 0; width: 230px;
@@ -90,12 +90,8 @@
     .main-wrap { max-width: 720px; margin: 0 auto; padding: 12px; display: flex; flex-direction: column; gap: 14px; }
 
     /* Analytics Horizon Cards */
-    .analytics-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
-    }
-    @media (min-width: 500px) {
-      .analytics-grid { grid-template-columns: repeat(4, 1fr); }
-    }
+    .analytics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    @media (min-width: 500px) { .analytics-grid { grid-template-columns: repeat(4, 1fr); } }
     .metric-card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 12px 10px; text-align: center;
@@ -106,14 +102,11 @@
 
     /* Live Telemetry Bar */
     .telemetry-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .tel-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 8px 4px; text-align: center;
-    }
+    .tel-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 4px; text-align: center; }
     .tel-lbl { font-size: 9px; text-transform: uppercase; color: var(--text-dim); font-weight: 800; }
     .tel-val { font-size: 14.5px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
-    /* Big Gramin Tactile Motor Controller */
+    /* Tactile Motor Hero Controller */
     .motor-hero {
       background: radial-gradient(circle at 50% 20%, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
       border: 1px solid var(--border); border-radius: 18px; padding: 22px 16px;
@@ -158,14 +151,8 @@
     .btn-locked { background: #1e293b; color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
 
     /* Expandable Accordion Card */
-    .acc-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden;
-    }
-    .acc-header {
-      padding: 16px; display: flex; justify-content: space-between; align-items: center;
-      cursor: pointer; user-select: none;
-    }
+    .acc-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .acc-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
     .acc-title { font-size: 14px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
     .acc-arrow { transition: transform 0.25s; font-size: 20px; color: var(--text-dim); }
     .acc-card.open .acc-arrow { transform: rotate(180deg); }
@@ -173,15 +160,9 @@
     .acc-card.open .acc-content { display: flex; }
 
     /* Search & Filter Toolbar */
-    .search-ribbon {
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .search-row {
-      display: flex; gap: 6px;
-    }
-    .filter-pills {
-      display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
-    }
+    .search-ribbon { display: flex; flex-direction: column; gap: 8px; }
+    .search-row { display: flex; gap: 6px; }
+    .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
     .pill {
       font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 20px;
       border: 1px solid var(--border); background: var(--surface); color: var(--text-dim);
@@ -189,7 +170,7 @@
     }
     .pill.active { background: var(--primary); color: #000; border-color: var(--primary); }
 
-    /* Inputs & Table */
+    /* Form Controls & Table */
     input, select {
       width: 100%; height: 44px; border-radius: 10px; border: 1px solid var(--border);
       background: var(--surface); color: var(--text); padding: 0 12px; font-size: 13.5px; outline: none;
@@ -207,7 +188,7 @@
     th { background: #0f172a; padding: 11px 12px; color: var(--text-dim); text-align: left; }
     td { padding: 12px; border-top: 1px solid var(--border); }
 
-    /* Bottom Nav Bar */
+    /* Bottom Navigation Bar */
     .bottom-bar {
       position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
       background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
@@ -219,7 +200,7 @@
     }
     .tab-btn.active { color: var(--primary); }
 
-    /* Auth Gate */
+    /* Auth Gate Modal */
     .auth-overlay {
       position: fixed; inset: 0; background: rgba(7, 11, 20, 0.98);
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px;
@@ -233,27 +214,27 @@
 </head>
 <body>
 
-<!-- Login Gate -->
+<!-- Login Modal -->
 <div class="auth-overlay" id="authGate">
   <div class="auth-card">
     <div style="display: flex; align-items: center; gap: 10px; color: var(--primary);">
       <span class="icon" style="font-size: 32px;">water_drop</span>
       <div>
         <div style="font-size: 18px; font-weight: 900;">ट्यूबवेल लॉगिन (Farmer Sign-In)</div>
-        <div style="font-size: 11px; color: var(--text-dim);">अपना मोबाइल नंबर दर्ज करें</div>
+        <div style="font-size: 11px; color: var(--text-dim);">अपन मोबाइल नंबर दर्ज करा</div>
       </div>
     </div>
 
     <div id="step_mobile">
       <input type="tel" id="input_phone" placeholder="10 अंकों का मोबाइल नंबर" value="8354816628" style="margin-top: 6px;">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="verifyFarmerMobile()">आगे बढ़ें (Continue) ➔</button>
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="verifyFarmerMobile()">आगे बढ़ीं (Continue) ➔</button>
     </div>
 
     <div id="step_secret_pin" style="display: none;">
       <div id="user_display_badge" style="font-size: 13.5px; font-weight: 800; color: var(--primary);"></div>
       <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 6px; text-align: center; letter-spacing: 6px; font-size: 20px;">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="authenticateWithPIN()">लॉगिन करें (Sign In)</button>
-      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">वापस जाएं (Back)</button>
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="authenticateWithPIN()">लॉगिन करा (Sign In)</button>
+      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">लहुटि जाईं (Back)</button>
     </div>
   </div>
 </div>
@@ -263,7 +244,7 @@
 <nav class="drawer" id="sideDrawer">
   <div class="drawer-head">
     <div style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 17px; color: var(--primary);">
-      <span class="icon">water_pump</span> किसान ग्रिड 2.5 Pro
+      <span class="icon">water_pump</span> किसान ग्रिड 2.6 Pro
     </div>
     <div style="font-size: 12px; color: var(--text-dim); margin-top: 4px;" id="drawerUserDesc">--</div>
   </div>
@@ -291,7 +272,7 @@
   </div>
 </nav>
 
-<!-- Top App Bar -->
+<!-- Top Bar -->
 <header class="app-bar">
   <div style="display: flex; align-items: center; gap: 10px;">
     <button class="icon-btn" onclick="toggleDrawer(true)">
@@ -299,7 +280,7 @@
     </button>
     <div style="display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 16px; color: var(--primary);">
       <span class="icon">water_ph</span>
-      <span>किसान ग्रिड 2.5</span>
+      <span>किसान ग्रिड 2.6</span>
     </div>
   </div>
   <div class="dropdown-container">
@@ -308,13 +289,13 @@
     </button>
     <div class="dropdown-menu" id="dotsMenu">
       <div class="menu-option" onclick="window.location.reload(true)">
-        <span class="icon">sync</span> रिफ्रेश करें (Refresh)
+        <span class="icon">sync</span> रिफ्रेश करा (Refresh)
       </div>
       <div class="menu-option owner-only" onclick="broadcastOTAUpdate()">
         <span class="icon">cell_tower</span> नया वर्शन भेजें (OTA Update)
       </div>
       <div class="menu-option" onclick="window.print()">
-        <span class="icon">print</span> खाता प्रिंट करें (Print PDF)
+        <span class="icon">print</span> खाता प्रिंट करा (Print PDF)
       </div>
       <div class="menu-option" style="color: var(--danger);" onclick="logout()">
         <span class="icon">logout</span> लॉगआउट (Logout)
@@ -325,11 +306,11 @@
 
 <main class="main-wrap">
 
-  <!-- Micro-Grid Analytics Overview (Advanced Learning Insights) -->
+  <!-- Analytics Horizon -->
   <section class="analytics-grid" id="analyticsSection">
     <div class="metric-card">
-      <div class="metric-lbl"><span class="icon" style="font-size:13px; color:var(--success);">payments</span> कुल आय (Revenue)</div>
-      <div class="metric-val" style="color:var(--success);" id="an_revenue">₹0.00</div>
+      <div class="metric-lbl"><span class="icon" style="font-size:13px; color:var(--success);">payments</span> कुल आमदनी (Revenue)</div>
+      <div class="metric-val" style="color:var(--success);" id="an_revenue">₹0</div>
     </div>
     <div class="metric-card">
       <div class="metric-lbl"><span class="icon" style="font-size:13px; color:var(--primary);">water</span> कुल पानी (Discharge)</div>
@@ -340,12 +321,12 @@
       <div class="metric-val" style="color:var(--warning);" id="an_hours">0.0 घं.</div>
     </div>
     <div class="metric-card">
-      <div class="metric-lbl"><span class="icon" style="font-size:13px; color:var(--purple);">energy_program_saving</span> ग्रिड स्वास्थ्य (Power)</div>
+      <div class="metric-lbl"><span class="icon" style="font-size:13px; color:var(--purple);">energy_program_saving</span> ग्रिड सेहत (Power)</div>
       <div class="metric-val" style="color:var(--purple);" id="an_grid_health">98%</div>
     </div>
   </section>
 
-  <!-- Live 3-Phase Telemetry Bar -->
+  <!-- Live 3-Phase Telemetry -->
   <section class="telemetry-row">
     <div class="tel-card">
       <div class="tel-lbl">R-फेज</div>
@@ -365,7 +346,7 @@
     </div>
   </section>
 
-  <!-- Tactile Motor Hero Controller with Voice Assistant -->
+  <!-- Tactile Motor Hero Controller -->
   <section class="motor-hero">
     <div class="visual-orb-wrapper">
       <div class="status-orb" id="visualOrb">
@@ -375,12 +356,12 @@
     </div>
 
     <div>
-      <div style="font-size: 18px; font-weight: 900;" id="motorTitleState">मोटर बंद है (STOPPED)</div>
-      <div style="font-size: 13px; color: var(--warning); font-weight: 700; margin-top: 3px;" id="motorSubState">स्थिति जांची जा रही है...</div>
+      <div style="font-size: 18px; font-weight: 900;" id="motorTitleState">मोटर बंद बा (STOPPED)</div>
+      <div style="font-size: 13px; color: var(--warning); font-weight: 700; margin-top: 3px;" id="motorSubState">हालत जांची जात बा...</div>
     </div>
 
     <button id="mainMotorButton" class="main-actuator-btn btn-locked" onclick="handleMotorSwitch()">
-      <span class="icon">lock</span> बटन लॉक है (LOCKED)
+      <span class="icon">lock</span> बटन लॉक बा (LOCKED)
     </button>
   </section>
 
@@ -394,15 +375,15 @@
     </div>
     <div class="acc-content">
       <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-        <span style="color: var(--text-dim);">किसके खेत में पानी:</span>
-        <strong id="label_active_field" style="color: var(--primary);">मालिक का खेत (Standby)</strong>
+        <span style="color: var(--text-dim);">कवने खेत मा पानी:</span>
+        <strong id="label_active_field" style="color: var(--primary);">मालिक कै खेत (Standby)</strong>
       </div>
       <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-        <span style="color: var(--text-dim);">पानी शुरू होने का समय:</span>
+        <span style="color: var(--text-dim);">पानी शुरू होवै कै टेम:</span>
         <strong id="label_start_time" style="font-family: monospace;">--:--:--</strong>
       </div>
 
-      <!-- Live metrics visible to Owner -->
+      <!-- Live financial metrics visible to Owner -->
       <div id="liveFinancialBox" style="display: none; border-top: 1px dashed var(--border); padding-top: 8px;">
         <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
           <span style="color: var(--text-dim);">कुल पानी चला:</span>
@@ -415,11 +396,11 @@
       </div>
 
       <button id="btnFarmerSurrender" class="btn-action btn-w" style="width: 100%; display: none;" onclick="surrenderFarmerTurn()">
-        <span class="icon">check_circle</span> खेत भर गया (बारी छोड़ें)
+        <span class="icon">check_circle</span> खेत भरि गवा (बारी छोड़ें)
       </button>
 
       <button id="btnOwnerRevoke" class="btn-action btn-d owner-only" style="width: 100%; display: none;" onclick="revokeTurnByMaster()">
-        <span class="icon">cancel</span> बारी समाप्त करें (Force End)
+        <span class="icon">cancel</span> बारी खतम करा (Force End)
       </button>
     </div>
   </div>
@@ -433,7 +414,7 @@
       <span class="icon acc-arrow">expand_more</span>
     </div>
     <div class="acc-content">
-      <div style="font-size: 12px; color: var(--text-dim);">जिस किसान को अभी पानी देना है, उसका नाम चुनें:</div>
+      <div style="font-size: 12px; color: var(--text-dim);">जेहका अभी पानी देवेक होय, ओकर नाव चुना:</div>
       <select id="select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
     </div>
   </div>
@@ -447,18 +428,18 @@
       <span class="icon acc-arrow">expand_more</span>
     </div>
     <div class="acc-content">
-      <div style="font-size: 12px; color: var(--text-dim);" id="coMasterStateText">जांच जारी है...</div>
-      <input type="text" id="input_co_name" placeholder="सह-मालिक का नाम">
+      <div style="font-size: 12px; color: var(--text-dim);" id="coMasterStateText">जांच चालू बा...</div>
+      <input type="text" id="input_co_name" placeholder="सह-मालिक कै नाव">
       <input type="tel" id="input_co_phone" placeholder="10-अंकों का मोबाइल">
       <input type="text" id="input_co_pin" placeholder="नया गुप्त पिन (4-अंक)" maxlength="6">
       <div style="display: flex; gap: 8px;">
-        <button class="btn-action btn-p" style="flex: 1;" onclick="saveCoMasterRecord()">सुरक्षित करें</button>
-        <button id="btnDeleteCoMaster" class="btn-action btn-d" style="display: none;" onclick="removeCoMasterRecord()">हटाएं</button>
+        <button class="btn-action btn-p" style="flex: 1;" onclick="saveCoMasterRecord()">सुरक्षित करा</button>
+        <button id="btnDeleteCoMaster" class="btn-action btn-d" style="display: none;" onclick="removeCoMasterRecord()">हटावां</button>
       </div>
     </div>
   </div>
 
-  <!-- Advanced Searchable & Sortable Ledger -->
+  <!-- Advanced Searchable Ledger -->
   <div class="acc-card" id="ledgerCard">
     <div class="acc-header" onclick="toggleAcc('ledgerCard')">
       <span class="acc-title">
@@ -467,22 +448,21 @@
       <span class="icon acc-arrow">expand_more</span>
     </div>
     <div class="acc-content">
-      <!-- Search and Filters Ribbon -->
       <div class="search-ribbon">
         <div class="search-row">
-          <input type="text" id="ledgerSearchInput" placeholder="🔍 किसान का नाम या फोन नंबर खोजें..." oninput="handleLedgerSearch()">
+          <input type="text" id="ledgerSearchInput" placeholder="🔍 किसान कै नाव या मोबाइल खोजा..." oninput="handleLedgerSearch()">
           <select id="ledgerSortSelect" style="width: 140px;" onchange="handleLedgerSort()">
-            <option value="NEWEST">तारीख: नया ➔ पुराना</option>
-            <option value="OLDEST">तारीख: पुराना ➔ नया</option>
-            <option value="AMOUNT_DESC">रकम: ज्यादा ➔ कम</option>
-            <option value="AMOUNT_ASC">रकम: कम ➔ ज्यादा</option>
+            <option value="NEWEST">तारीख: नया ➔ पुरान</option>
+            <option value="OLDEST">तारीख: पुरान ➔ नया</option>
+            <option value="AMOUNT_DESC">रकम: ढेर ➔ कम</option>
+            <option value="AMOUNT_ASC">रकम: कम ➔ ढेर</option>
           </select>
         </div>
         <div class="filter-pills">
-          <div class="pill active" onclick="applyStatusFilter('ALL', this)">सभी (All)</div>
+          <div class="pill active" onclick="applyStatusFilter('ALL', this)">सब्बै (All)</div>
           <div class="pill" onclick="applyStatusFilter('UNPAID', this)">बाकी उधार (Unpaid)</div>
           <div class="pill" onclick="applyStatusFilter('PAID', this)">चुकाया गया (Paid)</div>
-          <div class="pill owner-only" onclick="applyStatusFilter('OWNER', this)">मालिक का खेत</div>
+          <div class="pill owner-only" onclick="applyStatusFilter('OWNER', this)">मालिक कै खेत</div>
         </div>
       </div>
 
@@ -500,7 +480,7 @@
           <span class="icon">print</span> बिल प्रिंट (PDF)
         </button>
         <button class="btn-action" style="background:#22c55e; color:#fff;" onclick="sendWhatsAppInvoice()">
-          <span class="icon">chat</span> व्हाट्सएप भेजें
+          <span class="icon">chat</span> व्हाट्सएप भेजि दा
         </button>
       </div>
     </div>
@@ -529,7 +509,7 @@
 </nav>
 
 <script>
-  // --- Firebase RTDB Configuration ---
+  // --- Firebase RTDB Setup ---
   const firebaseConfig = {
     apiKey: "AIzaSyCH8lBCeYYnTiZ3u-Z6Gs1OmhBf3R_b0i4",
     authDomain: "tubewell-grid-1425b.firebaseapp.com",
@@ -549,12 +529,12 @@
   let unitTariffPerMin = 2.00, isMotorPhysicallyOn = false;
   let timerTicker = null;
 
-  // Search, Filter & Sorting States
+  // Search & Filter State
   let activeStatusFilter = 'ALL';
   let activeSearchQuery = '';
   let activeSortOption = 'NEWEST';
 
-  // Hysteresis error counter (prevents transient false cut-offs)
+  // Hysteresis error counter
   let noiseFilterStreak = 0;
   const FAULT_HYSTERESIS_COUNT = 2;
 
@@ -564,18 +544,57 @@
     if ("vibrate" in navigator) navigator.vibrate(ms);
   }
 
-  // --- Gramin Voice Assistant Feedback (Hindi) ---
-  function speakHindiFeedback(text) {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'hi-IN';
-      utterance.rate = 0.92;
-      window.speechSynthesis.speak(utterance);
+  // --- Eastern UP / Awadhi Voice Engine ---
+  function speakAwadhi(eventCode, extraData = {}) {
+    if (!('speechSynthesis' in window)) return;
+
+    window.speechSynthesis.cancel();
+
+    let text = "";
+    switch (eventCode) {
+      case 'WELCOME':
+        text = `राम राम ${extraData.name || 'किसान भाई'}, स्वागत बा।`;
+        break;
+      case 'MOTOR_ON':
+        text = "मोटर चालू होइ गवा बा। खेत मा पानी जाए लाग।";
+        break;
+      case 'MOTOR_OFF':
+        text = "मोटर बंद कइ दीन गवा बा।";
+        break;
+      case 'NOT_YOUR_TURN':
+        text = "रुक जाईं, अभी आपके पानी कै बारी नाहीं अहइ।";
+        break;
+      case 'TURN_FINISH':
+        text = `पानी भराई पूरा भवा। कुल बिल ${Math.round(extraData.fare || 0)} रुपिया बा।`;
+        break;
+      case 'FAULT_VOLTAGE':
+        text = "सावधान! लाइन मा वोल्टेज गिर गवा बा, मोटर कट होइ गवा।";
+        break;
+      case 'FAULT_DRY_RUN':
+        text = "बोरिंग से पानी छोड़ दिहिस, मोटर अपने-आप बंद भवा।";
+        break;
+      case 'FAULT_SINGLE_PHASE':
+        text = "एगो फेज उड़ गवा बा, मोटर बंद कइ दीन गवा।";
+        break;
+      default:
+        text = extraData.customText || "";
     }
+
+    if (!text) return;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'hi-IN';
+    utterance.rate = 0.88;
+    utterance.pitch = 0.95;
+
+    const voices = window.speechSynthesis.getVoices();
+    const hiVoice = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN');
+    if (hiVoice) utterance.voice = hiVoice;
+
+    window.speechSynthesis.speak(utterance);
   }
 
-  // --- Drawer & Menu Controls ---
+  // --- Navigation & UI Toggles ---
   function toggleDrawer(open) {
     document.getElementById('sideDrawer').classList.toggle('active', open);
     document.getElementById('drawerOverlay').classList.toggle('active', open);
@@ -616,9 +635,9 @@
       const co = meta.secondaryMaster || null;
 
       if (p === PRIMARY_ROOT_PHONE) {
-        candidateUser = { role: 'master', tier: 'primary', name: 'मुख्य ग्रिड मालिक (Primary Master)', phone: p, pin: String(meta.masterPin || '8354') };
+        candidateUser = { role: 'master', tier: 'primary', name: 'मुख्य ग्रिड मालिक', phone: p, pin: String(meta.masterPin || '8354') };
       } else if (co && co.active && sanitizeMobile(co.phone) === p) {
-        candidateUser = { role: 'master', tier: 'secondary', name: co.name || 'सह-मालिक (Co-Master)', phone: p, pin: String(co.pin || '1234') };
+        candidateUser = { role: 'master', tier: 'secondary', name: co.name || 'सह-मालिक', phone: p, pin: String(co.pin || '1234') };
       } else {
         const farmers = (await rtdb.ref('/tubewell/farmers').once('value')).val() || {};
         let found = null;
@@ -645,7 +664,7 @@
     const entered = document.getElementById('input_pin').value.trim();
     if (String(entered) !== String(candidateUser.pin)) {
       triggerVibrate([100, 50, 100]);
-      return alert("गलत पिन (Invalid PIN)। सही पिन दर्ज करें।");
+      return alert("गलत पिन (Invalid PIN)। सही पिन दर्ज करा।");
     }
 
     triggerVibrate(80);
@@ -660,7 +679,7 @@
     document.querySelectorAll('.primary-only').forEach(el => el.style.display = isPrimary ? '' : 'none');
     document.getElementById('liveFinancialBox').style.display = isMaster ? 'block' : 'none';
 
-    speakHindiFeedback(`नमस्ते ${loggedInUser.name}, आपका स्वागत है`);
+    speakAwadhi('WELCOME', { name: loggedInUser.name });
     initCloudListeners();
   }
 
@@ -687,7 +706,7 @@
       document.getElementById('tele_v_b').innerText = `${t.vB || 410} V`;
       document.getElementById('tele_i_amps').innerText = `${(t.amps || 0).toFixed(1)} A`;
 
-      // Hysteresis error suppression
+      // Hysteresis error suppression with Awadhi speech
       if (t.lockedOut) {
         noiseFilterStreak++;
         if (noiseFilterStreak >= FAULT_HYSTERESIS_COUNT) {
@@ -699,6 +718,10 @@
           btn.className = "main-actuator-btn btn-locked";
           btn.innerHTML = `<span class="icon">warning</span> ट्रिप लॉक (${t.fault})`;
           btn.disabled = true;
+
+          if (t.fault === "BROWNOUT_LOW_VOLTAGE") speakAwadhi('FAULT_VOLTAGE');
+          else if (t.fault === "DRY_RUN_NO_WATER") speakAwadhi('FAULT_DRY_RUN');
+          else if (t.fault === "SINGLE_PHASE_FAILURE") speakAwadhi('FAULT_SINGLE_PHASE');
           return;
         }
       } else {
@@ -756,7 +779,7 @@
     });
   }
 
-  // --- Advanced Data Analytics Horizon Engine ---
+  // --- Analytics Recalculation ---
   function recalculateAnalyticsHorizon() {
     let totalFare = 0;
     let totalHours = 0;
@@ -766,7 +789,6 @@
       totalHours += parseFloat(s.durationHours || 0);
     });
 
-    // Estimator: 12 HP agricultural pump discharge avg = ~380 LPM (22.8 kL per hour)
     const totalKiloLiters = Math.round(totalHours * 22.8);
 
     document.getElementById('an_revenue').innerText = `₹${totalFare.toFixed(0)}`;
@@ -788,29 +810,29 @@
 
     if (isMotorPhysicallyOn) {
       orb.className = "status-orb running";
-      title.innerText = "मोटर चालू है (PUMP RUNNING)";
+      title.innerText = "मोटर चालू बा (PUMP RUNNING)";
       title.style.color = "var(--success)";
-      sub.innerText = "खेत में पानी जा रहा है...";
+      sub.innerText = "खेत मा पानी जात बा...";
       sub.style.color = "var(--success)";
     } else {
       orb.className = "status-orb";
-      title.innerText = "मोटर बंद है (STOPPED)";
+      title.innerText = "मोटर बंद बा (STOPPED)";
       title.style.color = "var(--text)";
-      sub.innerText = "ट्यूबवेल तैयार स्थिति में है";
+      sub.innerText = "ट्यूबवेल तैयार हालत मा बा";
       sub.style.color = "var(--warning)";
     }
 
     if (!isAuthorized) {
       btn.className = "main-actuator-btn btn-locked";
-      btn.innerHTML = `<span class="icon">lock</span> अभी आपकी बारी नहीं है`;
-      sub.innerText = "अपनी बारी की प्रतीक्षा करें";
+      btn.innerHTML = `<span class="icon">lock</span> अभी आपके बारी नाहीं अहइ`;
+      sub.innerText = "अपन बारी कै बाट जोहीं";
     } else {
       if (isMotorPhysicallyOn) {
         btn.className = "main-actuator-btn btn-stop";
-        btn.innerHTML = `<span class="icon">power_settings_new</span> मोटर बंद करें (STOP)`;
+        btn.innerHTML = `<span class="icon">power_settings_new</span> मोटर बंद करा (STOP)`;
       } else {
         btn.className = "main-actuator-btn btn-start";
-        btn.innerHTML = `<span class="icon">play_arrow</span> मोटर चालू करें (START)`;
+        btn.innerHTML = `<span class="icon">play_arrow</span> मोटर चालू करा (START)`;
       }
     }
   }
@@ -825,25 +847,29 @@
       document.getElementById('btnFarmerSurrender').style.display = (isMyTurn && !isMaster) ? 'block' : 'none';
       document.getElementById('btnOwnerRevoke').style.display = isMaster ? 'block' : 'none';
     } else {
-      document.getElementById('label_active_field').innerText = "मालिक का खेत (Standby)";
+      document.getElementById('label_active_field').innerText = "मालिक कै खेत (Standby)";
       document.getElementById('label_start_time').innerText = "--:--:--";
       document.getElementById('btnFarmerSurrender').style.display = 'none';
       document.getElementById('btnOwnerRevoke').style.display = 'none';
     }
   }
 
-  // --- Motor Actuation with Voice Feedback ---
+  // --- Motor Switcher with Awadhi Voice Feedback ---
   async function handleMotorSwitch() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const isMyTurn = activeTurnObj && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
-    if (!isMaster && !isMyTurn) return;
+
+    if (!isMaster && !isMyTurn) {
+      speakAwadhi('NOT_YOUR_TURN');
+      return;
+    }
 
     triggerVibrate(70);
 
     if (!isMotorPhysicallyOn && isMaster && !activeTurnObj) {
       const now = Date.now();
       await rtdb.ref('/tubewell/active_turn').set({
-        farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_ROOT_PHONE, farmerName: 'मालिक का खेत',
+        farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_ROOT_PHONE, farmerName: 'मालिक कै खेत',
         plot: 'Estate', isOwnerPersonalRun: true, cycleStartTimestamp: now,
         cycleStartTimeIso: new Date(now).toLocaleTimeString('en-IN'),
         accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
@@ -853,13 +879,13 @@
     if (!isMotorPhysicallyOn) {
       await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: true, lastMotorStartTime: Date.now() });
       rtdb.ref('/tubewell/control/trigger_start').set(true);
-      speakHindiFeedback("मोटर चालू कर दी गई है। खेत में पानी शुरू हो गया है।");
+      speakAwadhi('MOTOR_ON');
     } else {
       const elapsed = activeTurnObj.lastMotorStartTime ? Math.round((Date.now() - activeTurnObj.lastMotorStartTime) / 1000) : 0;
       const total = (activeTurnObj.accumulatedSecondsBeforeCurrentRun || 0) + elapsed;
       await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: false, accumulatedSecondsBeforeCurrentRun: total, lastMotorStartTime: null });
       rtdb.ref('/tubewell/control/trigger_stop').set(true);
-      speakHindiFeedback("मोटर बंद कर दी गई है।");
+      speakAwadhi('MOTOR_OFF');
     }
   }
 
@@ -910,19 +936,20 @@
 
     await rtdb.ref('/tubewell/sessions').push(record);
     await rtdb.ref('/tubewell/active_turn').remove();
-    speakHindiFeedback(`सिंचाई समाप्त। कुल बिल ${fare.toFixed(0)} रुपये है।`);
-    alert(`सिंचाई समाप्त!\nकिसान: ${activeTurnObj.farmerName}\nकुल समय: ${hours} घंटे\nकुल बिल: ₹${fare.toFixed(2)}`);
+
+    speakAwadhi('TURN_FINISH', { fare: fare });
+    alert(`पानी भराई पूरा भवा!\nकिसान: ${activeTurnObj.farmerName}\nकुल टेम: ${hours} घंटे\nकुल बिल: ₹${fare.toFixed(2)}`);
   }
 
   function surrenderFarmerTurn() {
-    if (confirm("क्या आपका खेत भर गया है? मोटर बंद करके बारी छोड़ें?")) finalizeTurnCycle();
+    if (confirm("का खेत भरि गवा बा? मोटर बंद कइके बारी छोड़ब?")) finalizeTurnCycle();
   }
 
   function revokeTurnByMaster() {
-    if (confirm("मालिक द्वारा बारी समाप्त करें और मोटर बंद करें?")) finalizeTurnCycle();
+    if (confirm("मालिक द्वारा बारी समाप्त कइके मोटर बंद करब?")) finalizeTurnCycle();
   }
 
-  // --- Search, Filter & Sorting Algorithms ---
+  // --- Search, Filter & Sorting ---
   function handleLedgerSearch() {
     activeSearchQuery = document.getElementById('ledgerSearchInput').value.toLowerCase().trim();
     renderProcessedLedger();
@@ -944,17 +971,14 @@
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     let processed = [...sessionsCache];
 
-    // 1. Role Scope Filter
     if (!isMaster) {
       processed = processed.filter(s => s.userUid === loggedInUser.uid || sanitizeMobile(s.userPhone) === sanitizeMobile(loggedInUser.phone));
     }
 
-    // 2. Status / Owner Category Filter
     if (activeStatusFilter === 'UNPAID') processed = processed.filter(s => !s.billed);
     if (activeStatusFilter === 'PAID') processed = processed.filter(s => s.billed);
     if (activeStatusFilter === 'OWNER') processed = processed.filter(s => s.isOwnerPersonalRun || s.userUid === 'OWNER_DIRECT');
 
-    // 3. Search Query Filter (Matches Name, Mobile or Plot)
     if (activeSearchQuery) {
       processed = processed.filter(s => 
         (s.userName && s.userName.toLowerCase().includes(activeSearchQuery)) ||
@@ -963,17 +987,14 @@
       );
     }
 
-    // 4. Sorting
     if (activeSortOption === 'NEWEST') processed.reverse();
-    if (activeSortOption === 'OLDEST') { /* Natural order */ }
     if (activeSortOption === 'AMOUNT_DESC') processed.sort((a, b) => (parseFloat(b.fare) || 0) - (parseFloat(a.fare) || 0));
     if (activeSortOption === 'AMOUNT_ASC') processed.sort((a, b) => (parseFloat(a.fare) || 0) - (parseFloat(b.fare) || 0));
 
-    // Render Rows
     const tbody = document.getElementById('ledgerTableRows');
     tbody.innerHTML = '';
     if (processed.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-dim); padding:16px;">कोई रिकॉर्ड नहीं मिला।</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-dim); padding:16px;">कवनो रेकार्ड नाहीं मिला।</td></tr>`;
       return;
     }
 
@@ -997,25 +1018,25 @@
   // --- Master Features ---
   function populateTargetFarmerDropdown() {
     const sel = document.getElementById('select_target_farmer');
-    sel.innerHTML = '<option value="OWNER_DIRECT">⚡ मालिक का खेत (Self-Run)</option>';
+    sel.innerHTML = '<option value="OWNER_DIRECT">⚡ मालिक कै खेत (Self-Run)</option>';
     Object.keys(farmersCache).forEach(k => {
       const f = farmersCache[k];
-      sel.innerHTML += `<option value="${f.uid || k}">बारी दें: ${f.name} (${f.plot || 'खेत'})</option>`;
+      sel.innerHTML += `<option value="${f.uid || k}">बारी देईं: ${f.name} (${f.plot || 'खेत'})</option>`;
     });
   }
 
   async function executeInstantFieldSwitch(uid) {
-    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले मोटर बंद करें।");
+    if (isMotorPhysicallyOn) return alert("खेत बदले से पहिले मोटर बंद करा।");
     const now = Date.now();
     const timeStr = new Date(now).toLocaleTimeString('en-IN');
 
     if (uid === 'OWNER_DIRECT') {
       await rtdb.ref('/tubewell/active_turn').set({
-        farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_ROOT_PHONE, farmerName: 'मालिक का खेत',
+        farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_ROOT_PHONE, farmerName: 'मालिक कै खेत',
         plot: 'Estate', isOwnerPersonalRun: true, cycleStartTimestamp: now,
         cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
       });
-      speakHindiFeedback("मालिक के खेत के लिए बारी सेट कर दी गई है");
+      speakAwadhi('CUSTOM', { customText: "मालिक के खेत के बारी लगि गवा बा" });
     } else {
       const f = farmersCache[uid];
       if (!f) return;
@@ -1024,7 +1045,7 @@
         plot: f.plot || 'खेत', isOwnerPersonalRun: false, cycleStartTimestamp: now,
         cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
       });
-      speakHindiFeedback(`${f.name} के खेत के लिए बारी सेट कर दी गई है`);
+      speakAwadhi('CUSTOM', { customText: `${f.name} के खेत के बारी लगि गवा बा` });
     }
   }
 
@@ -1032,30 +1053,30 @@
     const name = document.getElementById('input_co_name').value.trim();
     const phone = sanitizeMobile(document.getElementById('input_co_phone').value.trim());
     const pin = document.getElementById('input_co_pin').value.trim();
-    if (!name || phone.length !== 10 || pin.length < 4) return alert("कृपया नाम, 10 अंकों का फोन व 4 अंकों का पिन दर्ज करें।");
+    if (!name || phone.length !== 10 || pin.length < 4) return alert("कृपया नाव, 10 अंकों का फोन व 4 अंकों का पिन दर्ज करा।");
 
     await rtdb.ref('/tubewell/system_meta/secondaryMaster').set({ name, phone, pin, active: true, assignedAt: Date.now() });
-    alert("सह-मालिक सफलतापूर्वक अधिकृत किया गया।");
+    alert("सह-मालिक अधिकार देइ दीन गवा।");
   }
 
   async function removeCoMasterRecord() {
-    if (confirm("क्या आप सह-मालिक के अधिकार समाप्त करना चाहते हैं?")) {
+    if (confirm("का आप सह-मालिक कै अधिकार खतम करब?")) {
       await rtdb.ref('/tubewell/system_meta/secondaryMaster').remove();
-      alert("अधिकार हटा दिए गए।");
+      alert("अधिकार हटावा गवा।");
     }
   }
 
   function broadcastOTAUpdate() {
-    const v = prompt("नया ऐप वर्शन कोड दर्ज करें:", "2.6");
+    const v = prompt("नया वर्शन कोड दर्ज करा:", "2.7");
     if (v) {
       rtdb.ref('/tubewell/system_meta/latestVersion').set(v);
-      alert(`अपडेट ${v} सभी फोन पर भेज दिया गया।`);
+      alert(`अपडेट ${v} सभन के फोन पर भेजि दीन गवा।`);
     }
   }
 
   function sendWhatsAppInvoice() {
     const phone = loggedInUser && loggedInUser.phone ? loggedInUser.phone : PRIMARY_ROOT_PHONE;
-    const msg = encodeURIComponent("⚡ ट्यूबवेल स्मार्ट ग्रिड: आपकी सिंचाई का बिल और खाता तैयार है। कृपया चेक करें।");
+    const msg = encodeURIComponent("⚡ ट्यूबवेल स्मार्ट ग्रिड: आपके सिंचाई कै बिल व पासबुक तैयार बा। कृपया जांच लें।");
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${msg}`, '_blank');
   }
 </script>
