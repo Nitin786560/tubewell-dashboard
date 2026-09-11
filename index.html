@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#020617">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>ट्यूबवेल स्मार्ट ग्रिड v18.0 AI</title>
+  <title>ट्यूबवेल स्मार्ट ग्रिड v19.0 AI</title>
 
   <!-- Google Material Symbols, Firebase SDKs & Fuse.js -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,800,1,0" />
@@ -22,11 +22,11 @@
       --border: #24385a;
       --border-bright: #38bdf8;
       --primary: #38bdf8;
-      --primary-glow: rgba(56, 189, 248, 0.45);
+      --primary-glow: rgba(56, 189, 248, 0.5);
       --success: #22c55e;
-      --success-glow: rgba(34, 197, 94, 0.6);
+      --success-glow: rgba(34, 197, 94, 0.7);
       --danger: #ef4444;
-      --danger-glow: rgba(239, 68, 68, 0.6);
+      --danger-glow: rgba(239, 68, 68, 0.7);
       --warning: #f59e0b;
       --purple: #a855f7;
       --text: #ffffff;
@@ -34,7 +34,6 @@
       --radius: 16px;
     }
 
-    /* ZERO-OVERFLOW / AUTO-FIT RESET */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0; padding: 0;
@@ -42,22 +41,15 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html {
-      width: 100%;
-      height: 100%;
-      background: var(--bg);
-    }
-
-    body {
+    html, body {
       width: 100%;
       max-width: 100%;
       min-height: 100%;
       background: var(--bg);
       color: var(--text);
       overflow-x: hidden;
-      position: relative;
       padding-top: env(safe-area-inset-top);
-      padding-bottom: calc(84px + env(safe-area-inset-bottom));
+      padding-bottom: calc(88px + env(safe-area-inset-bottom));
       font-size: 16px;
       line-height: 1.4;
     }
@@ -77,9 +69,9 @@
       width: 100%;
     }
     .header-brand { display: flex; align-items: center; gap: 8px; }
-    .header-brand-title { font-size: 18px; font-weight: 900; color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
+    .header-brand-title { font-size: 19px; font-weight: 900; color: var(--primary); text-shadow: 0 0 12px var(--primary-glow); }
     .header-version-tag {
-      font-size: 11px; font-weight: 900; padding: 2px 7px; border-radius: 6px;
+      font-size: 11px; font-weight: 900; padding: 3px 8px; border-radius: 6px;
       background: var(--primary); color: #000;
     }
     .btn-circle {
@@ -92,72 +84,71 @@
 
     .voice-badge {
       display: inline-flex; align-items: center; gap: 5px;
-      padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 800;
+      padding: 6px 12px; border-radius: 20px; font-size: 13.5px; font-weight: 800;
       background: var(--card); border: 1.5px solid var(--border); cursor: pointer;
     }
     .voice-badge.active { background: rgba(56, 189, 248, 0.25); border-color: var(--primary); color: var(--primary); }
     .voice-badge.disabled { background: rgba(239, 68, 68, 0.25); border-color: var(--danger); color: var(--danger); }
 
-    /* Single Column Mobile Body (Full Width, Zero Pinch Required) */
+    /* Fluid Body */
     .app-body {
-      width: 100%;
-      padding: 10px;
+      width: 100%; padding: 10px;
       display: flex; flex-direction: column; gap: 12px;
     }
 
-    /* 4-Column High-Contrast Telemetry */
+    /* 4-Column Compact Telemetry with Large Numbers */
     .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
     .tel-box {
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 12px; padding: 8px 2px; text-align: center;
     }
-    .tel-lbl { font-size: 11.5px; font-weight: 900; color: var(--text-dim); }
-    .tel-val { font-size: 17px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+    .tel-lbl { font-size: 12px; font-weight: 900; color: var(--text-dim); }
+    .tel-val { font-size: 18px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
-    /* AI Diagnostic Ribbon with Pulse */
+    /* AI Diagnostic Ribbon */
     .ai-smart-ribbon {
       background: rgba(168, 85, 247, 0.15); border: 1.5px solid var(--purple);
       border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px;
-      font-size: 13.5px; color: #f3e8ff; font-weight: 800; width: 100%;
-      box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+      font-size: 14px; color: #f3e8ff; font-weight: 800; width: 100%;
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.3);
     }
 
     /* ==========================================================================
-       RESTORED & ENLARGED: GIANT CIRCULAR TACTILE ACTUATOR BUTTON
+       UPGRADED: 160px CYBER-REACTOR CIRCULAR MOTOR BUTTON WITH MULTI-LAYER GLOW
        ========================================================================== */
     .motor-hero {
       width: 100%;
       background: radial-gradient(circle at 50% 15%, rgba(19, 31, 54, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
-      border: 2px solid var(--border-bright); border-radius: 20px;
-      padding: 20px 10px; text-align: center;
+      border: 2px solid var(--border-bright); border-radius: 22px;
+      padding: 22px 10px; text-align: center;
       display: flex; flex-direction: column; align-items: center; gap: 16px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.6);
     }
 
     .giant-circular-wrapper {
       position: relative;
-      width: 150px;
-      height: 150px;
+      width: 170px;
+      height: 170px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .circular-pulse-ring {
-      position: absolute; inset: -10px; border-radius: 50%;
+      position: absolute; inset: -12px; border-radius: 50%;
       border: 4px solid var(--success); opacity: 0;
-      animation: rippleEffect 2s infinite ease-out; display: none;
+      animation: rippleEffect 2s infinite cubic-bezier(0.2, 0.8, 0.2, 1); display: none;
     }
     @keyframes rippleEffect {
-      0% { transform: scale(0.85); opacity: 0.9; }
-      100% { transform: scale(1.45); opacity: 0; }
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
     }
 
     .giant-circular-btn {
-      width: 140px;
-      height: 140px;
+      width: 160px;
+      height: 160px;
       border-radius: 50%;
-      border: 4px solid #334155;
+      border: 5px solid #334155;
       background: #1e293b;
       color: var(--text-dim);
       display: flex;
@@ -167,30 +158,30 @@
       gap: 4px;
       cursor: pointer;
       z-index: 2;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
     .giant-circular-btn:active {
-      transform: scale(0.94);
+      transform: scale(0.93);
     }
 
-    /* States */
+    /* Start / Stop Neon States */
     .giant-circular-btn.btn-start {
-      background: radial-gradient(circle, #22c55e 30%, #15803d 100%);
+      background: radial-gradient(circle at 35% 35%, #22c55e 20%, #15803d 85%, #052e16 100%);
       border-color: #86efac;
       color: #ffffff;
-      box-shadow: 0 0 35px var(--success-glow);
+      box-shadow: 0 0 40px var(--success-glow);
     }
     .giant-circular-btn.btn-stop {
-      background: radial-gradient(circle, #ef4444 30%, #b91c1c 100%);
+      background: radial-gradient(circle at 35% 35%, #ef4444 20%, #b91c1c 85%, #450a0a 100%);
       border-color: #fca5a5;
       color: #ffffff;
-      box-shadow: 0 0 35px var(--danger-glow);
-      animation: motorVibe 0.6s infinite alternate;
+      box-shadow: 0 0 40px var(--danger-glow);
+      animation: reactorHum 1s infinite alternate ease-in-out;
     }
-    @keyframes motorVibe {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.04); }
+    @keyframes reactorHum {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.05); filter: brightness(1.2); }
     }
     .giant-circular-btn.btn-stop + .circular-pulse-ring {
       display: block;
@@ -203,55 +194,57 @@
     }
 
     .circle-label-main {
-      font-size: 16px;
+      font-size: 24px;
       font-weight: 900;
       letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
     }
     .circle-label-sub {
-      font-size: 11px;
-      font-weight: 800;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1px;
       opacity: 0.9;
     }
 
-    /* Quick Selector Box Directly Below Circular Button */
+    /* Quick Selector Box */
     .quick-selector-box {
       width: 100%; background: var(--surface); border: 2px solid var(--primary);
-      border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
+      border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 6px;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
     }
     .quick-selector-title {
-      font-size: 13px; font-weight: 900; color: var(--primary);
+      font-size: 14px; font-weight: 900; color: var(--primary);
       display: flex; align-items: center; justify-content: space-between;
     }
 
-    /* Cards with Large Fonts */
+    /* Cards with High Legibility */
     .app-card {
       width: 100%; background: var(--surface); border: 1.5px solid var(--border);
       border-radius: var(--radius); overflow: hidden;
     }
     .app-card-header { padding: 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .app-card-title { font-size: 16px; font-weight: 900; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .app-card-arrow { transition: transform 0.25s; font-size: 24px; color: var(--text-dim); }
+    .app-card-title { font-size: 17px; font-weight: 900; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .app-card-arrow { transition: transform 0.25s; font-size: 26px; color: var(--text-dim); }
     .app-card.open .app-card-arrow { transform: rotate(180deg); }
-    .app-card-content { display: none; padding: 12px; border-top: 1.5px solid var(--border); background: var(--card); flex-direction: column; gap: 10px; }
+    .app-card-content { display: none; padding: 14px; border-top: 1.5px solid var(--border); background: var(--card); flex-direction: column; gap: 12px; }
     .app-card.open .app-card-content { display: flex; }
 
     /* High-Visibility Bill Box */
     .bill-calc-box {
       background: rgba(11, 19, 41, 0.85); border: 1.5px solid var(--border);
-      border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 14.5px;
+      border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 15.5px;
     }
     .calc-row { display: flex; justify-content: space-between; align-items: center; }
     .calc-divider { border-top: 1.5px dashed var(--border); margin: 4px 0; }
 
-    /* Financial Horizon (3 Tabs) */
+    /* Financial Horizon */
     .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; }
     .summary-box {
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 12px; padding: 10px 4px; text-align: center;
     }
-    .summary-lbl { font-size: 11.5px; font-weight: 800; color: var(--text-dim); }
-    .summary-val { font-size: 18px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+    .summary-lbl { font-size: 12px; font-weight: 800; color: var(--text-dim); }
+    .summary-val { font-size: 19px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
     /* Recent Usage Stream List */
     .recent-stream-list { display: flex; flex-direction: column; gap: 6px; width: 100%; }
@@ -267,29 +260,29 @@
     .roster-single-row-list { display: flex; flex-direction: column; gap: 6px; width: 100%; }
     .roster-row-strip {
       background: var(--surface); border: 1.5px solid var(--border);
-      border-radius: 12px; padding: 10px 12px;
+      border-radius: 12px; padding: 12px 14px;
       display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px;
     }
     .strip-user-info { display: flex; flex-direction: column; overflow: hidden; }
-    .strip-name { font-size: 16px; font-weight: 900; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .strip-sub { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+    .strip-name { font-size: 17px; font-weight: 900; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .strip-sub { font-size: 13px; color: var(--text-dim); margin-top: 2px; font-weight: 600; }
     
     .strip-accounting-nums {
-      display: flex; flex-direction: column; align-items: flex-end; font-size: 12px;
+      display: flex; flex-direction: column; align-items: flex-end; font-size: 13px;
     }
     .strip-paid-discount { color: var(--success); font-weight: 800; }
-    .strip-due-num { font-size: 16px; font-weight: 900; font-family: monospace; }
+    .strip-due-num { font-size: 17px; font-weight: 900; font-family: monospace; }
     
     .strip-action-btn {
       height: 38px; padding: 0 12px; border-radius: 8px; border: none;
-      background: var(--primary); color: #000; font-size: 13px; font-weight: 900;
+      background: var(--primary); color: #000; font-size: 13.5px; font-weight: 900;
       display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
     .strip-action-btn:active { transform: scale(0.92); }
 
     /* Badges */
     .bill-tag {
-      font-size: 10.5px; font-weight: 900; padding: 3px 6px; border-radius: 6px;
+      font-size: 11px; font-weight: 900; padding: 3px 7px; border-radius: 6px;
       text-transform: uppercase; display: inline-block;
     }
     .tag-pakka { background: rgba(34, 197, 94, 0.25); color: var(--success); border: 1.5px solid var(--success); }
@@ -299,11 +292,11 @@
     /* AI Search */
     .ai-search-box { position: relative; display: flex; align-items: center; width: 100%; }
     .ai-search-box input {
-      width: 100%; height: 46px; border-radius: 10px; border: 1.5px solid var(--border-bright);
-      background: var(--surface); color: var(--text); padding: 0 46px 0 12px; font-size: 15px; outline: none;
+      width: 100%; height: 48px; border-radius: 10px; border: 1.5px solid var(--border-bright);
+      background: var(--surface); color: var(--text); padding: 0 48px 0 14px; font-size: 16px; outline: none;
     }
     .ai-search-box .mic-btn {
-      position: absolute; right: 4px; width: 38px; height: 38px; border-radius: 8px;
+      position: absolute; right: 4px; width: 40px; height: 40px; border-radius: 8px;
       border: none; background: var(--card); color: var(--primary);
       display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
@@ -312,7 +305,7 @@
     .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
     .filter-pills::-webkit-scrollbar { display: none; }
     .pill {
-      font-size: 12.5px; font-weight: 800; padding: 7px 12px; border-radius: 14px;
+      font-size: 13px; font-weight: 800; padding: 8px 14px; border-radius: 14px;
       border: 1.5px solid var(--border); background: var(--surface); color: var(--text-dim);
       white-space: nowrap; cursor: pointer;
     }
@@ -320,12 +313,12 @@
 
     /* Inputs & Form Controls */
     input, select {
-      width: 100%; height: 48px; border-radius: 10px; border: 1.5px solid var(--border);
-      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 15px; outline: none;
+      width: 100%; height: 50px; border-radius: 10px; border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--text); padding: 0 14px; font-size: 16px; outline: none;
     }
     .btn-action {
-      height: 48px; border-radius: 10px; border: none; padding: 0 14px;
-      font-size: 15px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+      height: 50px; border-radius: 10px; border: none; padding: 0 16px;
+      font-size: 16px; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
     }
     .btn-p { background: var(--primary); color: #000; }
     .btn-s { background: var(--success); color: #fff; }
@@ -334,7 +327,7 @@
 
     /* Bottom App Bar */
     .bottom-app-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
+      position: fixed; bottom: 0; left: 0; right: 0; height: 66px;
       background: rgba(11, 19, 41, 0.98); backdrop-filter: blur(16px);
       border-top: 2px solid var(--border); display: flex; align-items: center; justify-content: space-around; z-index: 90;
       padding-bottom: env(safe-area-inset-bottom);
@@ -342,7 +335,7 @@
     }
     .app-tab {
       display: flex; flex-direction: column; align-items: center; gap: 2px;
-      color: var(--text-dim); font-size: 11px; font-weight: 800; cursor: pointer; border: none; background: transparent;
+      color: var(--text-dim); font-size: 11.5px; font-weight: 800; cursor: pointer; border: none; background: transparent;
     }
     .app-tab.active { color: var(--primary); }
 
@@ -353,7 +346,7 @@
     }
     .modal-card {
       width: 100%; max-width: 380px; background: var(--surface); border: 2px solid var(--border-bright);
-      border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px;
+      border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 10px;
     }
   </style>
 </head>
@@ -365,11 +358,11 @@
     <div style="display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 8px; color: var(--primary);">
         <span class="icon" style="font-size: 32px;">water_drop</span>
-        <strong style="font-size: 19px;">ट्यूबवेल लॉगिन</strong>
+        <strong style="font-size: 20px;">ट्यूबवेल लॉगिन</strong>
       </div>
-      <span class="header-version-tag">v18.0 AI</span>
+      <span class="header-version-tag">v19.0 AI</span>
     </div>
-    <div style="font-size: 12.5px; color: var(--text-dim);">सिस्टम का उपयोग करने के लिए 10 अंकों का फोन नंबर दर्ज करें</div>
+    <div style="font-size: 13px; color: var(--text-dim);">सिस्टम का उपयोग करने के लिए 10 अंकों का फोन नंबर दर्ज करें</div>
 
     <div id="step_mobile">
       <input type="tel" id="input_phone" placeholder="10 अंकों का मोबाइल नंबर" value="8354816628" style="margin-top: 6px;">
@@ -377,9 +370,9 @@
     </div>
 
     <div id="step_secret_pin" style="display: none;">
-      <div id="user_display_badge" style="font-size: 15px; font-weight: 800; color: var(--primary);"></div>
-      <label style="font-size: 12px; color: var(--text-dim); margin-top: 6px; display: block;">4 अंक का सुरक्षा पिन (Security PIN):</label>
-      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 6px; text-align: center; letter-spacing: 8px; font-size: 22px;">
+      <div id="user_display_badge" style="font-size: 16px; font-weight: 800; color: var(--primary);"></div>
+      <label style="font-size: 13px; color: var(--text-dim); margin-top: 6px; display: block;">4 अंक का गुप्त पिन (Security PIN):</label>
+      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 4px; text-align: center; letter-spacing: 8px; font-size: 22px;">
       <button class="btn-action btn-p" style="width: 100%; margin-top: 12px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
       <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">नंबर बदलें</button>
     </div>
@@ -390,12 +383,12 @@
 <div class="modal-overlay" id="invoiceModal" style="display: none;">
   <div class="modal-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 17px; color: var(--primary);">बिलिंग कंसोल (Consolidation)</strong>
-      <button class="btn-circle" style="width:34px; height:34px;" onclick="closeInvoiceModal()">✕</button>
+      <strong style="font-size: 18px; color: var(--primary);">बिलिंग कंसोल (Consolidation)</strong>
+      <button class="btn-circle" style="width:36px; height:36px;" onclick="closeInvoiceModal()">✕</button>
     </div>
     
-    <div style="background: rgba(11,19,41,0.85); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px; font-size: 13px; display: flex; flex-direction: column; gap: 4px;">
-      <div id="invModalFarmerDesc" style="font-weight: 900; color: #fff; font-size: 15px;">--</div>
+    <div style="background: rgba(11,19,41,0.85); border: 1.5px solid var(--border); border-radius: 10px; padding: 12px; font-size: 14px; display: flex; flex-direction: column; gap: 5px;">
+      <div id="invModalFarmerDesc" style="font-weight: 900; color: #fff; font-size: 16px;">--</div>
       <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
         <span>पिछली पक्की रीडिंग:</span>
         <strong id="invModalLastPakkaDate" style="color: var(--primary); font-family: monospace;">--</strong>
@@ -406,7 +399,7 @@
       </div>
       <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
         <span>अवधि का बिल:</span>
-        <strong id="invModalCalculatedFare" style="color: var(--success); font-size: 16px;">₹0</strong>
+        <strong id="invModalCalculatedFare" style="color: var(--success); font-size: 17px;">₹0</strong>
       </div>
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
         <span style="color: var(--text-dim);">स्थिति / इटरेशन:</span>
@@ -415,31 +408,31 @@
     </div>
 
     <div>
-      <label style="font-size: 12.5px; color: var(--text-dim);">पक्का बिल कट-ऑफ तारीख (Upto Date):</label>
+      <label style="font-size: 13px; color: var(--text-dim);">पक्का बिल कट-ऑफ तारीख (Upto Date):</label>
       <input type="date" id="input_pakka_cutoff_date">
     </div>
 
     <div>
-      <label style="font-size: 12.5px; color: var(--text-dim);">जमा की गई रकम (Cash/UPI):</label>
+      <label style="font-size: 13px; color: var(--text-dim);">जमा की गई रकम (Cash/UPI):</label>
       <input type="number" id="input_inv_paid" placeholder="₹0" value="0" oninput="updateInvoicePreview()">
     </div>
 
     <div>
-      <label style="font-size: 12.5px; color: var(--text-dim);">माफी / छूट (Discount Allowed):</label>
+      <label style="font-size: 13px; color: var(--text-dim);">माफी / छूट (Discount Allowed):</label>
       <input type="number" id="input_inv_discount" placeholder="₹0" value="0" oninput="updateInvoicePreview()">
     </div>
 
-    <div style="background: rgba(34,197,94,0.12); border: 1.5px solid rgba(34,197,94,0.35); border-radius: 10px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-size: 13px; color: var(--text-dim);">आगे कैरी-फॉरवर्ड बकाया:</span>
-      <strong id="invModalRemainingDueTxt" style="color: var(--primary); font-size: 18px; font-family: monospace;">₹0</strong>
+    <div style="background: rgba(34,197,94,0.12); border: 1.5px solid rgba(34,197,94,0.35); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 13.5px; color: var(--text-dim);">आगे कैरी-फॉरवर्ड बकाया:</span>
+      <strong id="invModalRemainingDueTxt" style="color: var(--primary); font-size: 19px; font-family: monospace;">₹0</strong>
     </div>
 
     <div style="display: flex; gap: 6px; margin-top: 4px;">
       <button class="btn-action btn-p" style="flex: 1;" onclick="generateCheckBillOnly()">
-        <span class="icon" style="font-size:20px;">print</span> जांच पर्ची
+        <span class="icon" style="font-size:22px;">print</span> जांच पर्ची
       </button>
       <button class="btn-action btn-s" style="flex: 1;" onclick="commitPakkaConsolidationInvoice()">
-        <span class="icon" style="font-size:20px;">verified</span> पक्का बिल
+        <span class="icon" style="font-size:22px;">verified</span> पक्का बिल
       </button>
     </div>
   </div>
@@ -450,11 +443,11 @@
   <div class="header-brand">
     <span class="icon" style="color:var(--primary); text-shadow:0 0 10px var(--primary);">water_ph</span>
     <span class="header-brand-title">किसान ग्रिड AI</span>
-    <span class="header-version-tag">v18.0 Pro</span>
+    <span class="header-version-tag">v19.0 Pro</span>
   </div>
   <div style="display: flex; align-items: center; gap: 6px;">
     <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
-      <span class="icon" id="voiceBadgeIcon" style="font-size: 18px;">volume_up</span>
+      <span class="icon" id="voiceBadgeIcon" style="font-size: 16px;">volume_up</span>
       <span id="voiceBadgeText">आवाज</span>
     </div>
     <button class="btn-circle" onclick="window.location.reload(true)"><span class="icon">sync</span></button>
@@ -490,28 +483,28 @@
     <span id="aiPredictiveText">AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल रही है।</span>
   </div>
 
-  <!-- RESTORED: GIANT CIRCULAR TACTILE MOTOR CONTROLLER HERO -->
+  <!-- UPGRADED: 160px CYBER-REACTOR CIRCULAR MOTOR CONTROLLER -->
   <section class="motor-hero">
     <div>
-      <div style="font-size: 20px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
-      <div style="font-size: 13.5px; color: var(--warning); font-weight: 800; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
+      <div style="font-size: 22px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
+      <div style="font-size: 14.5px; color: var(--warning); font-weight: 800; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
     </div>
 
-    <!-- 150px GIANT CIRCULAR BUTTON -->
+    <!-- 160px GIANT CIRCULAR BUTTON WITH MULTI-LAYER GLOW -->
     <div class="giant-circular-wrapper">
       <div class="circular-pulse-ring"></div>
       <button id="mainMotorButton" class="giant-circular-btn btn-locked" onclick="handleMotorSwitch()">
-        <span class="icon" style="font-size: 42px;" id="mainMotorIcon">lock</span>
+        <span class="icon" style="font-size: 46px;" id="mainMotorIcon">lock</span>
         <span class="circle-label-main" id="mainMotorText">बंद है</span>
         <span class="circle-label-sub" id="mainMotorSubText">LOCKED</span>
       </button>
     </div>
 
-    <!-- Quick Selector Positioned Directly Below Circular Button -->
+    <!-- Quick Selector Positioned Directly Below Button -->
     <div class="quick-selector-box owner-only">
       <div class="quick-selector-title">
         <span>⚡ मोटर चलाने के लिए खेत / किसान चुनें:</span>
-        <span style="font-size:11.5px; color:var(--text-dim);">त्वरित चयन</span>
+        <span style="font-size:12px; color:var(--text-dim);">त्वरित चयन</span>
       </div>
       <select id="quick_select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
     </div>
@@ -529,39 +522,39 @@
       <div class="bill-calc-box">
         <div class="calc-row">
           <span style="color: var(--text-dim);">खेत / किसान:</span>
-          <strong id="label_active_field" style="color: var(--primary); font-size: 15px;">मालिक का खेत (Standby)</strong>
+          <strong id="label_active_field" style="color: var(--primary); font-size: 16px;">मालिक का खेत (Standby)</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">शुरू समय (Reading):</span>
-          <strong id="label_start_time" style="font-family: monospace; font-size: 15px;">--:--:--</strong>
+          <strong id="label_start_time" style="font-family: monospace; font-size: 16px;">--:--:--</strong>
         </div>
         <div class="calc-divider"></div>
 
         <div class="calc-row">
           <span style="color: var(--text-dim);">सिंचाई समय:</span>
-          <strong id="label_live_time_split" style="color: var(--text); font-size: 15px;">0 घंटे 0 मिनट</strong>
+          <strong id="label_live_time_split" style="color: var(--text); font-size: 16px;">0 घंटे 0 मिनट</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">कुल मिनट:</span>
-          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace; font-size: 15px;">0 मिनट</strong>
+          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace; font-size: 16px;">0 मिनट</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">अनुमानित पानी डिस्चार्ज:</span>
-          <strong id="label_live_liters" style="color: var(--primary); font-size: 15px;">0 लीटर</strong>
+          <strong id="label_live_liters" style="color: var(--primary); font-size: 16px;">0 लीटर</strong>
         </div>
         <div class="calc-divider"></div>
 
         <div class="calc-row">
           <span style="color: var(--text-dim);">पिछली पक्की रीडिंग से बकाया:</span>
-          <strong id="label_prev_due" style="color: var(--danger); font-size: 15px;">₹0</strong>
+          <strong id="label_prev_due" style="color: var(--danger); font-size: 16px;">₹0</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim); font-weight: bold;">इस बारी का बिल:</span>
-          <strong id="label_live_fare" style="color: var(--success); font-size: 18px;">₹0</strong>
+          <strong id="label_live_fare" style="color: var(--success); font-size: 19px;">₹0</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim); font-weight: bold;">वर्तमान कुल देय रकम:</span>
-          <strong id="label_total_payable" style="color: var(--primary); font-size: 18px;">₹0</strong>
+          <strong id="label_total_payable" style="color: var(--primary); font-size: 19px;">₹0</strong>
         </div>
       </div>
 
@@ -583,9 +576,9 @@
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
-    <div class="app-card-content" style="padding: 8px;">
+    <div class="app-card-content" style="padding: 6px;">
       <div class="recent-stream-list" id="recentPumpStreamContainer">
-        <div style="text-align:center; padding:8px; color:var(--text-dim); font-size:12px;">हालिया रिकॉर्ड लोड हो रहे हैं...</div>
+        <div style="text-align:center; padding:10px; color:var(--text-dim); font-size:13px;">हालिया रिकॉर्ड लोड हो रहे हैं...</div>
       </div>
     </div>
   </div>
@@ -599,9 +592,9 @@
       <span class="icon app-card-arrow">expand_more</span>
     </div>
     <div class="app-card-content" style="padding: 6px;">
-      <div style="font-size: 12px; color: var(--text-dim); padding: 0 4px 4px 4px;">सभी किसानों का कुल समय, अनबिल उपयोग, जमा व बकाया:</div>
+      <div style="font-size: 12.5px; color: var(--text-dim); padding: 0 4px 4px 4px;">सभी किसानों का कुल समय, अनबिल उपयोग, जमा व बकाया:</div>
       <div class="roster-single-row-list" id="masterRosterContainer">
-        <div style="text-align:center; padding:10px; color:var(--text-dim); font-size:12px;">डेटा लोड हो रहा है...</div>
+        <div style="text-align:center; padding:12px; color:var(--text-dim); font-size:13px;">डेटा लोड हो रहा है...</div>
       </div>
     </div>
   </div>
@@ -650,7 +643,7 @@
       <span class="icon app-card-arrow">expand_more</span>
     </div>
     <div class="app-card-content">
-      <div style="font-size: 12px; color: var(--text-dim);" id="coMasterStateText">जांच चल रही है...</div>
+      <div style="font-size: 13px; color: var(--text-dim);" id="coMasterStateText">जांच चल रही है...</div>
       <input type="text" id="input_co_name" placeholder="सह-मालिक का नाम">
       <input type="tel" id="input_co_phone" placeholder="10 अंकों का मोबाइल">
       <input type="text" id="input_co_pin" placeholder="गुप्त पिन (4 अंक)" maxlength="6">
@@ -1149,12 +1142,12 @@
       container.innerHTML += `
         <div class="recent-stream-item">
           <div class="stream-info">
-            <strong style="font-size:14.5px; color:#fff;">${s.userName} <span style="font-size:11.5px; color:var(--text-dim);">(${s.plot || 'खेत'})</span></strong>
-            <span style="font-size:11.5px; color:var(--text-dim);">${s.date} | ${timeRange}</span>
+            <strong style="font-size:15px; color:#fff;">${s.userName} <span style="font-size:12px; color:var(--text-dim);">(${s.plot || 'खेत'})</span></strong>
+            <span style="font-size:12px; color:var(--text-dim); font-weight:600;">${s.date} | ${timeRange}</span>
           </div>
           <div class="stream-right">
-            <span style="font-size:13px; font-weight:bold; color:var(--primary);">${dH}घं ${dM}मि</span>
-            <strong style="font-size:14.5px; color:var(--success);">₹${Math.round(s.fare || (durMins * unitTariffPerMin))}</strong>
+            <span style="font-size:14px; font-weight:bold; color:var(--primary);">${dH}घं ${dM}मि</span>
+            <strong style="font-size:15px; color:var(--success);">₹${Math.round(s.fare || (durMins * unitTariffPerMin))}</strong>
           </div>
         </div>
       `;
@@ -1182,7 +1175,7 @@
     recalculateAccountsAndLedger();
   }
 
-  // Single Row Master Roster Strip with High Legibility
+  // Single Row Master Roster Strip with Large High-Contrast Fonts
   function renderMasterRosterSingleRow(balances) {
     const container = document.getElementById('masterRosterContainer');
     container.innerHTML = '';
@@ -1204,12 +1197,12 @@
         <div class="roster-row-strip">
           <div class="strip-user-info">
             <span class="strip-name">${b.name}</span>
-            <span class="strip-sub">${b.plot || 'खेत'} | समय: <b style="color:var(--primary); font-size:13px;">${usageFormatted}</b></span>
+            <span class="strip-sub">${b.plot || 'खेत'} | समय: <b style="color:var(--primary); font-size:13.5px;">${usageFormatted}</b></span>
           </div>
 
           <div class="strip-accounting-nums">
             <span class="strip-paid-discount">जमा: ₹${b.totalPaid}</span>
-            <span class="strip-due-num" style="color:${dueColor}; font-size:16px;">बाकी: ${dueText}</span>
+            <span class="strip-due-num" style="color:${dueColor}; font-size:17px;">बाकी: ${dueText}</span>
           </div>
 
           <button class="strip-action-btn" onclick="openInvoiceModal('${b.phone}', '${b.name}', ${b.unbilledMins}, ${Math.round(b.unbilledMins * unitTariffPerMin)}, ${b.lastPakkaReadingTimestamp}, '${b.lastPakkaDateStr}')">
@@ -1363,7 +1356,7 @@
 
           <div class="strip-accounting-nums">
             <span class="strip-paid-discount">बिल: ₹${inv.fare} (जमा: ₹${inv.amountPaid || 0})</span>
-            <span class="strip-due-num" style="color:${inv.netDue > 0 ? 'var(--danger)' : 'var(--success)'}; font-size:15px;">बाकी: ₹${inv.netDue}</span>
+            <span class="strip-due-num" style="color:${inv.netDue > 0 ? 'var(--danger)' : 'var(--success)'}; font-size:16px;">बाकी: ₹${inv.netDue}</span>
           </div>
 
           <button class="strip-action-btn" style="background:#0284c7;" onclick="sendInvoiceWhatsApp('${inv.userPhone}', '${inv.userName}', '${inv.fromDateStr}', '${inv.toDateStr}', '${durationFormatted}', ${inv.fare}, ${inv.amountPaid||0}, ${inv.discount||0}, ${inv.netDue}, ${inv.iteration}, ${isPakka})">
@@ -1374,7 +1367,7 @@
     });
   }
 
-  // UPDATE MOTOR UI TO 140px CIRCULAR BUTTON
+  // 160px CIRCULAR BUTTON STATE CONTROLLER (HIGH VISIBILITY DEVANAGARI FONT)
   function refreshMotorUI() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const isMyTurn = activeTurnObj && loggedInUser && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
@@ -1439,7 +1432,7 @@
     const isMyTurn = activeTurnObj && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
     if (!isMaster && !isMyTurn) { speakSimpleHindi('NOT_YOUR_TURN'); return; }
 
-    triggerVibrate(70);
+    triggerVibrate(60);
 
     if (!isMotorPhysicallyOn && isMaster && !activeTurnObj) {
       const now = Date.now();
@@ -1596,7 +1589,7 @@
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
 शेष बकाया (Net Due): ₹${due}
-(ट्यूबवेल स्मार्ट ग्रिड v18.0 AI Pro)`;
+(ट्यूबवेल स्मार्ट ग्रिड v19.0 AI Pro)`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 
@@ -1611,7 +1604,7 @@
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
 कुल बाकी बकाया: ₹${due}
-(ट्यूबवेल स्मार्ट ग्रिड v18.0 AI Pro)`;
+(ट्यूबवेल स्मार्ट ग्रिड v19.0 AI Pro)`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 </script>
