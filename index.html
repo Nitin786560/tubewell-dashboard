@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#020617">
-  <title>ट्यूबवेल मास्टर कंसोल 8.0 - AI किसान ग्रिड</title>
+  <title>ट्यूबवेल स्मार्ट ग्रिड 9.0 - AI ऑपरेटर कंसोल</title>
 
   <!-- Google Material Symbols, Firebase SDKs & Fuse.js AI Search -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0" />
@@ -27,6 +27,7 @@
       --danger-glow: rgba(239, 68, 68, 0.45);
       --warning: #f59e0b;
       --purple: #a855f7;
+      --purple-dim: rgba(168, 85, 247, 0.18);
       --text: #f8fafc;
       --text-dim: #94a3b8;
       --radius: 18px;
@@ -54,12 +55,12 @@
     .app-header {
       position: sticky; top: 0; z-index: 100;
       background: rgba(11, 19, 41, 0.95); backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border); height: 66px; padding: 0 16px;
+      border-bottom: 1px solid var(--border); height: 64px; padding: 0 16px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .header-brand { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 900; color: var(--primary); }
+    .header-brand { display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 900; color: var(--primary); }
     .btn-circle {
-      width: 46px; height: 46px; border-radius: 50%;
+      width: 44px; height: 44px; border-radius: 50%;
       background: var(--card); border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
       color: var(--text); cursor: pointer; transition: transform 0.15s;
@@ -68,7 +69,7 @@
 
     .voice-badge {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 7px 14px; border-radius: 24px; font-size: 12.5px; font-weight: 800;
+      padding: 6px 14px; border-radius: 24px; font-size: 12px; font-weight: 800;
       background: var(--card); border: 1px solid var(--border); cursor: pointer;
     }
     .voice-badge.active { background: var(--primary-dim); border-color: var(--primary); color: var(--primary); }
@@ -76,13 +77,13 @@
 
     .app-body { max-width: 580px; margin: 0 auto; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
 
-    /* 3-Phase Line Telemetry */
+    /* Telemetry Horizontal Bar */
     .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .tel-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px 4px; text-align: center; }
-    .tel-lbl { font-size: 10.5px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
-    .tel-val { font-size: 17px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+    .tel-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
+    .tel-val { font-size: 16.5px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
-    /* Animated Water Reactor */
+    /* Animated Reactor Hero */
     .motor-hero {
       background: radial-gradient(circle at 50% 15%, rgba(21, 34, 56, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
       border: 1px solid var(--border-bright); border-radius: 26px;
@@ -109,8 +110,8 @@
     @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 
     .giant-actuator-btn {
-      width: 100%; height: 74px; border-radius: 20px; border: none;
-      font-size: 21px; font-weight: 900; letter-spacing: 0.5px;
+      width: 100%; height: 72px; border-radius: 20px; border: none;
+      font-size: 20px; font-weight: 900; letter-spacing: 0.5px;
       display: flex; align-items: center; justify-content: center; gap: 14px;
       cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
@@ -119,11 +120,29 @@
     .btn-stop { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); color: #fff; }
     .btn-locked { background: #1e293b; color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
 
+    /* Quick User Run Selector Box (Directly Below Start Button) */
+    .quick-selector-box {
+      width: 100%; background: var(--surface); border: 2px solid var(--primary);
+      border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15);
+    }
+    .quick-selector-title {
+      font-size: 13px; font-weight: 800; color: var(--primary);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* AI Predictive Insight Pill */
+    .ai-insight-box {
+      background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+      font-size: 12.5px; color: #d8b4fe;
+    }
+
     /* Expandable Cards */
     .app-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
     .app-card-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .app-card-title { font-size: 16px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
-    .app-card-arrow { transition: transform 0.25s; font-size: 26px; color: var(--text-dim); }
+    .app-card-title { font-size: 15.5px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .app-card-arrow { transition: transform 0.25s; font-size: 24px; color: var(--text-dim); }
     .app-card.open .app-card-arrow { transform: rotate(180deg); }
     .app-card-content { display: none; padding: 18px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 14px; }
     .app-card.open .app-card-content { display: flex; }
@@ -134,18 +153,18 @@
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 14px; padding: 12px 6px; text-align: center;
     }
-    .summary-lbl { font-size: 11px; font-weight: 800; color: var(--text-dim); }
-    .summary-val { font-size: 19px; font-weight: 900; font-family: monospace; margin-top: 4px; }
+    .summary-lbl { font-size: 10.5px; font-weight: 800; color: var(--text-dim); }
+    .summary-val { font-size: 18px; font-weight: 900; font-family: monospace; margin-top: 4px; }
 
-    /* Bill Itemization Box */
+    /* Itemized Bill Box */
     .bill-calc-box {
       background: rgba(11, 19, 41, 0.7); border: 1px solid var(--border-bright);
-      border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 14px;
+      border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px;
     }
     .calc-row { display: flex; justify-content: space-between; align-items: center; }
     .calc-divider { border-top: 1px dashed var(--border); margin: 4px 0; }
 
-    /* Master User Usage Roster (All Users in One Place) */
+    /* Master User Usage Roster Table */
     .roster-table-wrapper {
       width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
       border-radius: 14px; border: 1px solid var(--border); background: var(--surface);
@@ -158,9 +177,8 @@
     .roster-table td {
       padding: 12px 10px; border-bottom: 1px solid var(--border); white-space: nowrap;
     }
-    .roster-table tr:active { background: var(--card); }
 
-    /* Search & Filter Toolbar */
+    /* AI Search Box with Voice Mic */
     .ai-search-box { position: relative; display: flex; align-items: center; }
     .ai-search-box input {
       width: 100%; height: 50px; border-radius: 14px; border: 1px solid var(--border-bright);
@@ -203,7 +221,7 @@
     }
     .btn-action {
       height: 48px; border-radius: 14px; border: none; padding: 0 18px;
-      font-size: 14.5px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+      font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
     }
     .btn-p { background: var(--primary); color: #000; }
     .btn-s { background: var(--success); color: #fff; }
@@ -262,7 +280,7 @@
   </div>
 </div>
 
-<!-- Advanced Settlement Modal (Payment, Discount & Carry-Forward Calculation) -->
+<!-- Advanced Settlement Modal -->
 <div class="modal-overlay" id="paymentModal" style="display: none;">
   <div class="modal-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -288,7 +306,6 @@
       <input type="number" id="input_discount_given" placeholder="₹0" value="0" oninput="updatePaymentPreview()">
     </div>
 
-    <!-- Live Preview of Carry-Forward Remaining Balance -->
     <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
       <span style="font-size: 13px; color: var(--text-dim);">कटने के बाद आगे बचा बकाया (New Due):</span>
       <strong id="modal_new_balance_txt" style="color: var(--primary); font-size: 18px; font-family: monospace;">₹0</strong>
@@ -303,8 +320,8 @@
 <!-- Header -->
 <header class="app-header">
   <div class="header-brand">
-    <span class="icon">water_ph</span>
-    <span>किसान ग्रिड 8.0 Pro</span>
+    <span class="icon">psychology</span>
+    <span>किसान ग्रिड 9.0 AI</span>
   </div>
   <div style="display: flex; align-items: center; gap: 8px;">
     <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
@@ -338,6 +355,12 @@
     </div>
   </section>
 
+  <!-- AI Predictive Insight Pill -->
+  <div class="ai-insight-box">
+    <span class="icon" style="color: #a855f7; font-size: 24px;">smart_toy</span>
+    <span id="aiPredictiveText">AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल सकती है।</span>
+  </div>
+
   <!-- Animated Reactor Hero -->
   <section class="motor-hero">
     <div class="reactor-wrapper">
@@ -352,12 +375,22 @@
       <div style="font-size: 14px; color: var(--warning); font-weight: 700; margin-top: 3px;" id="motorSubState">लाइन जांची जा रही है...</div>
     </div>
 
+    <!-- Main Giant Motor Switch -->
     <button id="mainMotorButton" class="giant-actuator-btn btn-locked" onclick="handleMotorSwitch()">
       <span class="icon">lock</span> बटन बंद है (नंबर नहीं है)
     </button>
+
+    <!-- NEW FEATURE: Quick Field Selector Directly Below Start Button -->
+    <div class="quick-selector-box owner-only">
+      <div class="quick-selector-title">
+        <span>⚡ मोटर चलाने के लिए खेत / किसान चुनें:</span>
+        <span style="font-size:11px; color:var(--text-dim);">त्वरित चयन</span>
+      </div>
+      <select id="quick_select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
+    </div>
   </section>
 
-  <!-- Live Turn Status & Minute-Accurate Bill Calculation Box -->
+  <!-- Live Turn Status Card -->
   <div class="app-card open" id="turnCard">
     <div class="app-card-header" onclick="toggleCard('turnCard')">
       <span class="app-card-title">
@@ -415,7 +448,7 @@
     </div>
   </div>
 
-  <!-- NEW: Master Usage Roster (All Users Direct Visibility to Owner) -->
+  <!-- Master Usage Roster Table (All Users Direct Visibility to Owner) -->
   <div class="app-card open owner-only" id="ownerMasterRosterCard">
     <div class="app-card-header" onclick="toggleCard('ownerMasterRosterCard')">
       <span class="app-card-title">
@@ -463,19 +496,6 @@
     </div>
   </section>
 
-  <!-- Master Field Switcher -->
-  <div class="app-card owner-only" id="overrideCard">
-    <div class="app-card-header" onclick="toggleCard('overrideCard')">
-      <span class="app-card-title">
-        <span class="icon" style="color: var(--warning);">published_with_changes</span> तुरंत दूसरा खेत लगाएं
-      </span>
-      <span class="icon app-card-arrow">expand_more</span>
-    </div>
-    <div class="app-card-content">
-      <select id="select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
-    </div>
-  </div>
-
   <!-- AI Smart Search & Individual Ledger Slips -->
   <div class="app-card open" id="ledgerCard">
     <div class="app-card-header" onclick="toggleCard('ledgerCard')">
@@ -488,7 +508,7 @@
       <!-- AI Voice & Fuzzy Search -->
       <div class="ai-search-box">
         <input type="text" id="ledgerSearchInput" placeholder="🔍 नाम, नंबर या बोलकर खोजें..." oninput="handleAISearch()">
-        <button class="mic-btn" id="voiceSearchMicBtn" onclick="toggleVoiceSearch()" title="बोलकर खोजें">
+        <button class="mic-btn" id="voiceSearchMicBtn" onclick="toggleVoiceSearch()" title="बोलकर खोजें या कमांड दें">
           <span class="icon" style="font-size:24px;">mic</span>
         </button>
       </div>
@@ -559,7 +579,7 @@
   function triggerVibrate(ms = 60) { if ("vibrate" in navigator) navigator.vibrate(ms); }
   function toggleCard(id) { document.getElementById(id).classList.toggle('open'); }
 
-  // Voice Preference Handling
+  // Voice Engine Settings
   function updateVoiceUI(isEnabled) {
     const badge = document.getElementById('voiceControlBadge');
     const icon = document.getElementById('voiceBadgeIcon');
@@ -610,7 +630,7 @@
     window.speechSynthesis.speak(utterance);
   }
 
-  // AI Voice Assistant & Search
+  // AI Voice Recognition & Command Handler
   function toggleVoiceSearch() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return alert("बोलकर खोजने की सुविधा इस ब्राउज़र में उपलब्ध नहीं है।");
@@ -622,8 +642,17 @@
     recognition.lang = 'hi-IN';
     recognition.onstart = () => { isListeningVoice = true; micBtn.classList.add('listening'); triggerVibrate(50); };
     recognition.onresult = (e) => {
-      document.getElementById('ledgerSearchInput').value = e.results[0][0].transcript;
-      handleAISearch();
+      const query = e.results[0][0].transcript.toLowerCase();
+      document.getElementById('ledgerSearchInput').value = query;
+
+      // Smart Voice Command Logic
+      if (query.includes('बंद') && isMotorPhysicallyOn) {
+        if (confirm("AI आदेश: क्या आप मोटर बंद करना चाहते हैं?")) finalizeTurnDirectly();
+      } else if (query.includes('उधार') || query.includes('बकाया')) {
+        applySortPill('UNPAID', document.querySelector('.filter-pills .pill:nth-child(3)'));
+      } else {
+        handleAISearch();
+      }
     };
     recognition.onend = () => { isListeningVoice = false; micBtn.classList.remove('listening'); };
     recognition.start();
@@ -715,10 +744,28 @@
       const t = snap.val();
       if (!t) return;
 
-      document.getElementById('tele_v_r').innerText = `${t.vR || 412} V`;
-      document.getElementById('tele_v_y').innerText = `${t.vY || 414} V`;
-      document.getElementById('tele_v_b').innerText = `${t.vB || 410} V`;
-      document.getElementById('tele_i_amps').innerText = `${(t.amps || 0).toFixed(1)} A`;
+      const vr = t.vR || 412;
+      const vy = t.vY || 414;
+      const vb = t.vB || 410;
+      const amps = t.amps || 0;
+
+      document.getElementById('tele_v_r').innerText = `${vr} V`;
+      document.getElementById('tele_v_y').innerText = `${vy} V`;
+      document.getElementById('tele_v_b').innerText = `${vb} V`;
+      document.getElementById('tele_i_amps').innerText = `${amps.toFixed(1)} A`;
+
+      // AI Predictive Diagnostics
+      const aiText = document.getElementById('aiPredictiveText');
+      if (amps > 22.0) {
+        aiText.innerText = "AI चेतावनी: मोटर अधिक लोड ले रही है, बोरिंग में रेत या असर घिसने की संभावना!";
+        aiText.parentElement.style.background = "rgba(239, 68, 68, 0.15)";
+      } else if (Math.abs(vr - vy) > 30 || Math.abs(vy - vb) > 30) {
+        aiText.innerText = "AI चेतावनी: फेज़ वोल्टेज में भारी असंतुलन, सिंगल-फेज़िंग से सावधान रहें!";
+        aiText.parentElement.style.background = "rgba(245, 158, 11, 0.15)";
+      } else {
+        aiText.innerText = "AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल रही है।";
+        aiText.parentElement.style.background = "rgba(168, 85, 247, 0.1)";
+      }
 
       if (t.lockedOut) {
         noiseFilterStreak++;
@@ -726,9 +773,10 @@
           document.getElementById('visualOrb').className = "reactor-core fault";
           document.getElementById('motorTitleState').innerText = `🚨 सुरक्षा के लिए बंद (${t.fault})`;
           document.getElementById('motorTitleState').style.color = "var(--danger)";
-          document.getElementById('mainMotorButton').className = "giant-actuator-btn btn-locked";
-          document.getElementById('mainMotorButton').innerHTML = `<span class="icon">warning</span> मोटर ट्रिप लॉक है`;
-          document.getElementById('mainMotorButton').disabled = true;
+          const btn = document.getElementById('mainMotorButton');
+          btn.className = "giant-actuator-btn btn-locked";
+          btn.innerHTML = `<span class="icon">warning</span> मोटर ट्रिप लॉक है`;
+          btn.disabled = true;
           return;
         }
       } else {
@@ -750,11 +798,12 @@
       }
       refreshMotorUI();
       renderTurnCardUI();
+      syncQuickSelectorValue();
     });
 
     rtdb.ref('/tubewell/farmers').on('value', snap => {
       farmersCache = snap.val() || {};
-      populateTargetFarmerDropdown();
+      populateTargetFarmerDropdowns();
     });
 
     rtdb.ref('/tubewell/sessions').on('value', snap => {
@@ -770,7 +819,7 @@
     });
   }
 
-  // Account Engine: Pure Minute-Based Ledger & Master Roster Table
+  // Account Engine: Master Roster & Fuse.js AI Indexing
   function recalculateAccountsAndLedger() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const balances = {};
@@ -790,7 +839,6 @@
       };
     });
 
-    // Process Sessions (Debits)
     sessionsCache.forEach(s => {
       const p = sanitizeMobile(s.userPhone);
       if (!balances[p]) {
@@ -806,7 +854,6 @@
       balances[p].sessions.push(s);
     });
 
-    // Process Payments & Discounts (Credits)
     paymentsCache.forEach(pm => {
       const p = sanitizeMobile(pm.userPhone);
       if (balances[p]) {
@@ -818,7 +865,6 @@
       }
     });
 
-    // Update Top Summary Cards
     let sumCollected = 0, sumDisc = 0, sumDue = 0;
     Object.values(balances).forEach(b => {
       sumCollected += b.totalPaid;
@@ -863,7 +909,6 @@
     recalculateAccountsAndLedger();
   }
 
-  // Render Master Roster Table (Direct Visibility for Owner)
   function renderMasterRosterTable(balances) {
     const tbody = document.getElementById('masterRosterTableBody');
     tbody.innerHTML = '';
@@ -898,7 +943,6 @@
     });
   }
 
-  // Render Passbook Slips with Search & Filter
   function renderPassbookUI(balances) {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const container = document.getElementById('passbookContainer');
@@ -1191,17 +1235,31 @@
     if (confirm("खेत भर गया? मोटर बंद करके अपनी बारी छोड़ना चाहते हैं?")) finalizeTurnDirectly();
   }
 
-  function populateTargetFarmerDropdown() {
-    const sel = document.getElementById('select_target_farmer');
-    sel.innerHTML = '<option value="OWNER_DIRECT">⚡ मालिक का खेत</option>';
+  function populateTargetFarmerDropdowns() {
+    const selQuick = document.getElementById('quick_select_target_farmer');
+    const optionsHtml = ['<option value="OWNER_DIRECT">⚡ मालिक का खेत (Standby)</option>'];
+    
     Object.keys(farmersCache).forEach(k => {
       const f = farmersCache[k];
-      sel.innerHTML += `<option value="${f.uid || k}">पानी दें: ${f.name} (${f.plot || 'खेत'})</option>`;
+      optionsHtml.push(`<option value="${f.uid || k}">पानी दें: ${f.name} (${f.plot || 'खेत'})</option>`);
     });
+
+    selQuick.innerHTML = optionsHtml.join('');
+    syncQuickSelectorValue();
+  }
+
+  function syncQuickSelectorValue() {
+    const selQuick = document.getElementById('quick_select_target_farmer');
+    if (!selQuick) return;
+    if (activeTurnObj) {
+      selQuick.value = activeTurnObj.isOwnerPersonalRun ? 'OWNER_DIRECT' : activeTurnObj.farmerUid;
+    } else {
+      selQuick.value = 'OWNER_DIRECT';
+    }
   }
 
   async function executeInstantFieldSwitch(uid) {
-    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले मोटर बंद करें।");
+    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले कृपया मोटर बंद करें।");
     const now = Date.now();
     const timeStr = new Date(now).toLocaleTimeString('en-IN');
 
@@ -1211,6 +1269,7 @@
         plot: 'खेत', isOwnerPersonalRun: true, cycleStartTimestamp: now,
         cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
       });
+      speakSimpleHindi('CUSTOM', { customText: "मालिक के खेत का नंबर लगा दिया गया है" });
     } else {
       const f = farmersCache[uid];
       if (!f) return;
@@ -1219,6 +1278,7 @@
         plot: f.plot || 'खेत', isOwnerPersonalRun: false, cycleStartTimestamp: now,
         cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
       });
+      speakSimpleHindi('CUSTOM', { customText: `${f.name} के खेत का नंबर लगा दिया गया है` });
     }
   }
 
