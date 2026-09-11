@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#020617">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>ट्यूबवेल स्मार्ट ग्रिड v21.0 AI</title>
+  <title>ट्यूबवेल स्मार्ट ग्रिड v1.0 AI Base</title>
 
   <!-- Google Fonts: Mukta Devanagari & Material Symbols Rounded -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,7 +69,7 @@
       flex-shrink: 0;
     }
 
-    /* Fixed Top App Header */
+    /* Top App Header */
     .app-header {
       position: sticky; top: 0; z-index: 100;
       background: rgba(11, 19, 41, 0.98); backdrop-filter: blur(16px);
@@ -122,9 +122,7 @@
       box-shadow: 0 0 16px rgba(168, 85, 247, 0.35);
     }
 
-    /* ==========================================================================
-       180px MASSIVE CYBER-REACTOR CIRCULAR MOTOR CONTROLLER
-       ========================================================================== */
+    /* 180px Cyber-Reactor Motor Switch */
     .motor-hero {
       width: 100%;
       background: radial-gradient(circle at 50% 15%, rgba(19, 31, 54, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
@@ -222,7 +220,7 @@
       display: flex; align-items: center; justify-content: space-between;
     }
 
-    /* Cards with Large Hindi Headings */
+    /* Cards with High Legibility */
     .app-card {
       width: 100%; background: var(--surface); border: 2px solid var(--border);
       border-radius: var(--radius); overflow: hidden;
@@ -268,7 +266,7 @@
     .stream-info { display: flex; flex-direction: column; gap: 2px; }
     .stream-right { text-align: right; display: flex; flex-direction: column; gap: 2px; }
 
-    /* Single Row Master Roster Strip */
+    /* Single Row Master Roster Strip with Large High-Contrast Fonts */
     .roster-single-row-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
     .roster-row-strip {
       background: var(--surface); border: 2px solid var(--border);
@@ -351,9 +349,7 @@
     }
     .app-tab.active { color: var(--primary); }
 
-    /* ==========================================================================
-       विशाल और स्पष्ट साइन-इन विंडो (MAX-SIZE SIGNIN WINDOW)
-       ========================================================================== */
+    /* Enlarged Max-Size Login Modal */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98);
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 12px;
@@ -397,7 +393,7 @@
           <div class="login-hero-sub">किसान व मालिक प्रवेश पोर्टल</div>
         </div>
       </div>
-      <span class="header-version-tag">v21.0 AI</span>
+      <span class="header-version-tag">v1.0 Base</span>
     </div>
 
     <div id="step_mobile">
@@ -480,7 +476,7 @@
   <div class="header-brand">
     <span class="icon" style="color:var(--primary); text-shadow:0 0 10px var(--primary); font-size: 32px;">water_ph</span>
     <span class="header-brand-title">किसान ग्रिड AI</span>
-    <span class="header-version-tag">v21.0 Pro</span>
+    <span class="header-version-tag">v1.0 Base</span>
   </div>
   <div style="display: flex; align-items: center; gap: 6px;">
     <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
@@ -770,7 +766,7 @@
   const FAULT_HYSTERESIS_COUNT = 2;
 
   function sanitizeMobile(p) { return String(p || '').replace(/\D/g, '').slice(-10); }
-  function triggerVibrate(ms = 50) { if ("vibrate" in navigator) navigator.vibrate(ms); }
+  function triggerVibrate(ms = 40) { if ("vibrate" in navigator) navigator.vibrate(ms); }
   function toggleCard(id) { document.getElementById(id).classList.toggle('open'); }
 
   function updateVoiceUI(isEnabled) {
@@ -981,7 +977,7 @@
       document.getElementById('tele_v_b').innerText = `${vb} V`;
       document.getElementById('tele_i_amps').innerText = `${amps.toFixed(1)} A`;
 
-      // AI Predictive Advisor
+      // AI Predictive Diagnostics
       const aiText = document.getElementById('aiPredictiveText');
       if (amps > 22.0) {
         aiText.innerText = "AI चेतावनी: मोटर लोड अधिक है, बोरिंग में घर्षण या रेत की संभावना!";
@@ -1212,7 +1208,6 @@
     recalculateAccountsAndLedger();
   }
 
-  // Single Row Master Roster Strip with Large High-Contrast Fonts
   function renderMasterRosterSingleRow(balances) {
     const container = document.getElementById('masterRosterContainer');
     container.innerHTML = '';
@@ -1626,7 +1621,7 @@
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
 शेष बकाया (Net Due): ₹${due}
-(ट्यूबवेल स्मार्ट ग्रिड v21.0 AI Pro)`;
+(ट्यूबवेल स्मार्ट ग्रिड v1.0 Base Release)`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 
@@ -1641,7 +1636,7 @@
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
 कुल बाकी बकाया: ₹${due}
-(ट्यूबवेल स्मार्ट ग्रिड v21.0 AI Pro)`;
+(ट्यूबवेल स्मार्ट ग्रिड v1.0 Base Release)`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 </script>
