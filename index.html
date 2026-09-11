@@ -1,944 +1,3287 @@
 <!DOCTYPE html>
-<html lang="hi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#020617">
-  <title>ट्यूबवेल स्मार्ट ग्रिड v1.0 - बेस वर्शन</title>
 
-  <!-- Google Material Symbols, Firebase SDKs & Fuse.js AI Search -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0" />
+<html lang="hi">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
+
+  <meta name="theme-color" content="#020617">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>ट्यूबवेल स्मार्ट ग्रिड v1.0 AI Base</title>
+
+
+
+  <!-- Google Fonts: Mukta Devanagari & Material Symbols Rounded -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0&display=swap" rel="stylesheet">
+
+  
+
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
 
+
+
   <style>
+
     :root {
+
       --bg: #020617;
+
       --surface: #0b1329;
-      --card: #152238;
-      --border: #243552;
-      --border-bright: #3b5278;
+
+      --card: #131f36;
+
+      --border: #24385a;
+
+      --border-bright: #38bdf8;
+
       --primary: #38bdf8;
-      --primary-dim: rgba(56, 189, 248, 0.18);
+
+      --primary-glow: rgba(56, 189, 248, 0.55);
+
       --success: #22c55e;
-      --success-glow: rgba(34, 197, 94, 0.45);
+
+      --success-glow: rgba(34, 197, 94, 0.75);
+
       --danger: #ef4444;
-      --danger-glow: rgba(239, 68, 68, 0.45);
+
+      --danger-glow: rgba(239, 68, 68, 0.75);
+
       --warning: #f59e0b;
+
       --purple: #a855f7;
-      --text: #f8fafc;
-      --text-dim: #94a3b8;
-      --radius: 18px;
+
+      --text: #ffffff;
+
+      --text-dim: #cbd5e1;
+
+      --radius: 16px;
+
     }
 
-    * {
-      box-sizing: border-box; margin: 0; padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+
+    *, *::before, *::after {
+
+      box-sizing: border-box;
+
+      margin: 0; padding: 0;
+
+      font-family: 'Mukta', system-ui, -apple-system, sans-serif;
+
       -webkit-tap-highlight-color: transparent;
+
     }
 
-    body {
-      background: var(--bg); color: var(--text);
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: calc(92px + env(safe-area-inset-bottom));
+
+
+    html, body {
+
+      width: 100%;
+
+      max-width: 100%;
+
+      min-height: 100%;
+
+      background: var(--bg);
+
+      color: var(--text);
+
       overflow-x: hidden;
+
+      padding-top: env(safe-area-inset-top);
+
+      padding-bottom: calc(92px + env(safe-area-inset-bottom));
+
+      font-size: 18px;
+
+      line-height: 1.4;
+
     }
+
+
 
     .icon {
-      font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal;
-      font-size: 26px; display: inline-block; vertical-align: middle; line-height: 1;
+
+      font-family: 'Material Symbols Rounded', sans-serif;
+
+      font-weight: normal; font-style: normal;
+
+      font-size: 30px;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      vertical-align: middle;
+
+      line-height: 1;
+
+      flex-shrink: 0;
+
     }
+
+
+
+    /* Top App Header */
 
     .app-header {
+
       position: sticky; top: 0; z-index: 100;
-      background: rgba(11, 19, 41, 0.95); backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border); height: 64px; padding: 0 16px;
+
+      background: rgba(11, 19, 41, 0.98); backdrop-filter: blur(16px);
+
+      border-bottom: 2px solid var(--border); height: 64px; padding: 0 14px;
+
       display: flex; align-items: center; justify-content: space-between;
+
+      width: 100%;
+
     }
-    .header-brand { display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 900; color: var(--primary); }
+
+    .header-brand { display: flex; align-items: center; gap: 8px; }
+
+    .header-brand-title { font-size: 22px; font-weight: 900; color: var(--primary); text-shadow: 0 0 12px var(--primary-glow); }
+
+    .header-version-tag {
+
+      font-size: 12px; font-weight: 900; padding: 3px 8px; border-radius: 6px;
+
+      background: var(--primary); color: #000;
+
+    }
+
     .btn-circle {
+
       width: 44px; height: 44px; border-radius: 50%;
-      background: var(--card); border: 1px solid var(--border);
+
+      background: var(--card); border: 2px solid var(--border);
+
       display: flex; align-items: center; justify-content: center;
+
       color: var(--text); cursor: pointer;
+
     }
-    .btn-circle:active { transform: scale(0.9); background: var(--border); }
+
+    .btn-circle:active { transform: scale(0.92); }
+
+
 
     .voice-badge {
+
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 14px; border-radius: 24px; font-size: 12px; font-weight: 800;
-      background: var(--card); border: 1px solid var(--border); cursor: pointer;
+
+      padding: 6px 14px; border-radius: 20px; font-size: 14.5px; font-weight: 800;
+
+      background: var(--card); border: 2px solid var(--border); cursor: pointer;
+
     }
-    .voice-badge.active { background: var(--primary-dim); border-color: var(--primary); color: var(--primary); }
-    .voice-badge.disabled { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); }
 
-    .app-body { max-width: 540px; margin: 0 auto; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+    .voice-badge.active { background: rgba(56, 189, 248, 0.25); border-color: var(--primary); color: var(--primary); }
 
-    /* Telemetry Grid */
-    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .tel-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px 4px; text-align: center; }
-    .tel-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
-    .tel-val { font-size: 16.5px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+    .voice-badge.disabled { background: rgba(239, 68, 68, 0.25); border-color: var(--danger); color: var(--danger); }
 
-    /* Motor Hero */
+
+
+    /* Fluid App Body */
+
+    .app-body {
+
+      width: 100%; padding: 10px;
+
+      display: flex; flex-direction: column; gap: 14px;
+
+    }
+
+
+
+    /* 4-Column High-Contrast Telemetry */
+
+    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
+
+    .tel-box {
+
+      background: var(--surface); border: 2px solid var(--border);
+
+      border-radius: 14px; padding: 8px 2px; text-align: center;
+
+    }
+
+    .tel-lbl { font-size: 14px; font-weight: 900; color: var(--text-dim); }
+
+    .tel-val { font-size: 20px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+
+
+
+    /* AI Diagnostic Ribbon */
+
+    .ai-smart-ribbon {
+
+      background: rgba(168, 85, 247, 0.18); border: 2px solid var(--purple);
+
+      border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+
+      font-size: 15.5px; color: #f3e8ff; font-weight: 800; width: 100%;
+
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.35);
+
+    }
+
+
+
+    /* 180px Cyber-Reactor Motor Switch */
+
     .motor-hero {
-      background: radial-gradient(circle at 50% 15%, rgba(21, 34, 56, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
-      border: 1px solid var(--border-bright); border-radius: 26px;
-      padding: 24px 16px; text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 16px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.65);
-    }
-    .reactor-wrapper { position: relative; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; }
-    .pulse-wave {
-      position: absolute; inset: 0; border-radius: 50%;
-      border: 4px solid var(--success); opacity: 0;
-      animation: ripple 2s infinite ease-out; display: none;
-    }
-    @keyframes ripple { 0% { transform: scale(0.75); opacity: 0.9; } 100% { transform: scale(1.65); opacity: 0; } }
-    .reactor-core {
-      width: 96px; height: 96px; border-radius: 50%;
-      background: #1e293b; border: 4px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 48px; z-index: 2; transition: all 0.35s ease;
-    }
-    .reactor-core.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 45px var(--success-glow); }
-    .reactor-core.running + .pulse-wave { display: block; }
-    .reactor-core.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 45px var(--danger-glow); animation: shake 0.5s ease-in-out; }
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 
-    .giant-actuator-btn {
-      width: 100%; height: 72px; border-radius: 20px; border: none;
-      font-size: 20px; font-weight: 900; letter-spacing: 0.5px;
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-      cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .giant-actuator-btn:active { transform: scale(0.96); }
-    .btn-start { background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%); color: #fff; }
-    .btn-stop { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); color: #fff; }
-    .btn-locked { background: #1e293b; color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
+      width: 100%;
 
-    /* Expandable Cards */
-    .app-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-    .app-card-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .app-card-title { font-size: 15.5px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
-    .app-card-arrow { transition: transform 0.25s; font-size: 24px; color: var(--text-dim); }
+      background: radial-gradient(circle at 50% 15%, rgba(19, 31, 54, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
+
+      border: 2px solid var(--border-bright); border-radius: 24px;
+
+      padding: 24px 12px; text-align: center;
+
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+
+    }
+
+
+
+    .giant-circular-wrapper {
+
+      position: relative;
+
+      width: 195px;
+
+      height: 195px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+    }
+
+
+
+    .circular-pulse-ring {
+
+      position: absolute; inset: -14px; border-radius: 50%;
+
+      border: 5px solid var(--success); opacity: 0;
+
+      animation: rippleEffect 2s infinite cubic-bezier(0.2, 0.8, 0.2, 1); display: none;
+
+    }
+
+    @keyframes rippleEffect {
+
+      0% { transform: scale(0.85); opacity: 1; }
+
+      100% { transform: scale(1.55); opacity: 0; }
+
+    }
+
+
+
+    .giant-circular-btn {
+
+      width: 180px;
+
+      height: 180px;
+
+      border-radius: 50%;
+
+      border: 6px solid #334155;
+
+      background: #1e293b;
+
+      color: var(--text-dim);
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 4px;
+
+      cursor: pointer;
+
+      z-index: 2;
+
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+      box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+
+    }
+
+    .giant-circular-btn:active { transform: scale(0.93); }
+
+
+
+    .giant-circular-btn.btn-start {
+
+      background: radial-gradient(circle at 35% 35%, #22c55e 20%, #15803d 85%, #052e16 100%);
+
+      border-color: #86efac;
+
+      color: #ffffff;
+
+      box-shadow: 0 0 45px var(--success-glow);
+
+    }
+
+    .giant-circular-btn.btn-stop {
+
+      background: radial-gradient(circle at 35% 35%, #ef4444 20%, #b91c1c 85%, #450a0a 100%);
+
+      border-color: #fca5a5;
+
+      color: #ffffff;
+
+      box-shadow: 0 0 45px var(--danger-glow);
+
+      animation: reactorHum 1s infinite alternate ease-in-out;
+
+    }
+
+    @keyframes reactorHum {
+
+      0% { transform: scale(1); filter: brightness(1); }
+
+      100% { transform: scale(1.04); filter: brightness(1.2); }
+
+    }
+
+    .giant-circular-btn.btn-stop + .circular-pulse-ring { display: block; }
+
+    .giant-circular-btn.btn-locked {
+
+      background: #1e293b;
+
+      border-color: #334155;
+
+      color: #64748b;
+
+      cursor: not-allowed;
+
+    }
+
+
+
+    .circle-label-main {
+
+      font-size: 28px;
+
+      font-weight: 900;
+
+      letter-spacing: 0.5px;
+
+      line-height: 1.1;
+
+      text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+
+    }
+
+    .circle-label-sub {
+
+      font-size: 14px;
+
+      font-weight: 900;
+
+      letter-spacing: 1px;
+
+      opacity: 0.9;
+
+    }
+
+
+
+    /* Quick Selector Box */
+
+    .quick-selector-box {
+
+      width: 100%; background: var(--surface); border: 2px solid var(--primary);
+
+      border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
+
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+
+    }
+
+    .quick-selector-title {
+
+      font-size: 15.5px; font-weight: 900; color: var(--primary);
+
+      display: flex; align-items: center; justify-content: space-between;
+
+    }
+
+
+
+    /* Cards with High Legibility */
+
+    .app-card {
+
+      width: 100%; background: var(--surface); border: 2px solid var(--border);
+
+      border-radius: var(--radius); overflow: hidden;
+
+    }
+
+    .app-card-header { padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+
+    .app-card-title {
+
+      font-size: 20px;
+
+      font-weight: 900;
+
+      color: var(--text);
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+    }
+
+    .app-card-arrow { transition: transform 0.25s; font-size: 30px; color: var(--text-dim); }
+
     .app-card.open .app-card-arrow { transform: rotate(180deg); }
-    .app-card-content { display: none; padding: 18px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 14px; }
+
+    .app-card-content { display: none; padding: 16px 18px; border-top: 2px solid var(--border); background: var(--card); flex-direction: column; gap: 14px; }
+
     .app-card.open .app-card-content { display: flex; }
 
-    /* Bill Box */
-    .bill-calc-box {
-      background: rgba(11, 19, 41, 0.7); border: 1px solid var(--border-bright);
-      border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px;
-    }
-    .calc-row { display: flex; justify-content: space-between; align-items: center; }
-    .calc-divider { border-top: 1px dashed var(--border); margin: 4px 0; }
 
-    /* Summary Grid */
-    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    .summary-box {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px 6px; text-align: center;
+
+    /* High-Visibility Bill Box */
+
+    .bill-calc-box {
+
+      background: rgba(11, 19, 41, 0.85); border: 2px solid var(--border);
+
+      border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 17px;
+
     }
-    .summary-lbl { font-size: 10.5px; font-weight: 800; color: var(--text-dim); }
-    .summary-val { font-size: 18px; font-weight: 900; font-family: monospace; margin-top: 4px; }
+
+    .calc-row { display: flex; justify-content: space-between; align-items: center; }
+
+    .calc-divider { border-top: 2px dashed var(--border); margin: 4px 0; }
+
+
+
+    /* Financial Horizon */
+
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; }
+
+    .summary-box {
+
+      background: var(--surface); border: 2px solid var(--border);
+
+      border-radius: 14px; padding: 12px 4px; text-align: center;
+
+    }
+
+    .summary-lbl { font-size: 14px; font-weight: 800; color: var(--text-dim); }
+
+    .summary-val { font-size: 22px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+
+
+
+    /* Recent Usage Stream */
+
+    .recent-stream-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+
+    .recent-stream-item {
+
+      background: var(--surface); border: 1.5px solid var(--border);
+
+      border-radius: 12px; padding: 12px 14px;
+
+      display: flex; justify-content: space-between; align-items: center;
+
+    }
+
+    .stream-info { display: flex; flex-direction: column; gap: 2px; }
+
+    .stream-right { text-align: right; display: flex; flex-direction: column; gap: 2px; }
+
+
+
+    /* Single Row Master Roster Strip with Large High-Contrast Fonts */
+
+    .roster-single-row-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+
+    .roster-row-strip {
+
+      background: var(--surface); border: 2px solid var(--border);
+
+      border-radius: 14px; padding: 14px 16px;
+
+      display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px;
+
+    }
+
+    .strip-user-info { display: flex; flex-direction: column; overflow: hidden; }
+
+    .strip-name { font-size: 18.5px; font-weight: 900; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .strip-sub { font-size: 14px; color: var(--text-dim); margin-top: 2px; font-weight: 700; }
+
+    
+
+    .strip-accounting-nums {
+
+      display: flex; flex-direction: column; align-items: flex-end; font-size: 14px;
+
+    }
+
+    .strip-paid-discount { color: var(--success); font-weight: 800; }
+
+    .strip-due-num { font-size: 19px; font-weight: 900; font-family: monospace; }
+
+    
+
+    .strip-action-btn {
+
+      height: 42px; padding: 0 16px; border-radius: 10px; border: none;
+
+      background: var(--primary); color: #000; font-size: 15px; font-weight: 900;
+
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+
+    }
+
+    .strip-action-btn:active { transform: scale(0.92); }
+
+
+
+    /* Badges */
+
+    .bill-tag {
+
+      font-size: 12px; font-weight: 900; padding: 3px 8px; border-radius: 6px;
+
+      text-transform: uppercase; display: inline-block;
+
+    }
+
+    .tag-pakka { background: rgba(34, 197, 94, 0.25); color: var(--success); border: 2px solid var(--success); }
+
+    .tag-kachha { background: rgba(56, 189, 248, 0.25); color: var(--primary); border: 2px solid var(--primary); }
+
+    .tag-reprint { background: rgba(245, 158, 11, 0.25); color: var(--warning); border: 2px solid var(--warning); }
+
+
 
     /* AI Search */
-    .ai-search-box { position: relative; display: flex; align-items: center; }
+
+    .ai-search-box { position: relative; display: flex; align-items: center; width: 100%; }
+
     .ai-search-box input {
-      width: 100%; height: 50px; border-radius: 14px; border: 1px solid var(--border-bright);
-      background: var(--surface); color: var(--text); padding: 0 46px 0 14px; font-size: 15px; outline: none;
+
+      width: 100%; height: 52px; border-radius: 12px; border: 2px solid var(--border-bright);
+
+      background: var(--surface); color: var(--text); padding: 0 54px 0 14px; font-size: 17.5px; outline: none;
+
     }
+
     .ai-search-box .mic-btn {
-      position: absolute; right: 6px; width: 38px; height: 38px; border-radius: 10px;
+
+      position: absolute; right: 5px; width: 42px; height: 42px; border-radius: 10px;
+
       border: none; background: var(--card); color: var(--primary);
+
       display: flex; align-items: center; justify-content: center; cursor: pointer;
+
     }
+
     .ai-search-box .mic-btn.listening { background: var(--danger); color: #fff; }
 
-    .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+
+
+    .filter-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+
     .filter-pills::-webkit-scrollbar { display: none; }
+
     .pill {
-      font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 20px;
-      border: 1px solid var(--border); background: var(--surface); color: var(--text-dim);
+
+      font-size: 14px; font-weight: 900; padding: 8px 16px; border-radius: 16px;
+
+      border: 2px solid var(--border); background: var(--surface); color: var(--text-dim);
+
       white-space: nowrap; cursor: pointer;
-    }
-    .pill.active { background: var(--primary); color: #000; border-color: var(--primary); font-weight: 900; }
 
-    /* Passbook Slips */
-    .passbook-list { display: flex; flex-direction: column; gap: 10px; }
-    .passbook-slip {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
     }
-    .slip-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed var(--border); padding-bottom: 8px; }
-    .slip-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
-      font-size: 11.5px; color: var(--text-dim); background: rgba(0,0,0,0.25); padding: 10px; border-radius: 10px;
-    }
-    .slip-grid strong { color: var(--text); font-size: 13.5px; font-family: monospace; display: block; margin-top: 2px; }
 
-    /* Form Controls */
+    .pill.active { background: var(--primary); color: #000; border-color: var(--primary); }
+
+
+
+    /* Inputs & Form Controls */
+
     input, select {
-      width: 100%; height: 48px; border-radius: 14px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text); padding: 0 14px; font-size: 15px; outline: none;
+
+      width: 100%; height: 54px; border-radius: 12px; border: 2px solid var(--border);
+
+      background: var(--surface); color: var(--text); padding: 0 16px; font-size: 17.5px; outline: none;
+
     }
+
     .btn-action {
-      height: 48px; border-radius: 14px; border: none; padding: 0 18px;
-      font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+
+      height: 54px; border-radius: 12px; border: none; padding: 0 18px;
+
+      font-size: 18px; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+
     }
+
     .btn-p { background: var(--primary); color: #000; }
+
     .btn-s { background: var(--success); color: #fff; }
+
     .btn-d { background: var(--danger); color: #fff; }
+
     .btn-w { background: var(--warning); color: #000; }
 
-    /* Modals */
+
+
+    /* Bottom App Bar */
+
+    .bottom-app-bar {
+
+      position: fixed; bottom: 0; left: 0; right: 0; height: 72px;
+
+      background: rgba(11, 19, 41, 0.98); backdrop-filter: blur(16px);
+
+      border-top: 2px solid var(--border); display: flex; align-items: center; justify-content: space-around; z-index: 90;
+
+      padding-bottom: env(safe-area-inset-bottom);
+
+      width: 100%;
+
+    }
+
+    .app-tab {
+
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+
+      color: var(--text-dim); font-size: 13px; font-weight: 900; cursor: pointer; border: none; background: transparent;
+
+    }
+
+    .app-tab.active { color: var(--primary); }
+
+
+
+    /* Enlarged Max-Size Login Modal */
+
     .modal-overlay {
+
       position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98);
-      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px;
+
+      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 12px;
+
     }
+
     .modal-card {
-      width: 100%; max-width: 400px; background: var(--surface); border: 1px solid var(--border-bright);
-      border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px;
+
+      width: 96%;
+
+      max-width: 440px;
+
+      background: var(--surface);
+
+      border: 2.5px solid var(--border-bright);
+
+      border-radius: 24px;
+
+      padding: 24px 20px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 16px;
+
+      box-shadow: 0 16px 50px rgba(0,0,0,0.9);
+
     }
+
+    .login-hero-title {
+
+      font-size: 26px; font-weight: 900; color: #ffffff;
+
+    }
+
+    .login-hero-sub {
+
+      font-size: 15px; color: var(--text-dim); margin-top: 2px;
+
+    }
+
+    .login-input {
+
+      height: 60px; font-size: 20px; font-weight: 800; border-radius: 14px;
+
+    }
+
+    .login-pin-input {
+
+      height: 64px; font-size: 32px; font-weight: 900; letter-spacing: 14px; text-align: center; border-radius: 14px;
+
+    }
+
   </style>
+
 </head>
+
 <body>
 
-<!-- Login Gate -->
+
+
+<!-- ENLARGED MAX-SIZE LOGIN GATE -->
+
 <div class="modal-overlay" id="authGate">
+
   <div class="modal-card">
-    <div style="display: flex; align-items: center; gap: 10px; color: var(--primary);">
-      <span class="icon" style="font-size: 38px;">water_drop</span>
-      <div>
-        <div style="font-size: 20px; font-weight: 900;">ट्यूबवेल लॉगिन</div>
-        <div style="font-size: 12.5px; color: var(--text-dim);">अपना 10 अंक का मोबाइल नंबर डालें</div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 14px;">
+
+      <div style="display: flex; align-items: center; gap: 12px; color: var(--primary);">
+
+        <span class="icon" style="font-size: 42px;">water_drop</span>
+
+        <div>
+
+          <div class="login-hero-title">ट्यूबवेल लॉगिन</div>
+
+          <div class="login-hero-sub">किसान व मालिक प्रवेश पोर्टल</div>
+
+        </div>
+
       </div>
+
+      <span class="header-version-tag">v1.0 Base</span>
+
     </div>
+
+
 
     <div id="step_mobile">
-      <input type="tel" id="input_phone" placeholder="मोबाइल नंबर डालें" value="8354816628" style="margin-top: 6px;">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="verifyFarmerMobile()">आगे बढ़ें ➔</button>
+
+      <label style="font-size: 16px; font-weight: 900; color: var(--text-dim); display: block; margin-bottom: 6px;">अपना 10 अंकों का मोबाइल नंबर दर्ज करें:</label>
+
+      <input type="tel" id="input_phone" class="login-input" placeholder="उदा. 9876543210" value="8354816628">
+
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 16px; height: 60px; font-size: 20px;" onclick="verifyFarmerMobile()">आगे बढ़ें ➔</button>
+
     </div>
+
+
 
     <div id="step_secret_pin" style="display: none;">
-      <div id="user_display_badge" style="font-size: 15px; font-weight: 800; color: var(--primary);"></div>
-      <label style="font-size: 12px; color: var(--text-dim); margin-top: 8px; display: block;">4 अंक का गुप्त पिन डालें:</label>
-      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 6px; text-align: center; letter-spacing: 8px; font-size: 24px;">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
-      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">नंबर बदलें</button>
+
+      <div id="user_display_badge" style="font-size: 19px; font-weight: 900; color: var(--primary); background: var(--card); padding: 12px; border-radius: 12px; text-align: center; border: 1px solid var(--border);"></div>
+
+      <label style="font-size: 16px; font-weight: 900; color: var(--text-dim); margin-top: 12px; display: block;">4 अंक का गुप्त सुरक्षा पिन (PIN):</label>
+
+      <input type="password" id="input_pin" class="login-pin-input" placeholder="••••" maxlength="6">
+
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 16px; height: 60px; font-size: 20px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
+
+      <button class="btn-action" style="width: 100%; margin-top: 8px; background: transparent; color: var(--text-dim); font-size: 16px;" onclick="returnToPhoneStep()">मोबाइल नंबर बदलें</button>
+
     </div>
+
   </div>
+
 </div>
 
-<!-- Header -->
-<header class="app-header">
-  <div class="header-brand">
-    <span class="icon">water_ph</span>
-    <span>किसान ग्रिड 1.0 (Base)</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: 8px;">
-    <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
-      <span class="icon" id="voiceBadgeIcon" style="font-size: 16px;">volume_up</span>
-      <span id="voiceBadgeText">आवाज</span>
+
+
+<!-- Consolidated Pakka / Kachha Bill Generation Modal -->
+
+<div class="modal-overlay" id="invoiceModal" style="display: none;">
+
+  <div class="modal-card">
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+
+      <strong style="font-size: 20px; color: var(--primary);">बिलिंग कंसोल (Consolidation)</strong>
+
+      <button class="btn-circle" style="width:40px; height:40px;" onclick="closeInvoiceModal()">✕</button>
+
     </div>
-    <button class="btn-circle" onclick="window.location.reload(true)"><span class="icon">sync</span></button>
-    <button class="btn-circle" onclick="logout()"><span class="icon">logout</span></button>
+
+    
+
+    <div style="background: rgba(11,19,41,0.85); border: 2px solid var(--border); border-radius: 14px; padding: 14px; font-size: 16px; display: flex; flex-direction: column; gap: 6px;">
+
+      <div id="invModalFarmerDesc" style="font-weight: 900; color: #fff; font-size: 18px;">--</div>
+
+      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+
+        <span>पिछली पक्की रीडिंग:</span>
+
+        <strong id="invModalLastPakkaDate" style="color: var(--primary); font-family: monospace;">--</strong>
+
+      </div>
+
+      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+
+        <span>अनबिल उपयोग:</span>
+
+        <strong id="invModalDurationTxt" style="color: var(--text);">0 घंटे 0 मिनट (0 मि.)</strong>
+
+      </div>
+
+      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+
+        <span>अवधि का बिल:</span>
+
+        <strong id="invModalCalculatedFare" style="color: var(--success); font-size: 19px;">₹0</strong>
+
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+
+        <span style="color: var(--text-dim);">स्थिति / इटरेशन:</span>
+
+        <span id="invModalIterationBadge" class="bill-tag tag-kachha">जांच बिल #1</span>
+
+      </div>
+
+    </div>
+
+
+
+    <div>
+
+      <label style="font-size: 15px; font-weight: 800; color: var(--text-dim);">पक्का बिल कट-ऑफ तारीख (Upto Date):</label>
+
+      <input type="date" id="input_pakka_cutoff_date">
+
+    </div>
+
+
+
+    <div>
+
+      <label style="font-size: 15px; font-weight: 800; color: var(--text-dim);">जमा की गई रकम (Cash/UPI):</label>
+
+      <input type="number" id="input_inv_paid" placeholder="₹0" value="0" oninput="updateInvoicePreview()">
+
+    </div>
+
+
+
+    <div>
+
+      <label style="font-size: 15px; font-weight: 800; color: var(--text-dim);">माफी / छूट (Discount Allowed):</label>
+
+      <input type="number" id="input_inv_discount" placeholder="₹0" value="0" oninput="updateInvoicePreview()">
+
+    </div>
+
+
+
+    <div style="background: rgba(34,197,94,0.12); border: 2px solid rgba(34,197,94,0.35); border-radius: 14px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;">
+
+      <span style="font-size: 15px; font-weight: 800; color: var(--text-dim);">आगे कैरी-फॉरवर्ड बकाया:</span>
+
+      <strong id="invModalRemainingDueTxt" style="color: var(--primary); font-size: 22px; font-family: monospace;">₹0</strong>
+
+    </div>
+
+
+
+    <div style="display: flex; gap: 8px; margin-top: 4px;">
+
+      <button class="btn-action btn-p" style="flex: 1;" onclick="generateCheckBillOnly()">
+
+        <span class="icon">print</span> जांच पर्ची
+
+      </button>
+
+      <button class="btn-action btn-s" style="flex: 1;" onclick="commitPakkaConsolidationInvoice()">
+
+        <span class="icon">verified</span> पक्का बिल
+
+      </button>
+
+    </div>
+
   </div>
+
+</div>
+
+
+
+<!-- Header -->
+
+<header class="app-header">
+
+  <div class="header-brand">
+
+    <span class="icon" style="color:var(--primary); text-shadow:0 0 10px var(--primary); font-size: 32px;">water_ph</span>
+
+    <span class="header-brand-title">किसान ग्रिड AI</span>
+
+    <span class="header-version-tag">v1.0 Base</span>
+
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 6px;">
+
+    <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
+
+      <span class="icon" id="voiceBadgeIcon" style="font-size: 20px;">volume_up</span>
+
+      <span id="voiceBadgeText">आवाज</span>
+
+    </div>
+
+    <button class="btn-circle" onclick="window.location.reload(true)"><span class="icon">sync</span></button>
+
+    <button class="btn-circle" onclick="logout()"><span class="icon">logout</span></button>
+
+  </div>
+
 </header>
+
+
 
 <main class="app-body">
 
+
+
   <!-- 3-Phase Line Telemetry -->
+
   <section class="tel-grid">
+
     <div class="tel-box">
+
       <div class="tel-lbl">लाल (R)</div>
+
       <div class="tel-val" style="color:#f87171;" id="tele_v_r">-- V</div>
+
     </div>
+
     <div class="tel-box">
+
       <div class="tel-lbl">पीला (Y)</div>
+
       <div class="tel-val" style="color:#facc15;" id="tele_v_y">-- V</div>
+
     </div>
+
     <div class="tel-box">
+
       <div class="tel-lbl">नीला (B)</div>
+
       <div class="tel-val" style="color:#60a5fa;" id="tele_v_b">-- V</div>
+
     </div>
+
     <div class="tel-box">
+
       <div class="tel-lbl">लोड (A)</div>
+
       <div class="tel-val" style="color:#4ade80;" id="tele_i_amps">0.0 A</div>
+
     </div>
+
   </section>
 
-  <!-- Giant Reactor Hero -->
+
+
+  <!-- AI Smart Diagnostic Ribbon -->
+
+  <div class="ai-smart-ribbon">
+
+    <span class="icon" style="color: #a855f7; font-size: 26px;">psychology</span>
+
+    <span id="aiPredictiveText">AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल रही है।</span>
+
+  </div>
+
+
+
+  <!-- 180px CYBER-REACTOR CIRCULAR MOTOR CONTROLLER -->
+
   <section class="motor-hero">
-    <div class="reactor-wrapper">
-      <div class="reactor-core" id="visualOrb">
-        <span class="icon" style="font-size: 52px;">power_settings_new</span>
-      </div>
-      <div class="pulse-wave"></div>
-    </div>
 
     <div>
-      <div style="font-size: 22px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
-      <div style="font-size: 14px; color: var(--warning); font-weight: 700; margin-top: 3px;" id="motorSubState">लाइन जांची जा रही है...</div>
+
+      <div style="font-size: 25px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
+
+      <div style="font-size: 16px; color: var(--warning); font-weight: 800; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
+
     </div>
 
-    <button id="mainMotorButton" class="giant-actuator-btn btn-locked" onclick="handleMotorSwitch()">
-      <span class="icon">lock</span> बटन बंद है (नंबर नहीं है)
-    </button>
+
+
+    <!-- 180px GIANT CIRCULAR BUTTON WITH PROMINENT DEVANAGARI -->
+
+    <div class="giant-circular-wrapper">
+
+      <div class="circular-pulse-ring"></div>
+
+      <button id="mainMotorButton" class="giant-circular-btn btn-locked" onclick="handleMotorSwitch()">
+
+        <span class="icon" style="font-size: 54px;" id="mainMotorIcon">lock</span>
+
+        <span class="circle-label-main" id="mainMotorText">बंद है</span>
+
+        <span class="circle-label-sub" id="mainMotorSubText">LOCKED</span>
+
+      </button>
+
+    </div>
+
+
+
+    <!-- Quick Selector Positioned Directly Below Button -->
+
+    <div class="quick-selector-box owner-only">
+
+      <div class="quick-selector-title">
+
+        <span>⚡ मोटर चलाने के लिए खेत / किसान चुनें:</span>
+
+        <span style="font-size:13px; color:var(--text-dim);">त्वरित चयन</span>
+
+      </div>
+
+      <select id="quick_select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
+
+    </div>
+
   </section>
 
-  <!-- Real-Time Bill Box -->
+
+
+  <!-- Live Turn Status Card -->
+
   <div class="app-card open" id="turnCard">
+
     <div class="app-card-header" onclick="toggleCard('turnCard')">
+
       <span class="app-card-title">
-        <span class="icon" style="color: var(--primary);">timer</span> चालू बारी का बिल व हिसाब
+
+        <span class="icon" style="color: var(--primary);">timer</span> चालू बारी का समय व मीटर रीडिंग
+
       </span>
+
       <span class="icon app-card-arrow">expand_more</span>
+
     </div>
+
     <div class="app-card-content">
+
       <div class="bill-calc-box">
-        <div class="calc-row">
-          <span style="color: var(--text-dim);">खेत का नाम / किसान:</span>
-          <strong id="label_active_field" style="color: var(--primary); font-size: 15px;">मालिक का खेत (Standby)</strong>
-        </div>
-        <div class="calc-row">
-          <span style="color: var(--text-dim);">पानी शुरू होने का समय:</span>
-          <strong id="label_start_time" style="font-family: monospace;">--:--:--</strong>
-        </div>
-        <div class="calc-divider"></div>
 
         <div class="calc-row">
-          <span style="color: var(--text-dim);">सिंचाई का समय (Hours & Mins):</span>
-          <strong id="label_live_time_split" style="color: var(--text); font-size: 14.5px;">0 घंटे 0 मिनट</strong>
+
+          <span style="color: var(--text-dim);">खेत / किसान:</span>
+
+          <strong id="label_active_field" style="color: var(--primary); font-size: 18px;">मालिक का खेत (Standby)</strong>
+
         </div>
-        <div class="calc-row">
-          <span style="color: var(--text-dim);">कुल समय (मिनटों में):</span>
-          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace;">0 मिनट</strong>
-        </div>
-        <div class="calc-row">
-          <span style="color: var(--text-dim);">दर (Rate):</span>
-          <strong style="color: var(--text);">₹2.00 प्रति मिनट</strong>
-        </div>
-        <div class="calc-divider"></div>
 
         <div class="calc-row">
-          <span style="color: var(--text-dim);">पिछला बकाया (Old Balance):</span>
-          <strong id="label_prev_due" style="color: var(--danger);">₹0</strong>
+
+          <span style="color: var(--text-dim);">शुरू समय (Reading):</span>
+
+          <strong id="label_start_time" style="font-family: monospace; font-size: 18px;">--:--:--</strong>
+
         </div>
+
+        <div class="calc-divider"></div>
+
+
+
         <div class="calc-row">
-          <span style="color: var(--text-dim); font-weight: bold;">इस बारी का बिल (Current Fare):</span>
-          <strong id="label_live_fare" style="color: var(--success); font-size: 18px;">₹0</strong>
+
+          <span style="color: var(--text-dim);">सिंचाई समय:</span>
+
+          <strong id="label_live_time_split" style="color: var(--text); font-size: 18px;">0 घंटे 0 मिनट</strong>
+
         </div>
+
         <div class="calc-row">
-          <span style="color: var(--text-dim); font-weight: bold;">कुल देय रकम (Total Payable):</span>
-          <strong id="label_total_payable" style="color: var(--primary); font-size: 18px;">₹0</strong>
+
+          <span style="color: var(--text-dim);">कुल मिनट:</span>
+
+          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace; font-size: 18px;">0 मिनट</strong>
+
         </div>
+
+        <div class="calc-row">
+
+          <span style="color: var(--text-dim);">अनुमानित पानी डिस्चार्ज:</span>
+
+          <strong id="label_live_liters" style="color: var(--primary); font-size: 18px;">0 लीटर</strong>
+
+        </div>
+
+        <div class="calc-divider"></div>
+
+
+
+        <div class="calc-row">
+
+          <span style="color: var(--text-dim);">पिछली पक्की रीडिंग से बकाया:</span>
+
+          <strong id="label_prev_due" style="color: var(--danger); font-size: 18px;">₹0</strong>
+
+        </div>
+
+        <div class="calc-row">
+
+          <span style="color: var(--text-dim); font-weight: bold;">इस बारी का बिल:</span>
+
+          <strong id="label_live_fare" style="color: var(--success); font-size: 22px;">₹0</strong>
+
+        </div>
+
+        <div class="calc-row">
+
+          <span style="color: var(--text-dim); font-weight: bold;">वर्तमान कुल देय रकम:</span>
+
+          <strong id="label_total_payable" style="color: var(--primary); font-size: 22px;">₹0</strong>
+
+        </div>
+
       </div>
+
+
 
       <button id="btnFarmerSurrender" class="btn-action btn-w" style="width: 100%; display: none;" onclick="surrenderFarmerTurn()">
+
         <span class="icon">check_circle</span> खेत भर गया (बारी छोड़ें)
+
       </button>
 
-      <button id="btnOwnerRevoke" class="btn-action btn-d owner-only" style="width: 100%; display: none;" onclick="finalizeTurnWithBilling()">
-        <span class="icon">cancel</span> पानी बंद करें व बिल दर्ज करें
+
+
+      <button id="btnOwnerRevoke" class="btn-action btn-d owner-only" style="width: 100%; display: none;" onclick="finalizeTurnDirectly()">
+
+        <span class="icon">cancel</span> पानी बंद करें व रीडिंग सुरक्षित करें
+
       </button>
+
     </div>
+
   </div>
 
-  <!-- Financial Totals -->
+
+
+  <!-- Recent Pump Usage Stream -->
+
+  <div class="app-card open" id="recentPumpStreamCard">
+
+    <div class="app-card-header" onclick="toggleCard('recentPumpStreamCard')">
+
+      <span class="app-card-title">
+
+        <span class="icon" style="color: var(--primary);">history</span> ताज़ा पंप उपयोग विवरण (Recent Stream)
+
+      </span>
+
+      <span class="icon app-card-arrow">expand_more</span>
+
+    </div>
+
+    <div class="app-card-content" style="padding: 10px;">
+
+      <div class="recent-stream-list" id="recentPumpStreamContainer">
+
+        <div style="text-align:center; padding:12px; color:var(--text-dim); font-size:15px;">हालिया रिकॉर्ड लोड हो रहे हैं...</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- CONCISE SCREEN-FIT MASTER ROSTER (Owner Only) -->
+
+  <div class="app-card open owner-only" id="ownerMasterRosterCard">
+
+    <div class="app-card-header" onclick="toggleCard('ownerMasterRosterCard')">
+
+      <span class="app-card-title">
+
+        <span class="icon" style="color: var(--purple);">table_rows</span> सबका खाता (रीडिंग, जमा व बिलिंग)
+
+      </span>
+
+      <span class="icon app-card-arrow">expand_more</span>
+
+    </div>
+
+    <div class="app-card-content" style="padding: 10px;">
+
+      <div style="font-size: 14px; color: var(--text-dim); padding: 0 4px 6px 4px;">सभी किसानों का कुल समय, अनबिल उपयोग, जमा व बकाया:</div>
+
+      <div class="roster-single-row-list" id="masterRosterContainer">
+
+        <div style="text-align:center; padding:12px; color:var(--text-dim); font-size:15px;">डेटा लोड हो रहा है...</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- Financial Horizon (Totals) -->
+
   <section class="summary-grid" id="analyticsSection">
+
     <div class="summary-box">
-      <div class="summary-lbl">कुल वसूल (Paid)</div>
+
+      <div class="summary-lbl">कुल वसूल</div>
+
       <div class="summary-val" style="color:var(--success);" id="tot_collected">₹0</div>
+
     </div>
+
     <div class="summary-box">
-      <div class="summary-lbl">कुल छूट (Discount)</div>
+
+      <div class="summary-lbl">कुल छूट</div>
+
       <div class="summary-val" style="color:var(--warning);" id="tot_discount">₹0</div>
+
     </div>
+
     <div class="summary-box">
-      <div class="summary-lbl">कुल बाकी (Due)</div>
+
+      <div class="summary-lbl">कुल बाकी</div>
+
       <div class="summary-val" style="color:var(--danger);" id="tot_outstanding">₹0</div>
+
     </div>
+
   </section>
 
-  <!-- Master Field Switcher -->
-  <div class="app-card owner-only" id="overrideCard">
-    <div class="app-card-header" onclick="toggleCard('overrideCard')">
+
+
+  <!-- Register New Farmer (Owner Only) -->
+
+  <div class="app-card owner-only" id="addUserCard">
+
+    <div class="app-card-header" onclick="toggleCard('addUserCard')">
+
       <span class="app-card-title">
-        <span class="icon" style="color: var(--warning);">published_with_changes</span> तुरंत दूसरा खेत लगाएं
+
+        <span class="icon" style="color: var(--success);">person_add</span> नया किसान जोड़ें व पिन सेट करें
+
       </span>
+
       <span class="icon app-card-arrow">expand_more</span>
+
     </div>
+
     <div class="app-card-content">
-      <select id="select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
+
+      <input type="text" id="input_new_farmer_name" placeholder="किसान का नाम (Farmer Name)">
+
+      <input type="tel" id="input_new_farmer_phone" placeholder="10 अंकों का मोबाइल नंबर">
+
+      <input type="text" id="input_new_farmer_plot" placeholder="खेत / रकबा का नाम (उदा. नहर वाला खेत)">
+
+      <input type="password" id="input_new_farmer_pin" placeholder="4 अंकों का लॉगिन पिन" maxlength="6">
+
+      <button class="btn-action btn-s" onclick="registerNewFarmer()">
+
+        <span class="icon">save</span> किसान सुरक्षित करें
+
+      </button>
+
     </div>
+
   </div>
 
-  <!-- AI Searchable Passbook & Itemized Ledger -->
-  <div class="app-card open" id="ledgerCard">
-    <div class="app-card-header" onclick="toggleCard('ledgerCard')">
+
+
+  <!-- Co-Master Authorization -->
+
+  <div class="app-card primary-only" id="coMasterCard">
+
+    <div class="app-card-header" onclick="toggleCard('coMasterCard')">
+
       <span class="app-card-title">
-        <span class="icon" style="color: var(--success);">receipt_long</span> किसान खाता व पर्ची (Passbook Ledger)
+
+        <span class="icon" style="color: var(--purple);">admin_panel_settings</span> सह-मालिक प्रबंधन (Co-Master)
+
       </span>
+
       <span class="icon app-card-arrow">expand_more</span>
+
     </div>
+
     <div class="app-card-content">
-      <div class="ai-search-box">
-        <input type="text" id="ledgerSearchInput" placeholder="🔍 नाम, नंबर या बोलकर खोजें..." oninput="handleAISearch()">
-        <button class="mic-btn" id="voiceSearchMicBtn" onclick="toggleVoiceSearch()" title="बोलकर खोजें">
-          <span class="icon" style="font-size:22px;">mic</span>
-        </button>
+
+      <div style="font-size: 14px; color: var(--text-dim);" id="coMasterStateText">जांच चल रही है...</div>
+
+      <input type="text" id="input_co_name" placeholder="सह-मालिक का नाम">
+
+      <input type="tel" id="input_co_phone" placeholder="10 अंकों का मोबाइल">
+
+      <input type="text" id="input_co_pin" placeholder="गुप्त पिन (4 अंक)" maxlength="6">
+
+      <div style="display: flex; gap: 8px;">
+
+        <button class="btn-action btn-p" style="flex: 1;" onclick="saveCoMasterRecord()">सुरक्षित करें</button>
+
+        <button id="btnDeleteCoMaster" class="btn-action btn-d" style="display: none;" onclick="removeCoMasterRecord()">हटाएं</button>
+
       </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- AI Search & Invoice History Slips -->
+
+  <div class="app-card open" id="ledgerCard">
+
+    <div class="app-card-header" onclick="toggleCard('ledgerCard')">
+
+      <span class="app-card-title">
+
+        <span class="icon" style="color: var(--success);">receipt_long</span> बिल इतिहास (Invoices & History)
+
+      </span>
+
+      <span class="icon app-card-arrow">expand_more</span>
+
+    </div>
+
+    <div class="app-card-content">
+
+      <div class="ai-search-box">
+
+        <input type="text" id="ledgerSearchInput" placeholder="🔍 नाम, नंबर या बोलकर खोजें..." oninput="handleAISearch()">
+
+        <button class="mic-btn" id="voiceSearchMicBtn" onclick="toggleVoiceSearch()" title="बोलकर खोजें">
+
+          <span class="icon" style="font-size:26px;">mic</span>
+
+        </button>
+
+      </div>
+
+
 
       <div class="filter-pills">
-        <div class="pill active" onclick="applySortPill('NEWEST', this)">नवीनतम (New)</div>
-        <div class="pill" onclick="applySortPill('DUE_DESC', this)">अधिक बकाया (High Due)</div>
-        <div class="pill" onclick="applySortPill('UNPAID', this)">बाकी उधार (Unpaid)</div>
-        <div class="pill" onclick="applySortPill('PAID', this)">चुकाया गया (Settled)</div>
+
+        <div class="pill active" onclick="applySortPill('NEWEST', this)">नवीनतम</div>
+
+        <div class="pill" onclick="applySortPill('DUE_DESC', this)">अधिक बकाया</div>
+
+        <div class="pill" onclick="applySortPill('UNPAID', this)">बाकी उधार</div>
+
+        <div class="pill" onclick="applySortPill('PAID', this)">चुकाया गया</div>
+
       </div>
 
-      <div class="passbook-list" id="passbookContainer"></div>
+
+
+      <div class="roster-single-row-list" id="invoiceSlipContainer"></div>
+
     </div>
+
   </div>
+
+
 
 </main>
 
+
+
+<!-- Bottom Navigation Bar -->
+
+<nav class="bottom-app-bar">
+
+  <button class="app-tab active" onclick="navigateTab('dashboard')">
+
+    <span class="icon">power_settings_new</span>
+
+    <span>मोटर स्विच</span>
+
+  </button>
+
+  <button class="app-tab owner-only" onclick="navigateTab('roster')">
+
+    <span class="icon">table_rows</span>
+
+    <span>सबका खाता</span>
+
+  </button>
+
+  <button class="app-tab" onclick="navigateTab('ledger')">
+
+    <span class="icon">receipt_long</span>
+
+    <span>पर्चियां</span>
+
+  </button>
+
+  <button class="app-tab" onclick="navigateTab('analytics')">
+
+    <span class="icon">monitoring</span>
+
+    <span>कुल हिसाब</span>
+
+  </button>
+
+</nav>
+
+
+
 <script>
+
   const firebaseConfig = {
+
     apiKey: "AIzaSyCH8lBCeYYnTiZ3u-Z6Gs1OmhBf3R_b0i4",
+
     authDomain: "tubewell-grid-1425b.firebaseapp.com",
+
     databaseURL: "https://tubewell-grid-1425b-default-rtdb.firebaseio.com",
+
     projectId: "tubewell-grid-1425b",
+
     storageBucket: "tubewell-grid-1425b.firebasestorage.app",
+
     messagingSenderId: "76348823069",
+
     appId: "1:76348823069:web:3d6c60a5ebf1ffe29618f4"
+
   };
 
+
+
   firebase.initializeApp(firebaseConfig);
+
   const rtdb = firebase.database();
+
   const PRIMARY_ROOT_PHONE = "8354816628";
 
+
+
   let loggedInUser = null, candidateUser = null;
-  let activeTurnObj = null, farmersCache = {}, sessionsCache = [], paymentsCache = [];
+
+  let activeTurnObj = null, farmersCache = {}, sessionsCache = [], invoicesCache = [];
+
   let unitTariffPerMin = 2.00, isMotorPhysicallyOn = false;
+
   let timerTicker = null;
 
+
+
   let fuseInstance = null;
+
   let activeSearchQuery = '';
+
   let activeSortPill = 'NEWEST';
+
   let isListeningVoice = false;
 
+  let targetInvoicePlan = null;
+
+
+
   let noiseFilterStreak = 0;
+
   const FAULT_HYSTERESIS_COUNT = 2;
 
+
+
   function sanitizeMobile(p) { return String(p || '').replace(/\D/g, '').slice(-10); }
-  function triggerVibrate(ms = 60) { if ("vibrate" in navigator) navigator.vibrate(ms); }
+
+  function triggerVibrate(ms = 40) { if ("vibrate" in navigator) navigator.vibrate(ms); }
+
   function toggleCard(id) { document.getElementById(id).classList.toggle('open'); }
 
+
+
   function updateVoiceUI(isEnabled) {
+
     const badge = document.getElementById('voiceControlBadge');
+
     const icon = document.getElementById('voiceBadgeIcon');
+
     const txt = document.getElementById('voiceBadgeText');
+
     if (isEnabled) {
+
       badge.className = "voice-badge active";
+
       icon.innerText = "volume_up";
+
       txt.innerText = "आवाज";
+
     } else {
+
       badge.className = "voice-badge disabled";
+
       icon.innerText = "volume_off";
+
       txt.innerText = "मौन";
+
     }
+
   }
+
+
 
   async function toggleUserVoicePreference() {
+
     if (!loggedInUser) return;
+
     triggerVibrate(40);
+
     const newStatus = !(loggedInUser.voiceEnabled !== false);
+
     loggedInUser.voiceEnabled = newStatus;
+
     localStorage.setItem(`voice_pref_${loggedInUser.uid || loggedInUser.phone}`, newStatus ? 'true' : 'false');
+
     updateVoiceUI(newStatus);
+
     if (newStatus) speakSimpleHindi('CUSTOM', { customText: "आवाज चालू कर दी गई है" });
+
   }
+
+
 
   function speakSimpleHindi(eventCode, extraData = {}) {
+
     if (!('speechSynthesis' in window)) return;
+
     if (loggedInUser && loggedInUser.voiceEnabled === false) return;
 
+
+
     window.speechSynthesis.cancel();
+
     let text = "";
+
     switch (eventCode) {
+
       case 'WELCOME': text = `राम राम ${extraData.name || 'भाई'}, स्वागत है।`; break;
+
       case 'MOTOR_ON': text = "मोटर चालू हो गई है। खेत में पानी शुरू हो गया है।"; break;
+
       case 'MOTOR_OFF': text = "मोटर बंद कर दी गई है।"; break;
+
       case 'NOT_YOUR_TURN': text = "रुकिए भैया, अभी आपका नंबर नहीं आया है।"; break;
+
       case 'TURN_FINISH': 
-        text = `पानी भर गया है। कुल समय ${extraData.hours} घंटे ${extraData.mins} मिनट हुआ। इस बारी का बिल ${Math.round(extraData.fare || 0)} रुपया बना है।`; 
+
+        text = `पानी भर गया है। कुल समय ${extraData.hours} घंटे ${extraData.mins} मिनट हुआ। इस बारी का बिल ${extraData.fare} रुपया बना है।`; 
+
         break;
+
       default: text = extraData.customText || "";
+
     }
+
     if (!text) return;
 
+
+
     const utterance = new SpeechSynthesisUtterance(text);
+
     utterance.lang = 'hi-IN';
+
     utterance.rate = 0.90;
+
     utterance.pitch = 0.98;
+
     window.speechSynthesis.speak(utterance);
+
   }
+
+
 
   function toggleVoiceSearch() {
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return alert("बोलकर खोजने की सुविधा इस ब्राउज़र में उपलब्ध नहीं है।");
+
+    if (!SpeechRecognition) return alert("बोलकर खोजने की सुविधा उपलब्ध नहीं है।");
+
+
 
     const micBtn = document.getElementById('voiceSearchMicBtn');
+
     if (isListeningVoice) { isListeningVoice = false; micBtn.classList.remove('listening'); return; }
 
+
+
     const recognition = new SpeechRecognition();
+
     recognition.lang = 'hi-IN';
+
     recognition.onstart = () => { isListeningVoice = true; micBtn.classList.add('listening'); triggerVibrate(50); };
+
     recognition.onresult = (e) => {
+
       document.getElementById('ledgerSearchInput').value = e.results[0][0].transcript;
+
       handleAISearch();
+
     };
+
     recognition.onend = () => { isListeningVoice = false; micBtn.classList.remove('listening'); };
+
     recognition.start();
+
   }
+
+
+
+  function navigateTab(sec) {
+
+    triggerVibrate(30);
+
+    document.querySelectorAll('.app-tab').forEach(t => t.classList.remove('active'));
+
+    if (sec === 'dashboard') {
+
+      document.querySelector('.app-tab:nth-child(1)').classList.add('active');
+
+      document.getElementById('turnCard').scrollIntoView({ behavior: 'smooth' });
+
+    }
+
+    if (sec === 'roster') {
+
+      document.querySelector('.app-tab:nth-child(2)').classList.add('active');
+
+      document.getElementById('ownerMasterRosterCard').classList.add('open');
+
+      document.getElementById('ownerMasterRosterCard').scrollIntoView({ behavior: 'smooth' });
+
+    }
+
+    if (sec === 'ledger') {
+
+      document.querySelector('.app-tab:nth-child(3)').classList.add('active');
+
+      document.getElementById('ledgerCard').classList.add('open');
+
+      document.getElementById('ledgerCard').scrollIntoView({ behavior: 'smooth' });
+
+    }
+
+    if (sec === 'analytics') {
+
+      document.querySelector('.app-tab:nth-child(4)').classList.add('active');
+
+      document.getElementById('analyticsSection').scrollIntoView({ behavior: 'smooth' });
+
+    }
+
+  }
+
+
 
   async function verifyFarmerMobile() {
+
     const p = sanitizeMobile(document.getElementById('input_phone').value.trim());
+
     if (p.length !== 10) return alert("कृपया 10 अंक का सही मोबाइल नंबर डालें।");
 
+
+
     try {
+
       const meta = (await rtdb.ref('/tubewell/system_meta').once('value')).val() || {};
+
       const co = meta.secondaryMaster || null;
 
+
+
       if (p === PRIMARY_ROOT_PHONE) {
+
         candidateUser = { role: 'master', tier: 'primary', name: 'मुख्य मालिक', phone: p, pin: String(meta.masterPin || '8354'), voiceEnabled: meta.masterVoiceEnabled !== false };
+
       } else if (co && co.active && sanitizeMobile(co.phone) === p) {
+
         candidateUser = { role: 'master', tier: 'secondary', name: co.name || 'सह-मालिक', phone: p, pin: String(co.pin || '1234'), voiceEnabled: meta.masterVoiceEnabled !== false };
+
       } else {
+
         const farmers = (await rtdb.ref('/tubewell/farmers').once('value')).val() || {};
+
         let found = null;
+
         Object.keys(farmers).forEach(k => {
+
           if (sanitizeMobile(farmers[k].phone) === p || sanitizeMobile(k) === p) found = { uid: farmers[k].uid || k, ...farmers[k] };
+
         });
+
         if (!found) return alert("यह मोबाइल नंबर दर्ज नहीं है।");
+
         candidateUser = { role: 'farmer', ...found, pin: String(found.pin || p.slice(-4)), voiceEnabled: found.voiceEnabled !== false };
+
       }
 
+
+
       const localPref = localStorage.getItem(`voice_pref_${candidateUser.uid || candidateUser.phone}`);
+
       if (localPref !== null) candidateUser.voiceEnabled = (localPref === 'true');
 
+
+
       document.getElementById('step_mobile').style.display = 'none';
+
       document.getElementById('step_secret_pin').style.display = 'block';
+
       document.getElementById('user_display_badge').innerText = `${candidateUser.name} (+91-${candidateUser.phone})`;
+
     } catch (err) {
+
       alert("इंटरनेट कनेक्शन जांचें।");
+
     }
+
   }
+
+
 
   function authenticateWithPIN() {
+
     const entered = document.getElementById('input_pin').value.trim();
+
     if (String(entered) !== String(candidateUser.pin)) return alert("गलत पिन है।");
 
+
+
     loggedInUser = candidateUser;
+
     document.getElementById('authGate').style.display = 'none';
+
     updateVoiceUI(loggedInUser.voiceEnabled !== false);
 
+
+
     const isMaster = loggedInUser.role === 'master';
+
+    const isPrimary = isMaster && loggedInUser.tier === 'primary';
+
     document.querySelectorAll('.owner-only').forEach(el => el.style.display = isMaster ? '' : 'none');
 
+    document.querySelectorAll('.primary-only').forEach(el => el.style.display = isPrimary ? '' : 'none');
+
+
+
     speakSimpleHindi('WELCOME', { name: loggedInUser.name });
+
     initCloudListeners();
+
   }
 
+
+
   function returnToPhoneStep() {
+
     document.getElementById('step_mobile').style.display = 'block';
+
     document.getElementById('step_secret_pin').style.display = 'none';
+
   }
+
+
 
   function logout() { loggedInUser = null; document.getElementById('authGate').style.display = 'flex'; returnToPhoneStep(); }
 
+
+
+  async function registerNewFarmer() {
+
+    const name = document.getElementById('input_new_farmer_name').value.trim();
+
+    const phone = sanitizeMobile(document.getElementById('input_new_farmer_phone').value.trim());
+
+    const plot = document.getElementById('input_new_farmer_plot').value.trim() || 'सामान्य रकबा';
+
+    const pin = document.getElementById('input_new_farmer_pin').value.trim();
+
+
+
+    if (!name || phone.length !== 10 || pin.length < 4) {
+
+      return alert("कृपया नाम, 10-अंकों का फोन नंबर और कम से कम 4-अंकों का पिन दर्ज करें।");
+
+    }
+
+
+
+    const newUid = "FARM-" + phone;
+
+    await rtdb.ref(`/tubewell/farmers/${newUid}`).set({
+
+      uid: newUid,
+
+      name: name,
+
+      phone: phone,
+
+      plot: plot,
+
+      pin: pin,
+
+      voiceEnabled: true,
+
+      registeredAt: Date.now()
+
+    });
+
+
+
+    document.getElementById('input_new_farmer_name').value = '';
+
+    document.getElementById('input_new_farmer_phone').value = '';
+
+    document.getElementById('input_new_farmer_plot').value = '';
+
+    document.getElementById('input_new_farmer_pin').value = '';
+
+    alert(`किसान ${name} (+91-${phone}) पंजीकृत हो गया। पिन: ${pin}`);
+
+  }
+
+
+
+  async function saveCoMasterRecord() {
+
+    const name = document.getElementById('input_co_name').value.trim();
+
+    const phone = sanitizeMobile(document.getElementById('input_co_phone').value.trim());
+
+    const pin = document.getElementById('input_co_pin').value.trim();
+
+    if (!name || phone.length !== 10 || pin.length < 4) return alert("नाम, 10 अंकों का फोन व 4 अंकों का पिन सही दर्ज करें।");
+
+
+
+    await rtdb.ref('/tubewell/system_meta/secondaryMaster').set({ name, phone, pin, active: true, assignedAt: Date.now() });
+
+    alert("सह-मालिक अधिकार प्रदान किया गया।");
+
+  }
+
+
+
+  async function removeCoMasterRecord() {
+
+    if (confirm("क्या आप सह-मालिक के अधिकार समाप्त करना चाहते हैं?")) {
+
+      await rtdb.ref('/tubewell/system_meta/secondaryMaster').remove();
+
+      alert("अधिकार हटा दिया गया।");
+
+    }
+
+  }
+
+
+
   function initCloudListeners() {
+
     rtdb.ref('/tubewell/telemetry').on('value', snap => {
+
       const t = snap.val();
+
       if (!t) return;
-      document.getElementById('tele_v_r').innerText = `${t.vR || 412} V`;
-      document.getElementById('tele_v_y').innerText = `${t.vY || 414} V`;
-      document.getElementById('tele_v_b').innerText = `${t.vB || 410} V`;
-      document.getElementById('tele_i_amps').innerText = `${(t.amps || 0).toFixed(1)} A`;
+
+
+
+      const vr = t.vR || 412;
+
+      const vy = t.vY || 414;
+
+      const vb = t.vB || 410;
+
+      const amps = t.amps || 0;
+
+
+
+      document.getElementById('tele_v_r').innerText = `${vr} V`;
+
+      document.getElementById('tele_v_y').innerText = `${vy} V`;
+
+      document.getElementById('tele_v_b').innerText = `${vb} V`;
+
+      document.getElementById('tele_i_amps').innerText = `${amps.toFixed(1)} A`;
+
+
+
+      // AI Predictive Diagnostics
+
+      const aiText = document.getElementById('aiPredictiveText');
+
+      if (amps > 22.0) {
+
+        aiText.innerText = "AI चेतावनी: मोटर लोड अधिक है, बोरिंग में घर्षण या रेत की संभावना!";
+
+        aiText.parentElement.style.background = "rgba(239, 68, 68, 0.15)";
+
+      } else if (Math.abs(vr - vy) > 30 || Math.abs(vy - vb) > 30) {
+
+        aiText.innerText = "AI चेतावनी: वोल्टेज में असंतुलन, मोटर सुरक्षा की निगरानी करें!";
+
+        aiText.parentElement.style.background = "rgba(245, 158, 11, 0.15)";
+
+      } else {
+
+        aiText.innerText = "AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल रही है।";
+
+        aiText.parentElement.style.background = "rgba(168, 85, 247, 0.15)";
+
+      }
+
+
 
       if (t.lockedOut) {
+
         noiseFilterStreak++;
+
         if (noiseFilterStreak >= FAULT_HYSTERESIS_COUNT) {
-          document.getElementById('visualOrb').className = "reactor-core fault";
-          document.getElementById('motorTitleState').innerText = `🚨 सुरक्षा के लिए बंद (${t.fault})`;
-          document.getElementById('mainMotorButton').className = "giant-actuator-btn btn-locked";
-          document.getElementById('mainMotorButton').innerHTML = `<span class="icon">warning</span> मोटर ट्रिप लॉक है`;
-          document.getElementById('mainMotorButton').disabled = true;
+
+          document.getElementById('motorTitleState').innerText = `🚨 सुरक्षा बंद (${t.fault})`;
+
+          document.getElementById('motorTitleState').style.color = "var(--danger)";
+
+          const btn = document.getElementById('mainMotorButton');
+
+          btn.className = "giant-circular-btn btn-locked";
+
+          document.getElementById('mainMotorIcon').innerText = "warning";
+
+          document.getElementById('mainMotorText').innerText = "ट्रिप";
+
+          document.getElementById('mainMotorSubText').innerText = "LOCKED";
+
+          btn.disabled = true;
+
           return;
+
         }
+
       } else {
+
         noiseFilterStreak = 0;
+
         document.getElementById('mainMotorButton').disabled = false;
+
       }
+
       refreshMotorUI();
+
     });
+
+
 
     rtdb.ref('/tubewell/active_turn').on('value', snap => {
+
       activeTurnObj = snap.val() || null;
+
       isMotorPhysicallyOn = !!(activeTurnObj && activeTurnObj.isMotorRunning);
 
+
+
       if (isMotorPhysicallyOn) {
+
         startLiveTimer();
+
       } else {
+
         clearInterval(timerTicker);
+
         renderLiveMetrics(calculateRunSeconds());
+
       }
+
       refreshMotorUI();
+
       renderTurnCardUI();
+
+      syncQuickSelectorValue();
+
     });
+
+
 
     rtdb.ref('/tubewell/farmers').on('value', snap => {
+
       farmersCache = snap.val() || {};
-      populateTargetFarmerDropdown();
+
+      populateTargetFarmerDropdowns();
+
+      recalculateAccountsAndLedger();
+
     });
+
+
 
     rtdb.ref('/tubewell/sessions').on('value', snap => {
+
       const s = snap.val() || {};
+
       sessionsCache = Object.keys(s).map(k => ({ sessionId: k, ...s[k] }));
+
       recalculateAccountsAndLedger();
+
+      renderRecentPumpStream();
+
     });
 
-    rtdb.ref('/tubewell/payments').on('value', snap => {
-      const p = snap.val() || {};
-      paymentsCache = Object.keys(p).map(k => ({ paymentId: k, ...p[k] }));
+
+
+    rtdb.ref('/tubewell/invoices').on('value', snap => {
+
+      const inv = snap.val() || {};
+
+      invoicesCache = Object.keys(inv).map(k => ({ invoiceId: k, ...inv[k] }));
+
       recalculateAccountsAndLedger();
+
     });
+
+
+
+    rtdb.ref('/tubewell/system_meta').on('value', snap => {
+
+      const m = snap.val() || {};
+
+      unitTariffPerMin = m.tariff || 2.00;
+
+      const co = m.secondaryMaster;
+
+      const desc = document.getElementById('coMasterStateText');
+
+      const delBtn = document.getElementById('btnDeleteCoMaster');
+
+      if (co && co.active) {
+
+        desc.innerHTML = `सक्रिय सह-मालिक: <strong>${co.name}</strong> (+91-${co.phone})`;
+
+        delBtn.style.display = 'block';
+
+      } else {
+
+        desc.innerText = "कोई सह-मालिक अधिकृत नहीं है।";
+
+        delBtn.style.display = 'none';
+
+      }
+
+    });
+
   }
+
+
 
   function recalculateAccountsAndLedger() {
+
     const isMaster = loggedInUser && loggedInUser.role === 'master';
+
     const balances = {};
 
+
+
     Object.keys(farmersCache).forEach(uid => {
+
       const f = farmersCache[uid];
-      balances[f.phone] = { name: f.name, phone: f.phone, plot: f.plot, totalBilled: 0, totalPaid: 0, totalDiscount: 0, netDue: 0, sessions: [], totalMinutesWorked: 0 };
+
+      balances[f.phone] = { 
+
+        name: f.name, 
+
+        phone: f.phone, 
+
+        plot: f.plot, 
+
+        totalBilled: 0, 
+
+        totalPaid: 0, 
+
+        totalDiscount: 0, 
+
+        netDue: 0, 
+
+        unbilledMins: 0,
+
+        lastPakkaReadingTimestamp: 0,
+
+        lastPakkaDateStr: 'शुरुआत',
+
+        sessions: [],
+
+        invoices: [],
+
+        totalMinutesWorked: 0
+
+      };
+
     });
+
+
+
+    sessionsCache.sort((a,b) => (a.startTimestamp || a.timestamp || 0) - (b.startTimestamp || b.timestamp || 0));
 
     sessionsCache.forEach(s => {
+
       const p = sanitizeMobile(s.userPhone);
+
       if (!balances[p]) {
-        balances[p] = { name: s.userName, phone: p, plot: s.plot, totalBilled: 0, totalPaid: 0, totalDiscount: 0, netDue: 0, sessions: [], totalMinutesWorked: 0 };
+
+        balances[p] = { name: s.userName, phone: p, plot: s.plot, totalBilled: 0, totalPaid: 0, totalDiscount: 0, netDue: 0, unbilledMins: 0, lastPakkaReadingTimestamp: 0, lastPakkaDateStr: 'शुरुआत', sessions: [], invoices: [], totalMinutesWorked: 0 };
+
       }
 
-      const totalMins = s.durationMins || Math.round((s.durationHours || 0) * 60);
-      const fare = Math.round(s.fare || (totalMins * unitTariffPerMin));
+      const m = s.durationMins || Math.round((s.durationHours || 0) * 60);
 
-      balances[p].totalBilled += fare;
-      balances[p].netDue += fare;
-      balances[p].totalMinutesWorked += totalMins;
+      balances[p].totalMinutesWorked += m;
+
       balances[p].sessions.push(s);
+
     });
 
-    paymentsCache.forEach(pm => {
-      const p = sanitizeMobile(pm.userPhone);
+
+
+    invoicesCache.forEach(inv => {
+
+      const p = sanitizeMobile(inv.userPhone);
+
       if (balances[p]) {
-        const cash = Math.round(parseFloat(pm.amountPaid || 0));
-        const disc = Math.round(parseFloat(pm.discount || 0));
-        balances[p].totalPaid += cash;
-        balances[p].totalDiscount += disc;
-        balances[p].netDue -= (cash + disc);
+
+        balances[p].invoices.push(inv);
+
+        if (inv.isPakkaBill) {
+
+          balances[p].totalPaid += Math.round(parseFloat(inv.amountPaid || 0));
+
+          balances[p].totalDiscount += Math.round(parseFloat(inv.discount || 0));
+
+          if (inv.toTimestamp > balances[p].lastPakkaReadingTimestamp) {
+
+            balances[p].lastPakkaReadingTimestamp = inv.toTimestamp;
+
+            balances[p].lastPakkaDateStr = inv.toDateStr;
+
+          }
+
+        }
+
       }
+
     });
+
+
+
+    Object.values(balances).forEach(b => {
+
+      let unbilledM = 0;
+
+      b.sessions.forEach(s => {
+
+        const sTime = s.endTimestamp || s.timestamp || 0;
+
+        const m = s.durationMins || Math.round((s.durationHours || 0) * 60);
+
+        if (sTime > b.lastPakkaReadingTimestamp) {
+
+          unbilledM += m;
+
+        }
+
+      });
+
+
+
+      b.unbilledMins = unbilledM;
+
+      b.totalBilled = Math.round(b.totalMinutesWorked * unitTariffPerMin);
+
+      b.netDue = b.totalBilled - b.totalPaid - b.totalDiscount;
+
+    });
+
+
 
     let sumCollected = 0, sumDisc = 0, sumDue = 0;
+
     Object.values(balances).forEach(b => {
+
       sumCollected += b.totalPaid;
+
       sumDisc += b.totalDiscount;
+
       sumDue += b.netDue;
+
     });
+
+
 
     document.getElementById('tot_collected').innerText = `₹${sumCollected}`;
+
     document.getElementById('tot_discount').innerText = `₹${sumDisc}`;
+
     document.getElementById('tot_outstanding').innerText = `₹${sumDue}`;
 
+
+
     if (activeTurnObj && balances[sanitizeMobile(activeTurnObj.farmerPhone)]) {
+
       const curFarmer = balances[sanitizeMobile(activeTurnObj.farmerPhone)];
+
       document.getElementById('label_prev_due').innerText = `₹${curFarmer.netDue}`;
+
     } else {
+
       document.getElementById('label_prev_due').innerText = `₹0`;
+
     }
+
+
 
     setupAIFuseIndex(balances);
-    renderPassbookUI(balances);
+
+    renderMasterRosterSingleRow(balances);
+
+    renderInvoiceHistorySlips();
+
   }
 
-  function setupAIFuseIndex(balances) {
-    const list = Object.values(balances);
-    fuseInstance = new Fuse(list, { keys: ['name', 'phone', 'plot'], threshold: 0.35, ignoreLocation: true });
-  }
 
-  function handleAISearch() {
-    activeSearchQuery = document.getElementById('ledgerSearchInput').value.trim();
-    recalculateAccountsAndLedger();
-  }
 
-  function applySortPill(type, el) {
-    activeSortPill = type;
-    document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-    recalculateAccountsAndLedger();
-  }
+  function renderRecentPumpStream() {
 
-  function renderPassbookUI(balances) {
-    const isMaster = loggedInUser && loggedInUser.role === 'master';
-    const container = document.getElementById('passbookContainer');
-    if (!container) return;
+    const container = document.getElementById('recentPumpStreamContainer');
+
     container.innerHTML = '';
 
-    let list = Object.values(balances);
-    if (activeSearchQuery && fuseInstance) {
-      list = fuseInstance.search(activeSearchQuery).map(r => r.item);
+
+
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
+
+    let stream = [...sessionsCache];
+
+
+
+    if (!isMaster && loggedInUser) {
+
+      stream = stream.filter(s => sanitizeMobile(s.userPhone) === sanitizeMobile(loggedInUser.phone));
+
     }
 
-    if (activeSortPill === 'DUE_DESC') list.sort((a, b) => b.netDue - a.netDue);
-    if (activeSortPill === 'UNPAID') list = list.filter(b => b.netDue > 0);
-    if (activeSortPill === 'PAID') list = list.filter(b => b.netDue <= 0);
 
-    list.forEach(b => {
-      if (!isMaster && sanitizeMobile(b.phone) !== sanitizeMobile(loggedInUser.phone)) return;
 
-      const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
-      const dueText = b.netDue > 0 ? `बाकी: ₹${b.netDue}` : `चुकता (Adv: ₹${Math.abs(b.netDue)})`;
-      const totalHoursPart = Math.floor(b.totalMinutesWorked / 60);
-      const totalMinsPart = b.totalMinutesWorked % 60;
-      const totalUsageFormatted = `${totalHoursPart} घंटे ${totalMinsPart} मिनट`;
+    stream.reverse();
+
+    const recentTen = stream.slice(0, 8);
+
+
+
+    if (recentTen.length === 0) {
+
+      container.innerHTML = `<div style="text-align:center; padding:10px; color:var(--text-dim); font-size:15px;">हाल ही में कोई पंप नहीं चला है।</div>`;
+
+      return;
+
+    }
+
+
+
+    recentTen.forEach(s => {
+
+      const durMins = s.durationMins || Math.round((s.durationHours || 0) * 60);
+
+      const dH = Math.floor(durMins / 60);
+
+      const dM = durMins % 60;
+
+      const timeRange = (s.startIso && s.endIso) ? `${s.startIso} - ${s.endIso}` : s.date;
+
+
 
       container.innerHTML += `
-        <div class="passbook-slip">
-          <div class="slip-header">
-            <div>
-              <strong style="font-size:16px; color:#fff;">${b.name}</strong>
-              <div style="font-size:12px; color:var(--text-dim);">${b.plot || 'खेत'} | +91-${b.phone}</div>
-              <div style="font-size:12px; color:var(--primary); font-weight:bold; margin-top:2px;">
-                कुल सिंचाई: ${totalUsageFormatted}
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <strong style="font-size:15px; color:${dueColor}; font-family:monospace;">${dueText}</strong>
-            </div>
+
+        <div class="recent-stream-item">
+
+          <div class="stream-info">
+
+            <strong style="font-size:17px; color:#fff;">${s.userName} <span style="font-size:13.5px; color:var(--text-dim);">(${s.plot || 'खेत'})</span></strong>
+
+            <span style="font-size:13.5px; color:var(--text-dim); font-weight:700;">${s.date} | ${timeRange}</span>
+
           </div>
 
-          <div class="slip-grid">
-            <div>कुल बिल: <strong>₹${b.totalBilled}</strong></div>
-            <div>जमा: <strong style="color:var(--success);">₹${b.totalPaid}</strong></div>
-            <div>छूट: <strong style="color:var(--warning);">₹${b.totalDiscount}</strong></div>
+          <div class="stream-right">
+
+            <span style="font-size:15px; font-weight:bold; color:var(--primary);">${dH}घं ${dM}मि</span>
+
+            <strong style="font-size:17px; color:var(--success);">₹${Math.round(s.fare || (durMins * unitTariffPerMin))}</strong>
+
           </div>
+
         </div>
+
       `;
+
     });
+
   }
+
+
+
+  function setupAIFuseIndex(balances) {
+
+    const list = Object.values(balances);
+
+    fuseInstance = new Fuse(list, {
+
+      keys: ['name', 'phone', 'plot'],
+
+      threshold: 0.35,
+
+      ignoreLocation: true
+
+    });
+
+  }
+
+
+
+  function handleAISearch() {
+
+    activeSearchQuery = document.getElementById('ledgerSearchInput').value.trim();
+
+    recalculateAccountsAndLedger();
+
+  }
+
+
+
+  function applySortPill(type, el) {
+
+    activeSortPill = type;
+
+    document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
+
+    el.classList.add('active');
+
+    recalculateAccountsAndLedger();
+
+  }
+
+
+
+  function renderMasterRosterSingleRow(balances) {
+
+    const container = document.getElementById('masterRosterContainer');
+
+    container.innerHTML = '';
+
+
+
+    const list = Object.values(balances);
+
+    if (list.length === 0) {
+
+      container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-dim); font-size:15px;">कोई किसान दर्ज नहीं है।</div>`;
+
+      return;
+
+    }
+
+
+
+    list.forEach(b => {
+
+      const hoursPart = Math.floor(b.totalMinutesWorked / 60);
+
+      const minsPart = b.totalMinutesWorked % 60;
+
+      const usageFormatted = `${hoursPart}घं ${minsPart}मि`;
+
+      const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
+
+      const dueText = b.netDue > 0 ? `₹${b.netDue}` : `₹0`;
+
+
+
+      container.innerHTML += `
+
+        <div class="roster-row-strip">
+
+          <div class="strip-user-info">
+
+            <span class="strip-name">${b.name}</span>
+
+            <span class="strip-sub">${b.plot || 'खेत'} | समय: <b style="color:var(--primary); font-size:15px;">${usageFormatted}</b></span>
+
+          </div>
+
+
+
+          <div class="strip-accounting-nums">
+
+            <span class="strip-paid-discount">जमा: ₹${b.totalPaid}</span>
+
+            <span class="strip-due-num" style="color:${dueColor}; font-size:18px;">बाकी: ${dueText}</span>
+
+          </div>
+
+
+
+          <button class="strip-action-btn" onclick="openInvoiceModal('${b.phone}', '${b.name}', ${b.unbilledMins}, ${Math.round(b.unbilledMins * unitTariffPerMin)}, ${b.lastPakkaReadingTimestamp}, '${b.lastPakkaDateStr}')">
+
+            बिलिंग
+
+          </button>
+
+        </div>
+
+      `;
+
+    });
+
+  }
+
+
+
+  function openInvoiceModal(phone, name, unbilledMins, unbilledFare, lastPakkaTimestamp, lastPakkaDateStr) {
+
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    document.getElementById('input_pakka_cutoff_date').value = todayStr;
+
+
+
+    const userInvoices = invoicesCache.filter(inv => sanitizeMobile(inv.userPhone) === sanitizeMobile(phone));
+
+    const matchingReprint = userInvoices.filter(inv => inv.fromDateStr === lastPakkaDateStr);
+
+    const iterCount = matchingReprint.length + 1;
+
+
+
+    targetInvoicePlan = {
+
+      phone, name, unbilledMins, unbilledFare,
+
+      lastPakkaTimestamp, lastPakkaDateStr,
+
+      iterCount
+
+    };
+
+
+
+    document.getElementById('invModalFarmerDesc').innerText = `किसान: ${name} (+91-${phone})`;
+
+    document.getElementById('invModalLastPakkaDate').innerText = `${lastPakkaDateStr} ➔ आज तक`;
+
+    
+
+    const dH = Math.floor(unbilledMins / 60);
+
+    const dM = unbilledMins % 60;
+
+    document.getElementById('invModalDurationTxt').innerText = `${dH} घंटे ${dM} मिनट (${unbilledMins} मिनट)`;
+
+    document.getElementById('invModalCalculatedFare').innerText = `₹${unbilledFare}`;
+
+
+
+    const badge = document.getElementById('invModalIterationBadge');
+
+    badge.innerText = iterCount > 1 ? `पुनः जांच #${iterCount}` : `इटरेशन #${iterCount}`;
+
+    badge.className = iterCount > 1 ? "bill-tag tag-reprint" : "bill-tag tag-kachha";
+
+
+
+    document.getElementById('input_inv_paid').value = '0';
+
+    document.getElementById('input_inv_discount').value = '0';
+
+    document.getElementById('invModalRemainingDueTxt').innerText = `₹${unbilledFare}`;
+
+
+
+    document.getElementById('invoiceModal').style.display = 'flex';
+
+  }
+
+
+
+  function updateInvoicePreview() {
+
+    if (!targetInvoicePlan) return;
+
+    const base = targetInvoicePlan.unbilledFare || 0;
+
+    const paid = parseFloat(document.getElementById('input_inv_paid').value) || 0;
+
+    const disc = parseFloat(document.getElementById('input_inv_discount').value) || 0;
+
+    const due = Math.round(base - paid - disc);
+
+
+
+    document.getElementById('invModalRemainingDueTxt').innerText = `₹${due}`;
+
+    document.getElementById('invModalRemainingDueTxt').style.color = due > 0 ? 'var(--danger)' : 'var(--success)';
+
+  }
+
+
+
+  function closeInvoiceModal() {
+
+    document.getElementById('invoiceModal').style.display = 'none';
+
+    targetInvoicePlan = null;
+
+  }
+
+
+
+  async function generateCheckBillOnly() {
+
+    if (!targetInvoicePlan) return;
+
+
+
+    const invoicePayload = {
+
+      invoiceNo: "CHK-" + Math.floor(10000 + Math.random() * 90000),
+
+      userPhone: targetInvoicePlan.phone,
+
+      userName: targetInvoicePlan.name,
+
+      fromDateStr: targetInvoicePlan.lastPakkaDateStr,
+
+      toDateStr: new Date().toLocaleDateString('en-IN'),
+
+      durationMins: targetInvoicePlan.unbilledMins,
+
+      fare: targetInvoicePlan.unbilledFare,
+
+      amountPaid: 0,
+
+      discount: 0,
+
+      netDue: targetInvoicePlan.unbilledFare,
+
+      iteration: targetInvoicePlan.iterCount,
+
+      isPakkaBill: false,
+
+      timestamp: Date.now()
+
+    };
+
+
+
+    await rtdb.ref('/tubewell/invoices').push(invoicePayload);
+
+    alert(`⚡ जांच पर्ची जनरेट हुई (इटरेशन #${targetInvoicePlan.iterCount})!\nयह केवल हिसाब जांचने के लिए है।`);
+
+    closeInvoiceModal();
+
+  }
+
+
+
+  async function commitPakkaConsolidationInvoice() {
+
+    if (!targetInvoicePlan) return;
+
+
+
+    const paid = Math.round(parseFloat(document.getElementById('input_inv_paid').value) || 0);
+
+    const disc = Math.round(parseFloat(document.getElementById('input_inv_discount').value) || 0);
+
+    const cutoffDateInput = document.getElementById('input_pakka_cutoff_date').value;
+
+    const cutoffDate = cutoffDateInput ? new Date(cutoffDateInput) : new Date();
+
+    cutoffDate.setHours(23, 59, 59, 999);
+
+    const cutoffTimestamp = cutoffDate.getTime();
+
+    const cutoffDateStr = cutoffDate.toLocaleDateString('en-IN');
+
+
+
+    const netDue = targetInvoicePlan.unbilledFare - paid - disc;
+
+
+
+    const invoicePayload = {
+
+      invoiceNo: "PAKKA-" + Math.floor(10000 + Math.random() * 90000),
+
+      userPhone: targetInvoicePlan.phone,
+
+      userName: targetInvoicePlan.name,
+
+      fromTimestamp: targetInvoicePlan.lastPakkaTimestamp,
+
+      toTimestamp: cutoffTimestamp,
+
+      fromDateStr: targetInvoicePlan.lastPakkaDateStr,
+
+      toDateStr: cutoffDateStr,
+
+      durationMins: targetInvoicePlan.unbilledMins,
+
+      fare: targetInvoicePlan.unbilledFare,
+
+      amountPaid: paid,
+
+      discount: disc,
+
+      netDue: netDue,
+
+      iteration: targetInvoicePlan.iterCount,
+
+      isPakkaBill: true,
+
+      timestamp: Date.now()
+
+    };
+
+
+
+    await rtdb.ref('/tubewell/invoices').push(invoicePayload);
+
+    alert(`⚡ पक्का बिल दर्ज हुआ!\nकट-ऑफ: ${cutoffDateStr}\nजमा: ₹${paid} | छूट: ₹${disc}\nबकाया: ₹${netDue}`);
+
+    closeInvoiceModal();
+
+  }
+
+
+
+  function renderInvoiceHistorySlips() {
+
+    const container = document.getElementById('invoiceSlipContainer');
+
+    container.innerHTML = '';
+
+
+
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
+
+    let list = [...invoicesCache];
+
+
+
+    if (!isMaster && loggedInUser) {
+
+      list = list.filter(inv => sanitizeMobile(inv.userPhone) === sanitizeMobile(loggedInUser.phone));
+
+    }
+
+
+
+    list.reverse();
+
+    if (list.length === 0) {
+
+      container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-dim); font-size:15px;">कोई पुराना बिल नहीं मिला।</div>`;
+
+      return;
+
+    }
+
+
+
+    list.forEach(inv => {
+
+      const dH = Math.floor(inv.durationMins / 60);
+
+      const dM = inv.durationMins % 60;
+
+      const durationFormatted = `${dH}घं ${dM}मि (${inv.durationMins}m)`;
+
+      const isPakka = inv.isPakkaBill;
+
+      const tagClass = isPakka ? "bill-tag tag-pakka" : (inv.iteration > 1 ? "bill-tag tag-reprint" : "bill-tag tag-kachha");
+
+      const tagText = isPakka ? `पक्का #${inv.iteration}` : `जांच #${inv.iteration}`;
+
+
+
+      container.innerHTML += `
+
+        <div class="roster-row-strip">
+
+          <div class="strip-user-info">
+
+            <span class="strip-name">${inv.userName} <span class="${tagClass}">${tagText}</span></span>
+
+            <span class="strip-sub">${inv.fromDateStr} ➔ ${inv.toDateStr} | समय: <b>${durationFormatted}</b></span>
+
+          </div>
+
+
+
+          <div class="strip-accounting-nums">
+
+            <span class="strip-paid-discount">बिल: ₹${inv.fare} (जमा: ₹${inv.amountPaid || 0})</span>
+
+            <span class="strip-due-num" style="color:${inv.netDue > 0 ? 'var(--danger)' : 'var(--success)'}; font-size:18px;">बाकी: ₹${inv.netDue}</span>
+
+          </div>
+
+
+
+          <button class="strip-action-btn" style="background:#0284c7;" onclick="sendInvoiceWhatsApp('${inv.userPhone}', '${inv.userName}', '${inv.fromDateStr}', '${inv.toDateStr}', '${durationFormatted}', ${inv.fare}, ${inv.amountPaid||0}, ${inv.discount||0}, ${inv.netDue}, ${inv.iteration}, ${isPakka})">
+
+            पर्ची
+
+          </button>
+
+        </div>
+
+      `;
+
+    });
+
+  }
+
+
+
+  // 180px CIRCULAR BUTTON STATE CONTROLLER (PROMINENT DEVANAGARI FONT)
 
   function refreshMotorUI() {
+
     const isMaster = loggedInUser && loggedInUser.role === 'master';
+
     const isMyTurn = activeTurnObj && loggedInUser && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
+
     const isAuthorized = isMaster ? true : isMyTurn;
 
-    const orb = document.getElementById('visualOrb');
-    const title = document.getElementById('motorTitleState');
-    const sub = document.getElementById('motorSubState');
+
+
     const btn = document.getElementById('mainMotorButton');
 
+    const icon = document.getElementById('mainMotorIcon');
+
+    const mainText = document.getElementById('mainMotorText');
+
+    const subText = document.getElementById('mainMotorSubText');
+
+    const title = document.getElementById('motorTitleState');
+
+    const sub = document.getElementById('motorSubState');
+
+
+
     if (isMotorPhysicallyOn) {
-      orb.className = "reactor-core running";
-      title.innerText = "मोटर चालू है";
+
+      title.innerText = "मोटर चालू है (पानी चल रहा है)";
+
       title.style.color = "var(--success)";
+
       sub.innerText = "खेत में पानी जा रहा है...";
+
     } else {
-      orb.className = "reactor-core";
+
       title.innerText = "मोटर बंद है";
+
       title.style.color = "var(--text)";
+
       sub.innerText = "मोटर चालू करने के लिए तैयार";
+
     }
+
+
 
     if (!isAuthorized) {
-      btn.className = "giant-actuator-btn btn-locked";
-      btn.innerHTML = `<span class="icon">lock</span> अभी आपका नंबर नहीं है`;
+
+      btn.className = "giant-circular-btn btn-locked";
+
+      icon.innerText = "lock";
+
+      mainText.innerText = "बंद है";
+
+      subText.innerText = "LOCKED";
+
     } else {
+
       if (isMotorPhysicallyOn) {
-        btn.className = "giant-actuator-btn btn-stop";
-        btn.innerHTML = `<span class="icon">power_settings_new</span> मोटर बंद करो`;
+
+        btn.className = "giant-circular-btn btn-stop";
+
+        icon.innerText = "power_settings_new";
+
+        mainText.innerText = "बंद करें";
+
+        subText.innerText = "STOP";
+
       } else {
-        btn.className = "giant-actuator-btn btn-start";
-        btn.innerHTML = `<span class="icon">play_arrow</span> मोटर चालू करो`;
+
+        btn.className = "giant-circular-btn btn-start";
+
+        icon.innerText = "play_arrow";
+
+        mainText.innerText = "चालू करें";
+
+        subText.innerText = "START";
+
       }
+
     }
+
   }
+
+
 
   function renderTurnCardUI() {
+
     const isMaster = loggedInUser && loggedInUser.role === 'master';
+
     const isMyTurn = activeTurnObj && loggedInUser && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
 
+
+
     if (activeTurnObj) {
+
       document.getElementById('label_active_field').innerText = `${activeTurnObj.farmerName} (${activeTurnObj.plot || 'खेत'})`;
+
       document.getElementById('label_start_time').innerText = activeTurnObj.cycleStartTimeIso || "--:--:--";
+
       document.getElementById('btnFarmerSurrender').style.display = (isMyTurn && !isMaster) ? 'block' : 'none';
+
       document.getElementById('btnOwnerRevoke').style.display = isMaster ? 'block' : 'none';
+
     } else {
+
       document.getElementById('label_active_field').innerText = "मालिक का खेत (Standby)";
+
       document.getElementById('label_start_time').innerText = "--:--:--";
+
       document.getElementById('btnFarmerSurrender').style.display = 'none';
+
       document.getElementById('btnOwnerRevoke').style.display = 'none';
+
     }
+
   }
+
+
 
   async function handleMotorSwitch() {
+
     const isMaster = loggedInUser && loggedInUser.role === 'master';
+
     const isMyTurn = activeTurnObj && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
+
     if (!isMaster && !isMyTurn) { speakSimpleHindi('NOT_YOUR_TURN'); return; }
 
-    triggerVibrate(70);
+
+
+    triggerVibrate(60);
+
+
 
     if (!isMotorPhysicallyOn && isMaster && !activeTurnObj) {
+
       const now = Date.now();
+
       await rtdb.ref('/tubewell/active_turn').set({
+
         farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_ROOT_PHONE, farmerName: 'मालिक का खेत',
+
         plot: 'खेत', isOwnerPersonalRun: true, cycleStartTimestamp: now,
+
         cycleStartTimeIso: new Date(now).toLocaleTimeString('en-IN'),
+
         accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
+
       });
+
     }
+
+
 
     if (!isMotorPhysicallyOn) {
+
       await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: true, lastMotorStartTime: Date.now() });
+
       rtdb.ref('/tubewell/control/trigger_start').set(true);
+
       speakSimpleHindi('MOTOR_ON');
+
     } else {
+
       const elapsed = activeTurnObj.lastMotorStartTime ? Math.round((Date.now() - activeTurnObj.lastMotorStartTime) / 1000) : 0;
+
       const total = (activeTurnObj.accumulatedSecondsBeforeCurrentRun || 0) + elapsed;
+
       await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: false, accumulatedSecondsBeforeCurrentRun: total, lastMotorStartTime: null });
+
       rtdb.ref('/tubewell/control/trigger_stop').set(true);
+
       speakSimpleHindi('MOTOR_OFF');
+
     }
+
   }
+
+
 
   function calculateRunSeconds() {
+
     if (!activeTurnObj) return 0;
+
     let sec = activeTurnObj.accumulatedSecondsBeforeCurrentRun || 0;
+
     if (activeTurnObj.isMotorRunning && activeTurnObj.lastMotorStartTime) {
+
       sec += Math.max(0, Math.round((Date.now() - activeTurnObj.lastMotorStartTime) / 1000));
+
     }
+
     return sec;
+
   }
+
+
 
   function renderLiveMetrics(sec) {
+
     const totalMinutes = Math.floor(sec / 60);
+
     const displayHours = Math.floor(totalMinutes / 60);
+
     const displayRemainingMins = totalMinutes % 60;
+
     const currentFare = Math.round(totalMinutes * unitTariffPerMin);
+
     const dischargeLiters = Math.round((sec / 3600) * 22800);
 
+
+
     document.getElementById('label_live_time_split').innerText = `${displayHours} घंटे ${displayRemainingMins} मिनट`;
+
     document.getElementById('label_live_total_mins').innerText = `${totalMinutes} मिनट`;
+
+    document.getElementById('label_live_liters').innerText = `${dischargeLiters} लीटर (${(dischargeLiters/1000).toFixed(1)} kL)`;
+
     document.getElementById('label_live_fare').innerText = `₹${currentFare}`;
 
+
+
     const prevDue = parseFloat(document.getElementById('label_prev_due').innerText.replace(/[^\d.-]/g, '')) || 0;
+
     document.getElementById('label_total_payable').innerText = `₹${Math.round(prevDue + currentFare)}`;
+
   }
+
+
 
   function startLiveTimer() {
+
     clearInterval(timerTicker);
+
     timerTicker = setInterval(() => renderLiveMetrics(calculateRunSeconds()), 1000);
+
   }
 
-  async function finalizeTurnWithBilling() {
+
+
+  async function finalizeTurnDirectly() {
+
     if (!activeTurnObj) return;
 
+
+
     let sec = activeTurnObj.accumulatedSecondsBeforeCurrentRun || 0;
+
     if (activeTurnObj.isMotorRunning && activeTurnObj.lastMotorStartTime) {
+
       sec += Math.round((Date.now() - activeTurnObj.lastMotorStartTime) / 1000);
+
       await rtdb.ref('/tubewell/control/trigger_stop').set(true);
+
     }
 
+
+
     const totalMinutes = Math.max(1, Math.round(sec / 60));
+
     const displayHours = Math.floor(totalMinutes / 60);
+
     const displayRemainingMins = totalMinutes % 60;
+
     const fare = Math.round(totalMinutes * unitTariffPerMin);
 
     const isOwner = activeTurnObj.isOwnerPersonalRun || activeTurnObj.farmerUid === 'OWNER_DIRECT';
 
+
+
     const record = {
+
       cycleId: (isOwner ? 'OWN-' : 'CYC-') + Math.floor(1000 + Math.random() * 9000),
+
       userUid: activeTurnObj.farmerUid,
+
       userPhone: activeTurnObj.farmerPhone,
+
       userName: activeTurnObj.farmerName,
+
       plot: activeTurnObj.plot || 'खेत',
+
       isOwnerPersonalRun: isOwner,
+
       date: new Date().toLocaleDateString('en-IN'),
+
       startIso: activeTurnObj.cycleStartTimeIso,
+
       endIso: new Date().toLocaleTimeString('en-IN'),
+
+      startTimestamp: activeTurnObj.cycleStartTimestamp,
+
+      endTimestamp: Date.now(),
+
       durationMins: totalMinutes,
+
       fare: fare
+
     };
 
+
+
     await rtdb.ref('/tubewell/sessions').push(record);
+
     await rtdb.ref('/tubewell/active_turn').remove();
 
+
+
     speakSimpleHindi('TURN_FINISH', { hours: displayHours, mins: displayRemainingMins, fare: fare });
-    alert(`⚡ सिंचाई पूरी हुई और खाता में जुड़ गई!\nकिसान: ${activeTurnObj.farmerName}\nसमय: ${displayHours} घंटे ${displayRemainingMins} मिनट (कुल ${totalMinutes} मिनट)\nइस बारी का बिल: ₹${fare}`);
+
+    alert(`सिंचाई समाप्त!\nसमय: ${displayHours} घंटे ${displayRemainingMins} मिनट (कुल ${totalMinutes} मिनट)\nइस बारी का बिल: ₹${fare}`);
+
   }
+
+
 
   function surrenderFarmerTurn() {
-    if (confirm("खेत भर गया? मोटर बंद करके अपनी बारी छोड़ना चाहते हैं?")) finalizeTurnWithBilling();
+
+    if (confirm("खेत भर गया? मोटर बंद करके अपनी बारी छोड़ना चाहते हैं?")) finalizeTurnDirectly();
+
   }
 
-  function populateTargetFarmerDropdown() {
-    const sel = document.getElementById('select_target_farmer');
-    if (!sel) return;
-    sel.innerHTML = '<option value="OWNER_DIRECT">⚡ मालिक का खेत</option>';
+
+
+  function populateTargetFarmerDropdowns() {
+
+    const selQuick = document.getElementById('quick_select_target_farmer');
+
+    const optionsHtml = ['<option value="OWNER_DIRECT">⚡ मालिक का खेत (Standby)</option>'];
+
+    
+
     Object.keys(farmersCache).forEach(k => {
+
       const f = farmersCache[k];
-      sel.innerHTML += `<option value="${f.uid || k}">पानी दें: ${f.name} (${f.plot || 'खेत'})</option>`;
+
+      optionsHtml.push(`<option value="${f.uid || k}">पानी दें: ${f.name} (${f.plot || 'खेत'})</option>`);
+
     });
+
+
+
+    selQuick.innerHTML = optionsHtml.join('');
+
+    syncQuickSelectorValue();
+
   }
+
+
+
+  function syncQuickSelectorValue() {
+
+    const selQuick = document.getElementById('quick_select_target_farmer');
+
+    if (!selQuick) return;
+
+    if (activeTurnObj) {
+
+      selQuick.value = activeTurnObj.isOwnerPersonalRun ? 'OWNER_DIRECT' : activeTurnObj.farmerUid;
+
+    } else {
+
+      selQuick.value = 'OWNER_DIRECT';
+
+    }
+
+  }
+
+
 
   async function executeInstantFieldSwitch(uid) {
-    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले मोटर बंद करें।");
+
+    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले कृपया मोटर बंद करें।");
+
     const now = Date.now();
+
     const timeStr = new Date(now).toLocaleTimeString('en-IN');
 
+
+
     if (uid === 'OWNER_DIRECT') {
+
       await rtdb.ref('/tubewell/active_turn').set({
+
         farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_ROOT_PHONE, farmerName: 'मालिक का खेत',
+
         plot: 'खेत', isOwnerPersonalRun: true, cycleStartTimestamp: now,
+
         cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
+
       });
+
+      speakSimpleHindi('CUSTOM', { customText: "मालिक के खेत का नंबर लगा दिया गया है" });
+
     } else {
+
       const f = farmersCache[uid];
+
       if (!f) return;
+
       await rtdb.ref('/tubewell/active_turn').set({
+
         farmerUid: f.uid || uid, farmerPhone: f.phone, farmerName: f.name,
+
         plot: f.plot || 'खेत', isOwnerPersonalRun: false, cycleStartTimestamp: now,
+
         cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
+
       });
+
+      speakSimpleHindi('CUSTOM', { customText: `${f.name} के खेत का नंबर लगा दिया गया है` });
+
     }
+
   }
 
-  function generateSystemReportPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.setFont("Helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text("Tubewell Smart Grid v1.0 - Base Audit Statement", 14, 20);
-    doc.setFont("Helvetica", "normal");
-    doc.setFontSize(11);
-    doc.text(`Generated On: ${new Date().toLocaleString()}`, 14, 28);
-    doc.text(`Operator: ${loggedInUser ? loggedInUser.name : 'System Master'}`, 14, 34);
-    doc.line(14, 40, 196, 40);
-    doc.save("Tubewell_Base_Audit_Report.pdf");
+
+
+  function sendInvoiceWhatsApp(phone, name, fromDate, toDate, duration, fare, paid, disc, due, iter, isPakka) {
+
+    const billType = isPakka ? "पक्का बिल (Official Settlement)" : `जांच बिल (Check Slip #${iter})`;
+
+    const text = 
+
+`⚡ ट्यूबवेल पानी पर्ची: ${billType}
+
+किसान: ${name} (+91-${phone})
+
+रीडिंग अवधि: ${fromDate} से ${toDate}
+
+कुल सिंचाई समय: ${duration}
+
+--------------------------------
+
+अवधि का कुल बिल: ₹${fare}
+
+जमा किया: ₹${paid}
+
+दी गई छूट/माफी: ₹${disc}
+
+--------------------------------
+
+शेष बकाया (Net Due): ₹${due}
+
+(ट्यूबवेल स्मार्ट ग्रिड v1.0 Base Release)`;
+
+    window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
+
   }
+
+
+
+  function sendStatementWhatsApp(phone, name, billed, paid, disc, due, totalUsage) {
+
+    const text = 
+
+`⚡ ट्यूबवेल पानी पासबुक विवरण
+
+किसान: ${name} (+91-${phone})
+
+कुल पानी इस्तेमाल: ${totalUsage}
+
+--------------------------------
+
+कुल बना बिल: ₹${billed}
+
+कुल जमा किया: ₹${paid}
+
+दी गई छूट/माफी: ₹${disc}
+
+--------------------------------
+
+कुल बाकी बकाया: ₹${due}
+
+(ट्यूबवेल स्मार्ट ग्रिड v1.0 Base Release)`;
+
+    window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
+
+  }
+
 </script>
+
 </body>
+
 </html>
