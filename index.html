@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#020617">
-  <title>ट्यूबवेल स्मार्ट ग्रिड 11.0</title>
+  <title>ट्यूबवेल स्मार्ट ग्रिड v12.0 AI</title>
 
   <!-- Google Material Symbols, Firebase SDKs & Fuse.js -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0" />
@@ -51,14 +51,19 @@
       font-size: 24px; display: inline-block; vertical-align: middle; line-height: 1;
     }
 
-    /* Fixed App Header */
+    /* Top App Header with Version Display */
     .app-header {
       position: sticky; top: 0; z-index: 100;
       background: rgba(11, 19, 41, 0.96); backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border); height: 56px; padding: 0 14px;
+      border-bottom: 1px solid var(--border); height: 58px; padding: 0 14px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .header-brand { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 900; color: var(--primary); }
+    .header-brand { display: flex; align-items: center; gap: 6px; }
+    .header-brand-title { font-size: 16px; font-weight: 900; color: var(--primary); }
+    .header-version-tag {
+      font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 6px;
+      background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3);
+    }
     .btn-circle {
       width: 38px; height: 38px; border-radius: 50%;
       background: var(--card); border: 1px solid var(--border);
@@ -126,7 +131,7 @@
     .btn-stop { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); color: #fff; }
     .btn-locked { background: #1e293b; color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
 
-    /* Quick Selector Box */
+    /* Quick Selector Box Directly Below Button */
     .quick-selector-box {
       width: 100%; background: var(--surface); border: 1.5px solid var(--primary);
       border-radius: 14px; padding: 10px; display: flex; flex-direction: column; gap: 4px;
@@ -156,7 +161,7 @@
     .calc-row { display: flex; justify-content: space-between; align-items: center; }
     .calc-divider { border-top: 1px dashed var(--border); margin: 2px 0; }
 
-    /* Financial Horizon (3 Tabs) */
+    /* Horizon Financials */
     .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .summary-box {
       background: var(--surface); border: 1px solid var(--border);
@@ -165,7 +170,7 @@
     .summary-lbl { font-size: 9.5px; font-weight: 800; color: var(--text-dim); }
     .summary-val { font-size: 16px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
-    /* --- REFACTORED: ULTRA CONCISE SINGLE ROW MASTER ROSTER --- */
+    /* Ultra Concise Single Row Master Roster */
     .roster-single-row-list { display: flex; flex-direction: column; gap: 6px; }
     .roster-row-strip {
       background: var(--surface); border: 1px solid var(--border);
@@ -184,14 +189,23 @@
       display: flex; flex-direction: column; align-items: flex-end; font-size: 11px;
     }
     .strip-paid-discount { color: var(--success); font-weight: 700; }
-    .strip-due-num { font-size: 14.5px; font-weight: 900; font-family: monospace; }
+    .strip-due-num { font-size: 14px; font-weight: 900; font-family: monospace; }
     
     .strip-action-btn {
       height: 32px; padding: 0 10px; border-radius: 8px; border: none;
-      background: var(--success); color: #fff; font-size: 11px; font-weight: 900;
+      background: var(--primary); color: #000; font-size: 11px; font-weight: 900;
       display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
     .strip-action-btn:active { transform: scale(0.92); }
+
+    /* Iteration Badge */
+    .iteration-pill {
+      font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 6px;
+      background: rgba(168, 85, 247, 0.2); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.4);
+    }
+    .iteration-pill.reprint {
+      background: rgba(245, 158, 11, 0.2); color: var(--warning); border-color: rgba(245, 158, 11, 0.4);
+    }
 
     /* AI Search */
     .ai-search-box { position: relative; display: flex; align-items: center; width: 100%; }
@@ -281,48 +295,61 @@
   </div>
 </div>
 
-<!-- Advanced Settlement Modal -->
-<div class="modal-overlay" id="paymentModal" style="display: none;">
+<!-- Invoice Generation & Cycle Settlement Modal with Iteration Handling -->
+<div class="modal-overlay" id="invoiceModal" style="display: none;">
   <div class="modal-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 16px; color: var(--primary);">रुपया वसूली व छूट</strong>
-      <button class="btn-circle" style="width:32px; height:32px;" onclick="closePaymentModal()">✕</button>
+      <strong style="font-size: 16px; color: var(--primary);">बिल जनरेट व भुगतान (Invoice)</strong>
+      <button class="btn-circle" style="width:32px; height:32px;" onclick="closeInvoiceModal()">✕</button>
     </div>
     
-    <div style="background: rgba(11,19,41,0.7); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; font-size: 12.5px; display: flex; flex-direction: column; gap: 2px;">
-      <div id="payModalFarmerDesc" style="font-weight: 800; color: #fff;">--</div>
-      <div style="display:flex; justify-content:space-between; color: var(--text-dim);">
-        <span>अब तक का बकाया:</span>
-        <strong id="modal_prev_balance_txt" style="color: var(--danger); font-size: 14px;">₹0</strong>
+    <div style="background: rgba(11,19,41,0.7); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 4px;">
+      <div id="invModalFarmerDesc" style="font-weight: 800; color: #fff;">--</div>
+      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+        <span>रीडिंग अवधि (Range):</span>
+        <strong id="invModalReadingRange" style="color: var(--primary); font-family: monospace;">-- ➔ --</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+        <span>अवधि का कुल समय:</span>
+        <strong id="invModalDurationTxt" style="color: var(--text);">0 घंटे 0 मिनट</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+        <span>अवधि का बना बिल:</span>
+        <strong id="invModalCalculatedFare" style="color: var(--success); font-size: 14px;">₹0</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+        <span style="color: var(--text-dim);">बिल इटरेशन (Iteration):</span>
+        <span id="invModalIterationBadge" class="iteration-pill">Iteration #1</span>
       </div>
     </div>
 
     <div>
-      <label style="font-size: 11.5px; color: var(--text-dim);">किसान ने कितने रुपये जमा किए (Cash/UPI):</label>
-      <input type="number" id="input_cash_paid" placeholder="₹0" value="0" oninput="updatePaymentPreview()">
+      <label style="font-size: 11.5px; color: var(--text-dim);">जमा की गई रकम (Cash/UPI Received):</label>
+      <input type="number" id="input_inv_paid" placeholder="₹0" value="0" oninput="updateInvoicePreview()">
     </div>
 
     <div>
-      <label style="font-size: 11.5px; color: var(--text-dim);">माफी / छूट दी गई (Discount):</label>
-      <input type="number" id="input_discount_given" placeholder="₹0" value="0" oninput="updatePaymentPreview()">
+      <label style="font-size: 11.5px; color: var(--text-dim);">माफी / छूट (Discount Amount):</label>
+      <input type="number" id="input_inv_discount" placeholder="₹0" value="0" oninput="updateInvoicePreview()">
     </div>
 
     <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); border-radius: 10px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-size: 12px; color: var(--text-dim);">आगे बचा बकाया:</span>
-      <strong id="modal_new_balance_txt" style="color: var(--primary); font-size: 16px; font-family: monospace;">₹0</strong>
+      <span style="font-size: 12px; color: var(--text-dim);">अवधि का शेष बकाया:</span>
+      <strong id="invModalRemainingDueTxt" style="color: var(--primary); font-size: 16px; font-family: monospace;">₹0</strong>
     </div>
 
-    <button class="btn-action btn-s" style="width: 100%; margin-top: 4px;" onclick="submitPaymentEntry()">
-      <span class="icon" style="font-size:20px;">payments</span> खाता अपडेट करें
+    <button class="btn-action btn-s" style="width: 100%; margin-top: 4px;" onclick="commitGeneratedInvoice()">
+      <span class="icon" style="font-size:20px;">receipt</span> पक्का बिल दर्ज करें
     </button>
   </div>
 </div>
 
-<!-- Header -->
+<!-- Header with Branding & Version -->
 <header class="app-header">
   <div class="header-brand">
     <span class="icon">water_ph</span>
-    <span>किसान ग्रिड 11.0</span>
+    <span class="header-brand-title">किसान ग्रिड AI</span>
+    <span class="header-version-tag">v12.0 Pro</span>
   </div>
   <div style="display: flex; align-items: center; gap: 6px;">
     <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
@@ -356,7 +383,7 @@
     </div>
   </section>
 
-  <!-- Motor Controller with Quick-Selector Just Below -->
+  <!-- Motor Controller with Quick-Selector Positioned Just Below Button -->
   <section class="motor-hero">
     <div class="reactor-wrapper">
       <div class="reactor-core" id="visualOrb">
@@ -370,7 +397,7 @@
       <div style="font-size: 12.5px; color: var(--warning); font-weight: 700; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
     </div>
 
-    <!-- Giant Start/Stop Switch -->
+    <!-- Giant Start/Stop Actuator Switch -->
     <button id="mainMotorButton" class="giant-actuator-btn btn-locked" onclick="handleMotorSwitch()">
       <span class="icon">lock</span> बटन बंद है (नंबर नहीं है)
     </button>
@@ -388,7 +415,7 @@
   <div class="app-card open" id="turnCard">
     <div class="app-card-header" onclick="toggleCard('turnCard')">
       <span class="app-card-title">
-        <span class="icon" style="color: var(--primary);">timer</span> चालू बारी का समय व बिल
+        <span class="icon" style="color: var(--primary);">timer</span> चालू बारी का समय व मीटर रीडिंग
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
@@ -399,7 +426,7 @@
           <strong id="label_active_field" style="color: var(--primary);">मालिक का खेत (Standby)</strong>
         </div>
         <div class="calc-row">
-          <span style="color: var(--text-dim);">शुरू समय:</span>
+          <span style="color: var(--text-dim);">शुरू समय (Start Reading):</span>
           <strong id="label_start_time" style="font-family: monospace;">--:--:--</strong>
         </div>
         <div class="calc-divider"></div>
@@ -413,13 +440,13 @@
           <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace;">0 मिनट</strong>
         </div>
         <div class="calc-row">
-          <span style="color: var(--text-dim);">दर (Rate):</span>
+          <span style="color: var(--text-dim);">दर (Tariff Rate):</span>
           <strong style="color: var(--text);">₹2.00 प्रति मिनट</strong>
         </div>
         <div class="calc-divider"></div>
 
         <div class="calc-row">
-          <span style="color: var(--text-dim);">पुराना बकाया:</span>
+          <span style="color: var(--text-dim);">पिछली अनबिल रीडिंग से बकाया:</span>
           <strong id="label_prev_due" style="color: var(--danger);">₹0</strong>
         </div>
         <div class="calc-row">
@@ -427,7 +454,7 @@
           <strong id="label_live_fare" style="color: var(--success); font-size: 17px;">₹0</strong>
         </div>
         <div class="calc-row">
-          <span style="color: var(--text-dim); font-weight: bold;">कुल देय रकम:</span>
+          <span style="color: var(--text-dim); font-weight: bold;">वर्तमान कुल रीडिंग बिल:</span>
           <strong id="label_total_payable" style="color: var(--primary); font-size: 17px;">₹0</strong>
         </div>
       </div>
@@ -437,23 +464,21 @@
       </button>
 
       <button id="btnOwnerRevoke" class="btn-action btn-d owner-only" style="width: 100%; display: none;" onclick="finalizeTurnDirectly()">
-        <span class="icon">cancel</span> पानी बंद करें व बिल लेजर में जोड़ें
+        <span class="icon">cancel</span> पानी बंद करें व रीडिंग सुरक्षित करें
       </button>
     </div>
   </div>
 
-  <!-- CONCISE SINGLE ROW MASTER ROSTER (Owner Only) -->
+  <!-- ULTRA-CONCISE SINGLE ROW MASTER ROSTER -->
   <div class="app-card open owner-only" id="ownerMasterRosterCard">
     <div class="app-card-header" onclick="toggleCard('ownerMasterRosterCard')">
       <span class="app-card-title">
-        <span class="icon" style="color: var(--purple);">table_rows</span> सबका खाता (जमा व बकाया पट्टी)
+        <span class="icon" style="color: var(--purple);">table_rows</span> सबका खाता (रीडिंग, जमा व बिलिंग)
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
     <div class="app-card-content" style="padding: 8px;">
-      <div style="font-size: 11px; color: var(--text-dim); padding: 0 4px 4px 4px;">एक पंक्ति में किसान का कुल समय, जमा व बाकी बकाया:</div>
-      
-      <!-- Single Row Container -->
+      <div style="font-size: 11px; color: var(--text-dim); padding: 0 4px 4px 4px;">पिछली रीडिंग से अब तक का बिल निकालें व इटरेशन ट्रैक करें:</div>
       <div class="roster-single-row-list" id="masterRosterContainer">
         <div style="text-align:center; padding:12px; color:var(--text-dim);">डेटा लोड हो रहा है...</div>
       </div>
@@ -476,11 +501,11 @@
     </div>
   </section>
 
-  <!-- AI Search & Detailed Passbook Slips -->
+  <!-- AI Search & Invoice History Slips -->
   <div class="app-card open" id="ledgerCard">
     <div class="app-card-header" onclick="toggleCard('ledgerCard')">
       <span class="app-card-title">
-        <span class="icon" style="color: var(--success);">receipt_long</span> किसान व्यक्तिगत पर्ची व पासबुक
+        <span class="icon" style="color: var(--success);">receipt_long</span> जनरेट बिल इतिहास (Invoices & Iterations)
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
@@ -499,13 +524,13 @@
         <div class="pill" onclick="applySortPill('PAID', this)">चुकाया गया</div>
       </div>
 
-      <div class="roster-single-row-list" id="passbookContainer"></div>
+      <div class="roster-single-row-list" id="invoiceSlipContainer"></div>
     </div>
   </div>
 
 </main>
 
-<!-- Bottom App Bar -->
+<!-- Bottom Navigation Bar -->
 <nav class="bottom-app-bar">
   <button class="app-tab active" onclick="navigateTab('dashboard')">
     <span class="icon">power_settings_new</span>
@@ -517,7 +542,7 @@
   </button>
   <button class="app-tab" onclick="navigateTab('ledger')">
     <span class="icon">receipt_long</span>
-    <span>पासबुक</span>
+    <span>पर्चियां</span>
   </button>
   <button class="app-tab" onclick="navigateTab('analytics')">
     <span class="icon">monitoring</span>
@@ -541,7 +566,7 @@
   const PRIMARY_ROOT_PHONE = "8354816628";
 
   let loggedInUser = null, candidateUser = null;
-  let activeTurnObj = null, farmersCache = {}, sessionsCache = [], paymentsCache = [];
+  let activeTurnObj = null, farmersCache = {}, sessionsCache = [], invoicesCache = [];
   let unitTariffPerMin = 2.00, isMotorPhysicallyOn = false;
   let timerTicker = null;
 
@@ -549,7 +574,7 @@
   let activeSearchQuery = '';
   let activeSortPill = 'NEWEST';
   let isListeningVoice = false;
-  let selectedFarmerForPayment = null;
+  let targetInvoicePlan = null;
 
   let noiseFilterStreak = 0;
   const FAULT_HYSTERESIS_COUNT = 2;
@@ -758,13 +783,14 @@
       recalculateAccountsAndLedger();
     });
 
-    rtdb.ref('/tubewell/payments').on('value', snap => {
-      const p = snap.val() || {};
-      paymentsCache = Object.keys(p).map(k => ({ paymentId: k, ...p[k] }));
+    rtdb.ref('/tubewell/invoices').on('value', snap => {
+      const inv = snap.val() || {};
+      invoicesCache = Object.keys(inv).map(k => ({ invoiceId: k, ...inv[k] }));
       recalculateAccountsAndLedger();
     });
   }
 
+  // Pure Minute-Based Accounting & Invoice Cycle Engine
   function recalculateAccountsAndLedger() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const balances = {};
@@ -779,37 +805,58 @@
         totalPaid: 0, 
         totalDiscount: 0, 
         netDue: 0, 
+        unbilledMins: 0,
+        lastReadingTimestamp: 0,
         sessions: [],
-        totalMinutesWorked: 0
+        invoices: []
       };
     });
 
+    // 1. Sort sessions chronologically
+    sessionsCache.sort((a,b) => (a.startTimestamp || 0) - (b.startTimestamp || 0));
+
+    // 2. Map Sessions to Farmers
     sessionsCache.forEach(s => {
       const p = sanitizeMobile(s.userPhone);
       if (!balances[p]) {
-        balances[p] = { name: s.userName, phone: p, plot: s.plot, totalBilled: 0, totalPaid: 0, totalDiscount: 0, netDue: 0, sessions: [], totalMinutesWorked: 0 };
+        balances[p] = { name: s.userName, phone: p, plot: s.plot, totalBilled: 0, totalPaid: 0, totalDiscount: 0, netDue: 0, unbilledMins: 0, lastReadingTimestamp: 0, sessions: [], invoices: [] };
       }
-
-      const totalMins = s.durationMins || Math.round((s.durationHours || 0) * 60);
-      const fare = Math.round(s.fare || (totalMins * unitTariffPerMin));
-
-      balances[p].totalBilled += fare;
-      balances[p].netDue += fare;
-      balances[p].totalMinutesWorked += totalMins;
       balances[p].sessions.push(s);
     });
 
-    paymentsCache.forEach(pm => {
-      const p = sanitizeMobile(pm.userPhone);
+    // 3. Map Invoices and track settlements
+    invoicesCache.forEach(inv => {
+      const p = sanitizeMobile(inv.userPhone);
       if (balances[p]) {
-        const cash = Math.round(parseFloat(pm.amountPaid || 0));
-        const disc = Math.round(parseFloat(pm.discount || 0));
-        balances[p].totalPaid += cash;
-        balances[p].totalDiscount += disc;
-        balances[p].netDue -= (cash + disc);
+        balances[p].totalPaid += Math.round(parseFloat(inv.amountPaid || 0));
+        balances[p].totalDiscount += Math.round(parseFloat(inv.discount || 0));
+        balances[p].invoices.push(inv);
+        if (inv.toTimestamp > balances[p].lastReadingTimestamp) {
+          balances[p].lastReadingTimestamp = inv.toTimestamp;
+        }
       }
     });
 
+    // 4. Calculate unbilled runs from last generated reading to present reading
+    Object.values(balances).forEach(b => {
+      let totalAllMins = 0;
+      let unbilledM = 0;
+
+      b.sessions.forEach(s => {
+        const m = s.durationMins || Math.round((s.durationHours || 0) * 60);
+        totalAllMins += m;
+        // Unbilled check: timestamp greater than last closed invoice timestamp
+        if ((s.endTimestamp || s.timestamp || 0) > b.lastReadingTimestamp) {
+          unbilledM += m;
+        }
+      });
+
+      b.unbilledMins = unbilledM;
+      b.totalBilled = Math.round(totalAllMins * unitTariffPerMin);
+      b.netDue = b.totalBilled - b.totalPaid - b.totalDiscount;
+    });
+
+    // Horizon totals
     let sumCollected = 0, sumDisc = 0, sumDue = 0;
     Object.values(balances).forEach(b => {
       sumCollected += b.totalPaid;
@@ -830,7 +877,7 @@
 
     setupAIFuseIndex(balances);
     renderMasterRosterSingleRow(balances);
-    renderPassbookUI(balances);
+    renderInvoiceHistorySlips();
   }
 
   function setupAIFuseIndex(balances) {
@@ -854,7 +901,7 @@
     recalculateAccountsAndLedger();
   }
 
-  /* --- RENDER CONCISE SINGLE ROW MASTER ROSTER --- */
+  // Master Roster Single Row Strip
   function renderMasterRosterSingleRow(balances) {
     const container = document.getElementById('masterRosterContainer');
     container.innerHTML = '';
@@ -866,9 +913,11 @@
     }
 
     list.forEach(b => {
-      const hoursPart = Math.floor(b.totalMinutesWorked / 60);
-      const minsPart = b.totalMinutesWorked % 60;
-      const usageFormatted = `${hoursPart}घं ${minsPart}मि`;
+      const unbilledHours = Math.floor(b.unbilledMins / 60);
+      const unbilledRemainingMins = b.unbilledMins % 60;
+      const unbilledFormatted = `${unbilledHours}घं ${unbilledRemainingMins}मि`;
+      const unbilledFare = Math.round(b.unbilledMins * unitTariffPerMin);
+
       const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
       const dueText = b.netDue > 0 ? `₹${b.netDue}` : `₹0`;
 
@@ -876,7 +925,7 @@
         <div class="roster-row-strip">
           <div class="strip-user-info">
             <span class="strip-name">${b.name}</span>
-            <span class="strip-sub">${b.plot || 'खेत'} | समय: <b style="color:var(--primary);">${usageFormatted}</b></span>
+            <span class="strip-sub">${b.plot || 'खेत'} | नई रीडिंग: <b style="color:var(--primary);">${unbilledFormatted} (₹${unbilledFare})</b></span>
           </div>
 
           <div class="strip-accounting-nums">
@@ -884,110 +933,149 @@
             <span class="strip-due-num" style="color:${dueColor};">बाकी: ${dueText}</span>
           </div>
 
-          <button class="strip-action-btn" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
-            जमा / छूट
+          <button class="strip-action-btn" onclick="prepareInvoiceForPeriod('${b.phone}', '${b.name}', ${b.unbilledMins}, ${unbilledFare}, ${b.lastReadingTimestamp})">
+            बिल जनरेट
           </button>
         </div>
       `;
     });
   }
 
-  function renderPassbookUI(balances) {
-    const isMaster = loggedInUser && loggedInUser.role === 'master';
-    const container = document.getElementById('passbookContainer');
+  // Invoice Window Preparation with Iteration Count
+  function prepareInvoiceForPeriod(phone, name, unbilledMins, unbilledFare, fromTimestamp) {
+    const toTimestamp = Date.now();
+    const fromDateStr = fromTimestamp > 0 ? new Date(fromTimestamp).toLocaleDateString('en-IN') : 'शुरुआत';
+    const toDateStr = new Date(toTimestamp).toLocaleDateString('en-IN');
+
+    // Count existing iterations for this time window or user
+    const userInvoices = invoicesCache.filter(inv => sanitizeMobile(inv.userPhone) === sanitizeMobile(phone));
+    
+    // Check if an invoice was already generated covering up to this timestamp
+    const matchingPrev = userInvoices.find(inv => Math.abs(inv.toTimestamp - toTimestamp) < 30000);
+    const iterationNumber = matchingPrev ? (matchingPrev.iteration + 1) : (userInvoices.length + 1);
+
+    targetInvoicePlan = {
+      phone, name, unbilledMins, unbilledFare,
+      fromTimestamp, toTimestamp, fromDateStr, toDateStr,
+      iterationNumber
+    };
+
+    document.getElementById('invModalFarmerDesc').innerText = `किसान: ${name} (+91-${phone})`;
+    document.getElementById('invModalReadingRange').innerText = `${fromDateStr} ➔ ${toDateStr}`;
+    
+    const dH = Math.floor(unbilledMins / 60);
+    const dM = unbilledMins % 60;
+    document.getElementById('invModalDurationTxt').innerText = `${dH} घंटे ${dM} मिनट (कुल ${unbilledMins} मिनट)`;
+    document.getElementById('invModalCalculatedFare').innerText = `₹${unbilledFare}`;
+
+    const badge = document.getElementById('invModalIterationBadge');
+    badge.innerText = `इटरेशन: #${iterationNumber}`;
+    badge.className = iterationNumber > 1 ? "iteration-pill reprint" : "iteration-pill";
+
+    document.getElementById('input_inv_paid').value = '0';
+    document.getElementById('input_inv_discount').value = '0';
+    document.getElementById('invModalRemainingDueTxt').innerText = `₹${unbilledFare}`;
+
+    document.getElementById('invoiceModal').style.display = 'flex';
+  }
+
+  function updateInvoicePreview() {
+    if (!targetInvoicePlan) return;
+    const base = targetInvoicePlan.unbilledFare || 0;
+    const paid = parseFloat(document.getElementById('input_inv_paid').value) || 0;
+    const disc = parseFloat(document.getElementById('input_inv_discount').value) || 0;
+    const due = Math.round(base - paid - disc);
+
+    document.getElementById('invModalRemainingDueTxt').innerText = `₹${due}`;
+    document.getElementById('invModalRemainingDueTxt').style.color = due > 0 ? 'var(--danger)' : 'var(--success)';
+  }
+
+  function closeInvoiceModal() {
+    document.getElementById('invoiceModal').style.display = 'none';
+    targetInvoicePlan = null;
+  }
+
+  async function commitGeneratedInvoice() {
+    if (!targetInvoicePlan) return;
+
+    const paid = Math.round(parseFloat(document.getElementById('input_inv_paid').value) || 0);
+    const disc = Math.round(parseFloat(document.getElementById('input_inv_discount').value) || 0);
+    const netDue = targetInvoicePlan.unbilledFare - paid - disc;
+
+    const invoicePayload = {
+      invoiceNo: "INV-" + Math.floor(10000 + Math.random() * 90000),
+      userPhone: targetInvoicePlan.phone,
+      userName: targetInvoicePlan.name,
+      fromTimestamp: targetInvoicePlan.fromTimestamp,
+      toTimestamp: targetInvoicePlan.toTimestamp,
+      fromDateStr: targetInvoicePlan.fromDateStr,
+      toDateStr: targetInvoicePlan.toDateStr,
+      durationMins: targetInvoicePlan.unbilledMins,
+      fare: targetInvoicePlan.unbilledFare,
+      amountPaid: paid,
+      discount: disc,
+      netDue: netDue,
+      iteration: targetInvoicePlan.iterationNumber,
+      generatedAt: Date.now()
+    };
+
+    await rtdb.ref('/tubewell/invoices').push(invoicePayload);
+    alert(
+      `⚡ बिल सफलतापूर्वक दर्ज हुआ!\n` +
+      `इटरेशन: #${targetInvoicePlan.iterationNumber}\n` +
+      `अवधि: ${targetInvoicePlan.fromDateStr} से ${targetInvoicePlan.toDateStr}\n` +
+      `बिल: ₹${targetInvoicePlan.unbilledFare}\n` +
+      `जमा: ₹${paid} | छूट: ₹${disc}\n` +
+      `शेष बकाया: ₹${netDue}`
+    );
+    closeInvoiceModal();
+  }
+
+  // Render Past Invoices with Exact Iterations & Durations
+  function renderInvoiceHistorySlips() {
+    const container = document.getElementById('invoiceSlipContainer');
     container.innerHTML = '';
 
-    let list = Object.values(balances);
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
+    let list = [...invoicesCache];
 
-    if (activeSearchQuery && fuseInstance) {
-      list = fuseInstance.search(activeSearchQuery).map(r => r.item);
+    if (!isMaster && loggedInUser) {
+      list = list.filter(inv => sanitizeMobile(inv.userPhone) === sanitizeMobile(loggedInUser.phone));
     }
 
-    if (activeSortPill === 'DUE_DESC') list.sort((a, b) => b.netDue - a.netDue);
-    if (activeSortPill === 'UNPAID') list = list.filter(b => b.netDue > 0);
-    if (activeSortPill === 'PAID') list = list.filter(b => b.netDue <= 0);
+    list.reverse();
+    if (list.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-dim); font-size:12px;">कोई पुराना बिल नहीं मिला।</div>`;
+      return;
+    }
 
-    list.forEach(b => {
-      if (!isMaster && sanitizeMobile(b.phone) !== sanitizeMobile(loggedInUser.phone)) return;
-
-      const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
-      const dueText = b.netDue > 0 ? `₹${b.netDue}` : `₹0`;
-      const hoursPart = Math.floor(b.totalMinutesWorked / 60);
-      const minsPart = b.totalMinutesWorked % 60;
-      const usageFormatted = `${hoursPart}घं ${minsPart}मि`;
+    list.forEach(inv => {
+      const dH = Math.floor(inv.durationMins / 60);
+      const dM = inv.durationMins % 60;
+      const iterClass = inv.iteration > 1 ? "iteration-pill reprint" : "iteration-pill";
+      const iterText = inv.iteration > 1 ? `Reprint #${inv.iteration}` : `इटरेशन #${inv.iteration}`;
 
       container.innerHTML += `
         <div class="roster-row-strip">
           <div class="strip-user-info">
-            <span class="strip-name">${b.name}</span>
-            <span class="strip-sub">${b.plot || 'खेत'} | कुल बिल: ₹${b.totalBilled}</span>
+            <span class="strip-name">${inv.userName} <span class="${iterClass}">${iterText}</span></span>
+            <span class="strip-sub">${inv.fromDateStr} ➔ ${inv.toDateStr} | समय: <b>${dH}घं ${dM}मि</b></span>
           </div>
 
           <div class="strip-accounting-nums">
-            <span class="strip-paid-discount">जमा: ₹${b.totalPaid}</span>
-            <span class="strip-due-num" style="color:${dueColor};">बाकी: ${dueText}</span>
+            <span class="strip-paid-discount">बिल: ₹${inv.fare} (जमा: ₹${inv.amountPaid})</span>
+            <span class="strip-due-num" style="color:${inv.netDue > 0 ? 'var(--danger)' : 'var(--success)'};">बाकी: ₹${inv.netDue}</span>
           </div>
 
-          <div style="display:flex; gap:4px;">
-            ${isMaster ? `
-              <button class="strip-action-btn" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
-                जमा
-              </button>
-            ` : ''}
-            <button class="strip-action-btn" style="background:#0284c7;" onclick="sendStatementWhatsApp('${b.phone}', '${b.name}', ${b.totalBilled}, ${b.totalPaid}, ${b.totalDiscount}, ${b.netDue}, '${hoursPart} घंटे ${minsPart} मिनट')">
-              पर्ची
-            </button>
-          </div>
+          <button class="strip-action-btn" style="background:#0284c7;" onclick="sendInvoiceWhatsApp('${inv.userPhone}', '${inv.userName}', '${inv.fromDateStr}', '${inv.toDateStr}', '${dH} घंटे ${dM} मिनट', ${inv.fare}, ${inv.amountPaid}, ${inv.discount}, ${inv.netDue}, ${inv.iteration})">
+            पर्ची
+          </button>
         </div>
       `;
     });
   }
 
-  function openPaymentModal(phone, name, currentDue) {
-    selectedFarmerForPayment = { phone, name, currentDue };
-    document.getElementById('payModalFarmerDesc').innerText = `खाता: ${name} (+91-${phone})`;
-    document.getElementById('modal_prev_balance_txt').innerText = `₹${currentDue}`;
-    document.getElementById('input_cash_paid').value = '';
-    document.getElementById('input_discount_given').value = '';
-    document.getElementById('modal_new_balance_txt').innerText = `₹${currentDue}`;
-    document.getElementById('paymentModal').style.display = 'flex';
-  }
-
-  function updatePaymentPreview() {
-    if (!selectedFarmerForPayment) return;
-    const prev = selectedFarmerForPayment.currentDue || 0;
-    const paid = parseFloat(document.getElementById('input_cash_paid').value) || 0;
-    const disc = parseFloat(document.getElementById('input_discount_given').value) || 0;
-    const newDue = prev - paid - disc;
-    document.getElementById('modal_new_balance_txt').innerText = `₹${newDue}`;
-    document.getElementById('modal_new_balance_txt').style.color = newDue > 0 ? 'var(--danger)' : 'var(--success)';
-  }
-
-  function closePaymentModal() { 
-    document.getElementById('paymentModal').style.display = 'none'; 
-    selectedFarmerForPayment = null; 
-  }
-
-  async function submitPaymentEntry() {
-    if (!selectedFarmerForPayment) return;
-    const paid = Math.round(parseFloat(document.getElementById('input_cash_paid').value) || 0);
-    const disc = Math.round(parseFloat(document.getElementById('input_discount_given').value) || 0);
-    if (paid === 0 && disc === 0) return alert("कृपया जमा रकम या छूट राशि भरें।");
-
-    await rtdb.ref('/tubewell/payments').push({
-      userPhone: selectedFarmerForPayment.phone,
-      userName: selectedFarmerForPayment.name,
-      amountPaid: paid,
-      discount: disc,
-      date: new Date().toLocaleDateString('en-IN'),
-      timestamp: Date.now()
-    });
-
-    const finalDue = selectedFarmerForPayment.currentDue - paid - disc;
-    alert(`खाता अपडेट हुआ!\nजमा: ₹${paid}\nछूट: ₹${disc}\nनया बाकी: ₹${finalDue}`);
-    closePaymentModal();
-  }
-
+  // Motor Control & Telemetry Execution
   function refreshMotorUI() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const isMyTurn = activeTurnObj && loggedInUser && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
@@ -1112,7 +1200,6 @@
     const displayHours = Math.floor(totalMinutes / 60);
     const displayRemainingMins = totalMinutes % 60;
     const fare = Math.round(totalMinutes * unitTariffPerMin);
-
     const isOwner = activeTurnObj.isOwnerPersonalRun || activeTurnObj.farmerUid === 'OWNER_DIRECT';
 
     const record = {
@@ -1125,8 +1212,9 @@
       date: new Date().toLocaleDateString('en-IN'),
       startIso: activeTurnObj.cycleStartTimeIso,
       endIso: new Date().toLocaleTimeString('en-IN'),
+      startTimestamp: activeTurnObj.cycleStartTimestamp,
+      endTimestamp: Date.now(),
       durationMins: totalMinutes,
-      durationFormatted: `${displayHours} घंटे ${displayRemainingMins} मिनट`,
       fare: fare
     };
 
@@ -1134,17 +1222,11 @@
     await rtdb.ref('/tubewell/active_turn').remove();
 
     speakSimpleHindi('TURN_FINISH', { hours: displayHours, mins: displayRemainingMins, fare: fare });
-    
-    alert(
-      `⚡ सिंचाई पूरी हुई और खाता में जुड़ गई!\n` +
-      `किसान: ${activeTurnObj.farmerName}\n` +
-      `समय: ${displayHours} घंटे ${displayRemainingMins} मिनट (कुल ${totalMinutes} मिनट)\n` +
-      `इस बारी का बिल: ₹${fare}`
-    );
+    alert(`सिंचाई पूरी हुई!\nसमय: ${displayHours} घंटे ${displayRemainingMins} मिनट (कुल ${totalMinutes} मिनट)\nइस बारी का बिल: ₹${fare}`);
   }
 
   function surrenderFarmerTurn() {
-    if (confirm("खेत भर गया? मोटर बंद करके अपनी बारी छोड़ना चाहते हैं?")) finalizeTurnDirectly();
+    if (confirm("खेत भर गया? मोटर बंद करके बारी छोड़ना चाहते हैं?")) finalizeTurnDirectly();
   }
 
   function populateTargetFarmerDropdowns() {
@@ -1194,17 +1276,20 @@
     }
   }
 
-  function sendStatementWhatsApp(phone, name, billed, paid, disc, due, totalUsage) {
+  function sendInvoiceWhatsApp(phone, name, fromDate, toDate, duration, fare, paid, disc, due, iter) {
     const text = 
-`⚡ ट्यूबवेल पानी पर्ची व लेजर विवरण
+`⚡ ट्यूबवेल पानी बिल पर्ची (Invoice)
 किसान: ${name} (+91-${phone})
-कुल पानी इस्तेमाल: ${totalUsage}
+इटरेशन: #${iter}
+रीडिंग अवधि: ${fromDate} से ${toDate}
+कुल समय: ${duration}
 --------------------------------
-कुल बना बिल: ₹${billed}
-कुल जमा किया: ₹${paid}
+अवधि का कुल बिल: ₹${fare}
+जमा किया: ₹${paid}
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
-कुल बाकी बकाया: ₹${due}`;
+शेष बकाया (Net Due): ₹${due}
+(ट्यूबवेल स्मार्ट ग्रिड v12.0 Pro)`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 </script>
