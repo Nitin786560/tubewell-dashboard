@@ -2,478 +2,408 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0B0D10">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>ट्यूबवेल स्मार्ट ग्रिड v1.0.1 - Pro Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#020617">
+  <title>ट्यूबवेल स्मार्ट ग्रिड v1.0 - बेस वर्शन</title>
 
-  <!-- Google Fonts: Mukta Devanagari, Inter & Material Symbols Rounded -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mukta:wght@600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0&display=swap" rel="stylesheet">
-  
+  <!-- Google Material Symbols, Firebase SDKs & Fuse.js AI Search -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0" />
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
-  <!-- jsPDF for instant PDF generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
     :root {
-      --bg: #0B0D10;
-      --surface: #14171C;
-      --card: #14171C;
-      --sidebar-bg: #0E1014;
-      --border: #242A35;
-      --border-bright: #F5A623;
-      --primary: #F5A623;
-      --primary-glow: rgba(245, 166, 35, 0.3);
-      --success: #22C55E;
+      --bg: #020617;
+      --surface: #0b1329;
+      --card: #152238;
+      --border: #243552;
+      --border-bright: #3b5278;
+      --primary: #38bdf8;
+      --primary-dim: rgba(56, 189, 248, 0.18);
+      --success: #22c55e;
       --success-glow: rgba(34, 197, 94, 0.45);
-      --danger: #EF4444;
+      --danger: #ef4444;
       --danger-glow: rgba(239, 68, 68, 0.45);
-      --warning: #FFB547;
-      --purple: #A855F7;
-      --text: #FFFFFF;
-      --text-dim: #B0B3B8;
-      --text-muted: #6B6F76;
-      --radius: 16px;
+      --warning: #f59e0b;
+      --purple: #a855f7;
+      --text: #f8fafc;
+      --text-dim: #94a3b8;
+      --radius: 18px;
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0; padding: 0;
-      font-family: 'Inter', 'Mukta', system-ui, -apple-system, sans-serif;
+    * {
+      box-sizing: border-box; margin: 0; padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
-    html, body {
-      width: 100%;
-      max-width: 100%;
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
+    body {
+      background: var(--bg); color: var(--text);
       padding-top: env(safe-area-inset-top);
       padding-bottom: calc(92px + env(safe-area-inset-bottom));
-      font-size: 15px;
-      line-height: 1.4;
+      overflow-x: hidden;
     }
 
     .icon {
-      font-family: 'Material Symbols Rounded', sans-serif;
-      font-weight: normal; font-style: normal;
-      font-size: 20px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      vertical-align: middle;
-      line-height: 1;
-      flex-shrink: 0;
-      color: var(--text-muted);
+      font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal;
+      font-size: 26px; display: inline-block; vertical-align: middle; line-height: 1;
     }
-    .icon.active { color: var(--primary); }
 
-    /* Top Navigation Bar (Mevolut / Fintech Style) */
     .app-header {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(14, 16, 20, 0.95); backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border); height: 72px; padding: 0 24px;
+      background: rgba(11, 19, 41, 0.95); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); height: 64px; padding: 0 16px;
       display: flex; align-items: center; justify-content: space-between;
-      width: 100%;
     }
-    .header-brand { display: flex; align-items: center; gap: 12px; }
-    .brand-logo-box {
-      width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #F5A623, #FFB547);
-      display: flex; align-items: center; justify-content: center; font-weight: 800; color: #0B0D10; font-size: 20px;
-      box-shadow: 0 4px 12px rgba(245, 166, 35, 0.3);
+    .header-brand { display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 900; color: var(--primary); }
+    .btn-circle {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text); cursor: pointer;
     }
-    .header-brand-title { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
-    .header-version-tag {
-      font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px;
-      background: rgba(245, 166, 35, 0.15); color: var(--primary); border: 1px solid rgba(245,166,35,0.3);
-    }
-
-    .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-link { color: var(--text-dim); font-weight: 500; font-size: 14px; text-decoration: none; cursor: pointer; transition: color 0.2s; }
-    .nav-link:hover, .nav-link.active { color: var(--primary); }
-
-    .header-right { display: flex; align-items: center; gap: 14px; }
-    .btn-deposit {
-      background: var(--primary); color: #0B0D10; font-weight: 600; padding: 10px 20px; border-radius: 999px; border: none; cursor: pointer;
-      box-shadow: 0 4px 16px rgba(245, 166, 35, 0.25); transition: transform 0.15s;
-    }
-    .btn-deposit:active { transform: scale(0.96); }
+    .btn-circle:active { transform: scale(0.9); background: var(--border); }
 
     .voice-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
-      background: var(--surface); border: 1px solid var(--border); cursor: pointer; color: var(--text);
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 24px; font-size: 12px; font-weight: 800;
+      background: var(--card); border: 1px solid var(--border); cursor: pointer;
     }
-    .voice-badge.active { background: rgba(245, 166, 35, 0.15); border-color: var(--primary); color: var(--primary); }
+    .voice-badge.active { background: var(--primary-dim); border-color: var(--primary); color: var(--primary); }
+    .voice-badge.disabled { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); }
 
-    /* App Layout */
-    .app-layout { display: flex; width: 100%; min-height: calc(100vh - 72px); }
-
-    /* Left Sidebar */
-    .app-sidebar {
-      width: 240px; background: var(--sidebar-bg); border-right: 1px solid var(--border);
-      padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0;
-    }
-    .sidebar-menu { display: flex; flex-direction: column; gap: 6px; }
-    .sidebar-item {
-      display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px;
-      color: var(--text-dim); text-decoration: none; font-weight: 500; cursor: pointer; transition: all 0.2s;
-    }
-    .sidebar-item:hover { background: rgba(255,255,255,0.03); color: var(--text); }
-    .sidebar-item.active { background: rgba(245, 166, 35, 0.08); color: var(--primary); }
-    .sidebar-item.active .icon { color: var(--primary); }
-
-    /* Main Content Area */
-    .app-main-content {
-      flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 24px;
-      max-width: calc(100vw - 240px); overflow-y: auto;
-    }
-
-    @media (max-width: 1024px) {
-      .app-sidebar { display: none; }
-      .app-main-content { max-width: 100vw; padding: 12px; }
-      .nav-links { display: none; }
-    }
-
-    /* Web3 Luxe Cards */
-    .web3-card {
-      background: var(--card); border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid var(--border);
-      padding: 24px; position: relative; overflow: hidden;
-      display: flex; flex-direction: column; gap: 14px;
-    }
+    .app-body { max-width: 540px; margin: 0 auto; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
 
     /* Telemetry Grid */
-    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
-    .tel-box {
-      background: #0B0D10; border: 1px solid var(--border);
-      border-radius: 12px; padding: 10px 6px; text-align: center;
-    }
-    .tel-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    .tel-val { font-size: 18px; font-weight: 700; font-family: monospace; margin-top: 2px; color: var(--primary); }
+    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .tel-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px 4px; text-align: center; }
+    .tel-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
+    .tel-val { font-size: 16.5px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
-    /* ==========================================================================
-       विशाल सर्कुलर मोटर कंट्रोलर (180px GIANT TACTILE MOTOR SWITCH)
-       ========================================================================== */
+    /* Motor Hero */
     .motor-hero {
-      width: 100%;
-      background: radial-gradient(circle at 50% 15%, rgba(19, 31, 54, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
-      border: 2px solid var(--border-bright); border-radius: 20px;
+      background: radial-gradient(circle at 50% 15%, rgba(21, 34, 56, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
+      border: 1px solid var(--border-bright); border-radius: 26px;
       padding: 24px 16px; text-align: center;
       display: flex; flex-direction: column; align-items: center; gap: 16px;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.65);
     }
-
-    .giant-circular-wrapper {
-      position: relative; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center;
-    }
-    .circular-pulse-ring {
-      position: absolute; inset: -12px; border-radius: 50%;
+    .reactor-wrapper { position: relative; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; }
+    .pulse-wave {
+      position: absolute; inset: 0; border-radius: 50%;
       border: 4px solid var(--success); opacity: 0;
-      animation: rippleEffect 2s infinite cubic-bezier(0.2, 0.8, 0.2, 1); display: none;
+      animation: ripple 2s infinite ease-out; display: none;
     }
-    @keyframes rippleEffect {
-      0% { transform: scale(0.85); opacity: 1; }
-      100% { transform: scale(1.5); opacity: 0; }
+    @keyframes ripple { 0% { transform: scale(0.75); opacity: 0.9; } 100% { transform: scale(1.65); opacity: 0; } }
+    .reactor-core {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: #1e293b; border: 4px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px; z-index: 2; transition: all 0.35s ease;
     }
-    .giant-circular-btn {
-      width: 170px; height: 170px; border-radius: 50%;
-      border: 5px solid #334155; background: #1e293b; color: var(--text-dim);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-      cursor: pointer; z-index: 2; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-    }
-    .giant-circular-btn:active { transform: scale(0.94); }
-    .giant-circular-btn.btn-start {
-      background: radial-gradient(circle at 35% 35%, #22c55e 20%, #15803d 85%, #052e16 100%);
-      border-color: #86efac; color: #ffffff; box-shadow: 0 0 45px var(--success-glow);
-    }
-    .giant-circular-btn.btn-stop {
-      background: radial-gradient(circle at 35% 35%, #ef4444 20%, #b91c1c 85%, #450a0a 100%);
-      border-color: #fca5a5; color: #ffffff; box-shadow: 0 0 45px var(--danger-glow);
-      animation: reactorHum 1s infinite alternate ease-in-out;
-    }
-    @keyframes reactorHum {
-      0% { transform: scale(1); filter: brightness(1); }
-      100% { transform: scale(1.04); filter: brightness(1.2); }
-    }
-    .giant-circular-btn.btn-stop + .circular-pulse-ring { display: block; }
-    .giant-circular-btn.btn-locked { background: #1e293b; border-color: #334155; color: #64748b; cursor: not-allowed; }
+    .reactor-core.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 45px var(--success-glow); }
+    .reactor-core.running + .pulse-wave { display: block; }
+    .reactor-core.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 45px var(--danger-glow); animation: shake 0.5s ease-in-out; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 
-    .circle-label-main { font-size: 26px; font-weight: 900; letter-spacing: 0.5px; line-height: 1.1; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
-    .circle-label-sub { font-size: 13px; font-weight: 900; letter-spacing: 1.5px; opacity: 0.9; }
-
-    /* Quick Selector Box */
-    .quick-selector-box {
-      width: 100%; background: #0B0D10; border: 2px solid var(--primary);
-      border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 6px;
+    .giant-actuator-btn {
+      width: 100%; height: 72px; border-radius: 20px; border: none;
+      font-size: 20px; font-weight: 900; letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
+    .giant-actuator-btn:active { transform: scale(0.96); }
+    .btn-start { background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%); color: #fff; }
+    .btn-stop { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); color: #fff; }
+    .btn-locked { background: #1e293b; color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
 
-    /* Roster Strip & Ledger */
-    .roster-row-strip {
-      background: #0B0D10; border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px;
-      display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px;
+    /* Expandable Cards */
+    .app-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .app-card-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .app-card-title { font-size: 15.5px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .app-card-arrow { transition: transform 0.25s; font-size: 24px; color: var(--text-dim); }
+    .app-card.open .app-card-arrow { transform: rotate(180deg); }
+    .app-card-content { display: none; padding: 18px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 14px; }
+    .app-card.open .app-card-content { display: flex; }
+
+    /* Bill Box */
+    .bill-calc-box {
+      background: rgba(11, 19, 41, 0.7); border: 1px solid var(--border-bright);
+      border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px;
     }
-    .strip-name { font-size: 17px; font-weight: 800; color: #FFF; }
-    .strip-sub { font-size: 13px; color: var(--text-dim); }
-    .strip-due-num { font-size: 18px; font-weight: 900; font-family: monospace; }
-    .strip-action-btn {
-      height: 38px; padding: 0 14px; border-radius: 8px; border: none;
-      background: var(--primary); color: #0B0D10; font-size: 14px; font-weight: 800;
+    .calc-row { display: flex; justify-content: space-between; align-items: center; }
+    .calc-divider { border-top: 1px dashed var(--border); margin: 4px 0; }
+
+    /* Summary Grid */
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .summary-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px 6px; text-align: center;
+    }
+    .summary-lbl { font-size: 10.5px; font-weight: 800; color: var(--text-dim); }
+    .summary-val { font-size: 18px; font-weight: 900; font-family: monospace; margin-top: 4px; }
+
+    /* AI Search */
+    .ai-search-box { position: relative; display: flex; align-items: center; }
+    .ai-search-box input {
+      width: 100%; height: 50px; border-radius: 14px; border: 1px solid var(--border-bright);
+      background: var(--surface); color: var(--text); padding: 0 46px 0 14px; font-size: 15px; outline: none;
+    }
+    .ai-search-box .mic-btn {
+      position: absolute; right: 6px; width: 38px; height: 38px; border-radius: 10px;
+      border: none; background: var(--card); color: var(--primary);
       display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
+    .ai-search-box .mic-btn.listening { background: var(--danger); color: #fff; }
+
+    .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    .filter-pills::-webkit-scrollbar { display: none; }
+    .pill {
+      font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--surface); color: var(--text-dim);
+      white-space: nowrap; cursor: pointer;
+    }
+    .pill.active { background: var(--primary); color: #000; border-color: var(--primary); font-weight: 900; }
+
+    /* Passbook Slips */
+    .passbook-list { display: flex; flex-direction: column; gap: 10px; }
+    .passbook-slip {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .slip-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed var(--border); padding-bottom: 8px; }
+    .slip-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+      font-size: 11.5px; color: var(--text-dim); background: rgba(0,0,0,0.25); padding: 10px; border-radius: 10px;
+    }
+    .slip-grid strong { color: var(--text); font-size: 13.5px; font-family: monospace; display: block; margin-top: 2px; }
+
+    /* Form Controls */
+    input, select {
+      width: 100%; height: 48px; border-radius: 14px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); padding: 0 14px; font-size: 15px; outline: none;
+    }
+    .btn-action {
+      height: 48px; border-radius: 14px; border: none; padding: 0 18px;
+      font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+    }
+    .btn-p { background: var(--primary); color: #000; }
+    .btn-s { background: var(--success); color: #fff; }
+    .btn-d { background: var(--danger); color: #fff; }
+    .btn-w { background: var(--warning); color: #000; }
 
     /* Modals */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(11, 13, 16, 0.95);
+      position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98);
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-card {
-      width: 100%; max-width: 440px; background: var(--surface); border: 2px solid var(--border-bright);
-      border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 16px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.9);
+      width: 100%; max-width: 400px; background: var(--surface); border: 1px solid var(--border-bright);
+      border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px;
     }
-    
-    input, select {
-      width: 100%; height: 50px; border-radius: 12px; border: 1px solid var(--border);
-      background: #0B0D10; color: var(--text); padding: 0 16px; font-size: 16px; outline: none;
-    }
-    input:focus { border-color: var(--primary); }
-
-    .btn-action {
-      height: 50px; border-radius: 12px; border: none; padding: 0 18px;
-      font-size: 16px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
-    }
-    .btn-p { background: var(--primary); color: #0B0D10; }
-    .btn-s { background: var(--success); color: #FFF; }
-    .btn-d { background: var(--danger); color: #FFF; }
-
-    /* Bottom App Bar for Mobile */
-    .bottom-app-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; height: 68px;
-      background: rgba(14, 16, 20, 0.98); backdrop-filter: blur(16px);
-      border-top: 2px solid var(--border); display: none; align-items: center; justify-content: space-around; z-index: 90;
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-    @media (max-width: 1024px) {
-      .bottom-app-bar { display: flex; }
-    }
-    .app-tab {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      color: var(--text-dim); font-size: 11px; font-weight: 800; cursor: pointer; border: none; background: transparent;
-    }
-    .app-tab.active { color: var(--primary); }
   </style>
 </head>
 <body>
 
-<!-- Login Gate (Preserving Base v1.0 Security) -->
+<!-- Login Gate -->
 <div class="modal-overlay" id="authGate">
   <div class="modal-card">
-    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 14px;">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <div class="brand-logo-box">M</div>
-        <div>
-          <div style="font-size: 20px; font-weight: 700; color: var(--text);">ट्यूबवेल स्मार्ट ग्रिड लॉगिन</div>
-          <div style="font-size: 12px; color: var(--text-muted);">Mevolut Fintech & Water Gateway</div>
-        </div>
+    <div style="display: flex; align-items: center; gap: 10px; color: var(--primary);">
+      <span class="icon" style="font-size: 38px;">water_drop</span>
+      <div>
+        <div style="font-size: 20px; font-weight: 900;">ट्यूबवेल लॉगिन</div>
+        <div style="font-size: 12.5px; color: var(--text-dim);">अपना 10 अंक का मोबाइल नंबर डालें</div>
       </div>
-      <span class="header-version-tag">v1.0 Base</span>
     </div>
 
     <div id="step_mobile">
-      <label style="font-size: 14px; font-weight: 700; color: var(--text-dim); display: block; margin-bottom: 6px;">10 अंकों का मोबाइल नंबर दर्ज करें:</label>
-      <input type="tel" id="input_phone" placeholder="उदा. 8354816628" value="8354816628">
+      <input type="tel" id="input_phone" placeholder="मोबाइल नंबर डालें" value="8354816628" style="margin-top: 6px;">
       <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="verifyFarmerMobile()">आगे बढ़ें ➔</button>
     </div>
 
     <div id="step_secret_pin" style="display: none;">
-      <div id="user_display_badge" style="font-size: 15px; font-weight: 700; color: var(--primary); background: #0B0D10; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid var(--border);"></div>
-      <label style="font-size: 14px; font-weight: 700; color: var(--text-dim); margin-top: 12px; display: block;">4 अंक का गुप्त पिन (PIN):</label>
-      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="text-align: center; letter-spacing: 8px; font-size: 24px;">
+      <div id="user_display_badge" style="font-size: 15px; font-weight: 800; color: var(--primary);"></div>
+      <label style="font-size: 12px; color: var(--text-dim); margin-top: 8px; display: block;">4 अंक का गुप्त पिन डालें:</label>
+      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 6px; text-align: center; letter-spacing: 8px; font-size: 24px;">
       <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
-      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-muted);" onclick="returnToPhoneStep()">नंबर बदलें</button>
+      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">नंबर बदलें</button>
     </div>
   </div>
 </div>
 
-<!-- Consolidated Pakka / Kachha Bill Generation Modal -->
-<div class="modal-overlay" id="invoiceModal" style="display: none;">
-  <div class="modal-card">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 18px; color: var(--primary);">बिलिंग कंसोल (Consolidation)</strong>
-      <button class="btn-circle" style="width:36px; height:36px;" onclick="closeInvoiceModal()">✕</button>
-    </div>
-    
-    <div style="background: rgba(11,19,41,0.85); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; display: flex; flex-direction: column; gap: 5px;">
-      <div id="invModalFarmerDesc" style="font-weight: 900; color: #fff; font-size: 16px;">--</div>
-      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
-        <span>पिछली पक्की रीडिंग:</span>
-        <strong id="invModalLastPakkaDate" style="color: var(--primary); font-family: monospace;">--</strong>
-      </div>
-      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
-        <span>अनबिल उपयोग:</span>
-        <strong id="invModalDurationTxt" style="color: var(--text);">0 घंटे 0 मिनट (0 मि.)</strong>
-      </div>
-      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
-        <span>अवधि का बिल:</span>
-        <strong id="invModalCalculatedFare" style="color: var(--success); font-size: 17px;">₹0</strong>
-      </div>
-    </div>
-
-    <div>
-      <label style="font-size: 13px; color: var(--text-dim);">पक्का बिल कट-ऑफ तारीख:</label>
-      <input type="date" id="input_pakka_cutoff_date">
-    </div>
-
-    <div>
-      <label style="font-size: 13px; color: var(--text-dim);">जमा की गई रकम (Cash/UPI):</label>
-      <input type="number" id="input_inv_paid" placeholder="₹0" value="0">
-    </div>
-
-    <div>
-      <label style="font-size: 13px; color: var(--text-dim);">माफी / छूट (Discount):</label>
-      <input type="number" id="input_inv_discount" placeholder="₹0" value="0">
-    </div>
-
-    <div style="display: flex; gap: 8px; margin-top: 6px;">
-      <button class="btn-action btn-p" style="flex: 1;" onclick="commitPakkaConsolidationInvoice()">
-        <span class="icon">verified</span> पक्का बिल बनाएं
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Top Navigation Bar -->
+<!-- Header -->
 <header class="app-header">
   <div class="header-brand">
-    <div class="brand-logo-box">M</div>
-    <span class="header-brand-title">Mevolut Grid</span>
-    <span class="header-version-tag">v1.0 Base</span>
+    <span class="icon">water_ph</span>
+    <span>किसान ग्रिड 1.0 (Base)</span>
   </div>
-  
-  <nav class="nav-links">
-    <a class="nav-link active">Dashboard</a>
-    <a class="nav-link">Security</a>
-    <a class="nav-link">Referral</a>
-    <a class="nav-link">Trading Fees</a>
-  </nav>
-
-  <div class="header-right">
+  <div style="display: flex; align-items: center; gap: 8px;">
     <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
       <span class="icon" id="voiceBadgeIcon" style="font-size: 16px;">volume_up</span>
       <span id="voiceBadgeText">आवाज</span>
     </div>
-    <button class="btn-deposit" onclick="generateSystemReportPDF()">Audit PDF</button>
-    <div class="user-avatar" id="headerAvatar" style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #0B0D10; display: flex; align-items: center; justify-content: center; font-weight: 700;">NK</div>
-    <button class="btn-circle" style="width: 36px; height: 36px;" onclick="window.location.reload(true)"><span class="icon">sync</span></button>
+    <button class="btn-circle" onclick="window.location.reload(true)"><span class="icon">sync</span></button>
+    <button class="btn-circle" onclick="logout()"><span class="icon">logout</span></button>
   </div>
 </header>
 
-<!-- App Layout -->
-<div class="app-layout">
-  
-  <!-- Left Sidebar -->
-  <aside class="app-sidebar">
-    <div class="sidebar-menu">
-      <a class="sidebar-item active"><span class="icon active">dashboard</span> डैशबोर्ड</a>
-      <a class="sidebar-item"><span class="icon">security</span> सुरक्षा</a>
-      <a class="sidebar-item"><span class="icon">card_giftcard</span> रेफरल</a>
-      <a class="sidebar-item"><span class="icon">payments</span> ट्रेडिंग फीस</a>
+<main class="app-body">
+
+  <!-- 3-Phase Line Telemetry -->
+  <section class="tel-grid">
+    <div class="tel-box">
+      <div class="tel-lbl">लाल (R)</div>
+      <div class="tel-val" style="color:#f87171;" id="tele_v_r">-- V</div>
     </div>
-    
-    <div class="sidebar-menu">
-      <a class="sidebar-item" onclick="logout()" style="color: var(--danger);"><span class="icon" style="color: var(--danger);">logout</span> लॉग आउट</a>
+    <div class="tel-box">
+      <div class="tel-lbl">पीला (Y)</div>
+      <div class="tel-val" style="color:#facc15;" id="tele_v_y">-- V</div>
     </div>
-  </aside>
+    <div class="tel-box">
+      <div class="tel-lbl">नीला (B)</div>
+      <div class="tel-val" style="color:#60a5fa;" id="tele_v_b">-- V</div>
+    </div>
+    <div class="tel-box">
+      <div class="tel-lbl">लोड (A)</div>
+      <div class="tel-val" style="color:#4ade80;" id="tele_i_amps">0.0 A</div>
+    </div>
+  </section>
 
-  <!-- Main Content Area -->
-  <main class="app-main-content">
-    
-    <!-- 3-Phase Line Telemetry -->
-    <section class="tel-grid">
-      <div class="tel-box">
-        <div class="tel-lbl">लाल (R)</div>
-        <div class="tel-val" style="color:#f87171;" id="tele_v_r">-- V</div>
+  <!-- Giant Reactor Hero -->
+  <section class="motor-hero">
+    <div class="reactor-wrapper">
+      <div class="reactor-core" id="visualOrb">
+        <span class="icon" style="font-size: 52px;">power_settings_new</span>
       </div>
-      <div class="tel-box">
-        <div class="tel-lbl">पीला (Y)</div>
-        <div class="tel-val" style="color:#facc15;" id="tele_v_y">-- V</div>
-      </div>
-      <div class="tel-box">
-        <div class="tel-lbl">नीला (B)</div>
-        <div class="tel-val" style="color:#60a5fa;" id="tele_v_b">-- V</div>
-      </div>
-      <div class="tel-box">
-        <div class="tel-lbl">लोड (A)</div>
-        <div class="tel-val" style="color:#4ade80;" id="tele_i_amps">0.0 A</div>
-      </div>
-    </section>
+      <div class="pulse-wave"></div>
+    </div>
 
-    <!-- GIANT 180px CIRCULAR MOTOR CONTROLLER -->
-    <section class="motor-hero">
-      <div>
-        <div style="font-size: 22px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
-        <div style="font-size: 14px; color: var(--warning); font-weight: 700; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
+    <div>
+      <div style="font-size: 22px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
+      <div style="font-size: 14px; color: var(--warning); font-weight: 700; margin-top: 3px;" id="motorSubState">लाइन जांची जा रही है...</div>
+    </div>
+
+    <button id="mainMotorButton" class="giant-actuator-btn btn-locked" onclick="handleMotorSwitch()">
+      <span class="icon">lock</span> बटन बंद है (नंबर नहीं है)
+    </button>
+  </section>
+
+  <!-- Real-Time Bill Box -->
+  <div class="app-card open" id="turnCard">
+    <div class="app-card-header" onclick="toggleCard('turnCard')">
+      <span class="app-card-title">
+        <span class="icon" style="color: var(--primary);">timer</span> चालू बारी का बिल व हिसाब
+      </span>
+      <span class="icon app-card-arrow">expand_more</span>
+    </div>
+    <div class="app-card-content">
+      <div class="bill-calc-box">
+        <div class="calc-row">
+          <span style="color: var(--text-dim);">खेत का नाम / किसान:</span>
+          <strong id="label_active_field" style="color: var(--primary); font-size: 15px;">मालिक का खेत (Standby)</strong>
+        </div>
+        <div class="calc-row">
+          <span style="color: var(--text-dim);">पानी शुरू होने का समय:</span>
+          <strong id="label_start_time" style="font-family: monospace;">--:--:--</strong>
+        </div>
+        <div class="calc-divider"></div>
+
+        <div class="calc-row">
+          <span style="color: var(--text-dim);">सिंचाई का समय (Hours & Mins):</span>
+          <strong id="label_live_time_split" style="color: var(--text); font-size: 14.5px;">0 घंटे 0 मिनट</strong>
+        </div>
+        <div class="calc-row">
+          <span style="color: var(--text-dim);">कुल समय (मिनटों में):</span>
+          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace;">0 मिनट</strong>
+        </div>
+        <div class="calc-row">
+          <span style="color: var(--text-dim);">दर (Rate):</span>
+          <strong style="color: var(--text);">₹2.00 प्रति मिनट</strong>
+        </div>
+        <div class="calc-divider"></div>
+
+        <div class="calc-row">
+          <span style="color: var(--text-dim);">पिछला बकाया (Old Balance):</span>
+          <strong id="label_prev_due" style="color: var(--danger);">₹0</strong>
+        </div>
+        <div class="calc-row">
+          <span style="color: var(--text-dim); font-weight: bold;">इस बारी का बिल (Current Fare):</span>
+          <strong id="label_live_fare" style="color: var(--success); font-size: 18px;">₹0</strong>
+        </div>
+        <div class="calc-row">
+          <span style="color: var(--text-dim); font-weight: bold;">कुल देय रकम (Total Payable):</span>
+          <strong id="label_total_payable" style="color: var(--primary); font-size: 18px;">₹0</strong>
+        </div>
       </div>
 
-      <div class="giant-circular-wrapper">
-        <div class="circular-pulse-ring"></div>
-        <button id="mainMotorButton" class="giant-circular-btn btn-locked" onclick="handleMotorSwitch()">
-          <span class="icon" style="font-size: 44px;" id="mainMotorIcon">lock</span>
-          <span class="circle-label-main" id="mainMotorText">बंद है</span>
-          <span class="circle-label-sub" id="mainMotorSubText">LOCKED</span>
+      <button id="btnFarmerSurrender" class="btn-action btn-w" style="width: 100%; display: none;" onclick="surrenderFarmerTurn()">
+        <span class="icon">check_circle</span> खेत भर गया (बारी छोड़ें)
+      </button>
+
+      <button id="btnOwnerRevoke" class="btn-action btn-d owner-only" style="width: 100%; display: none;" onclick="finalizeTurnWithBilling()">
+        <span class="icon">cancel</span> पानी बंद करें व बिल दर्ज करें
+      </button>
+    </div>
+  </div>
+
+  <!-- Financial Totals -->
+  <section class="summary-grid" id="analyticsSection">
+    <div class="summary-box">
+      <div class="summary-lbl">कुल वसूल (Paid)</div>
+      <div class="summary-val" style="color:var(--success);" id="tot_collected">₹0</div>
+    </div>
+    <div class="summary-box">
+      <div class="summary-lbl">कुल छूट (Discount)</div>
+      <div class="summary-val" style="color:var(--warning);" id="tot_discount">₹0</div>
+    </div>
+    <div class="summary-box">
+      <div class="summary-lbl">कुल बाकी (Due)</div>
+      <div class="summary-val" style="color:var(--danger);" id="tot_outstanding">₹0</div>
+    </div>
+  </section>
+
+  <!-- Master Field Switcher -->
+  <div class="app-card owner-only" id="overrideCard">
+    <div class="app-card-header" onclick="toggleCard('overrideCard')">
+      <span class="app-card-title">
+        <span class="icon" style="color: var(--warning);">published_with_changes</span> तुरंत दूसरा खेत लगाएं
+      </span>
+      <span class="icon app-card-arrow">expand_more</span>
+    </div>
+    <div class="app-card-content">
+      <select id="select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
+    </div>
+  </div>
+
+  <!-- AI Searchable Passbook & Itemized Ledger -->
+  <div class="app-card open" id="ledgerCard">
+    <div class="app-card-header" onclick="toggleCard('ledgerCard')">
+      <span class="app-card-title">
+        <span class="icon" style="color: var(--success);">receipt_long</span> किसान खाता व पर्ची (Passbook Ledger)
+      </span>
+      <span class="icon app-card-arrow">expand_more</span>
+    </div>
+    <div class="app-card-content">
+      <div class="ai-search-box">
+        <input type="text" id="ledgerSearchInput" placeholder="🔍 नाम, नंबर या बोलकर खोजें..." oninput="handleAISearch()">
+        <button class="mic-btn" id="voiceSearchMicBtn" onclick="toggleVoiceSearch()" title="बोलकर खोजें">
+          <span class="icon" style="font-size:22px;">mic</span>
         </button>
       </div>
 
-      <div class="quick-selector-box owner-only" style="display: none;">
-        <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px;">⚡ त्वरित खेत/किसान चयन:</div>
-        <select id="quick_select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
+      <div class="filter-pills">
+        <div class="pill active" onclick="applySortPill('NEWEST', this)">नवीनतम (New)</div>
+        <div class="pill" onclick="applySortPill('DUE_DESC', this)">अधिक बकाया (High Due)</div>
+        <div class="pill" onclick="applySortPill('UNPAID', this)">बाकी उधार (Unpaid)</div>
+        <div class="pill" onclick="applySortPill('PAID', this)">चुकाया गया (Settled)</div>
       </div>
-    </section>
 
-    <!-- Master Roster Ledger (Owner View) -->
-    <div class="web3-card owner-only" style="display: none;">
-      <div style="font-size: 18px; font-weight: 700; color: var(--primary);">सबका खाता (Master Ledger Roster)</div>
-      <div style="font-size: 13px; color: var(--text-dim);">सभी किसानों का कुल समय, जमा व बकाया:</div>
-      <div id="masterRosterContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-        <div style="text-align: center; padding: 12px; color: var(--text-muted);">लोड हो रहा है...</div>
-      </div>
+      <div class="passbook-list" id="passbookContainer"></div>
     </div>
+  </div>
 
-    <!-- Recent Pump Activity Stream -->
-    <div class="web3-card">
-      <div style="font-size: 18px; font-weight: 700; color: var(--text);">ताज़ा पंप उपयोग विवरण (Recent Stream)</div>
-      <div id="recentPumpStreamContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
-        <div style="text-align: center; padding: 12px; color: var(--text-muted);">हालिया रिकॉर्ड लोड हो रहे हैं...</div>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<!-- Bottom Mobile App Bar -->
-<nav class="bottom-app-bar">
-  <button class="app-tab active" onclick="navigateTab('dashboard')">
-    <span class="icon">power_settings_new</span>
-    <span>मोटर</span>
-  </button>
-  <button class="app-tab owner-only" onclick="navigateTab('roster')" style="display: none;">
-    <span class="icon">table_rows</span>
-    <span>खाता</span>
-  </button>
-  <button class="app-tab" onclick="generateSystemReportPDF()">
-    <span class="icon">picture_as_pdf</span>
-    <span>PDF</span>
-  </button>
-</nav>
+</main>
 
 <script>
   const firebaseConfig = {
@@ -491,10 +421,89 @@
   const PRIMARY_ROOT_PHONE = "8354816628";
 
   let loggedInUser = null, candidateUser = null;
-  let activeTurnObj = null, farmersCache = {}, sessionsCache = [], invoicesCache = [];
+  let activeTurnObj = null, farmersCache = {}, sessionsCache = [], paymentsCache = [];
   let unitTariffPerMin = 2.00, isMotorPhysicallyOn = false;
+  let timerTicker = null;
+
+  let fuseInstance = null;
+  let activeSearchQuery = '';
+  let activeSortPill = 'NEWEST';
+  let isListeningVoice = false;
+
+  let noiseFilterStreak = 0;
+  const FAULT_HYSTERESIS_COUNT = 2;
 
   function sanitizeMobile(p) { return String(p || '').replace(/\D/g, '').slice(-10); }
+  function triggerVibrate(ms = 60) { if ("vibrate" in navigator) navigator.vibrate(ms); }
+  function toggleCard(id) { document.getElementById(id).classList.toggle('open'); }
+
+  function updateVoiceUI(isEnabled) {
+    const badge = document.getElementById('voiceControlBadge');
+    const icon = document.getElementById('voiceBadgeIcon');
+    const txt = document.getElementById('voiceBadgeText');
+    if (isEnabled) {
+      badge.className = "voice-badge active";
+      icon.innerText = "volume_up";
+      txt.innerText = "आवाज";
+    } else {
+      badge.className = "voice-badge disabled";
+      icon.innerText = "volume_off";
+      txt.innerText = "मौन";
+    }
+  }
+
+  async function toggleUserVoicePreference() {
+    if (!loggedInUser) return;
+    triggerVibrate(40);
+    const newStatus = !(loggedInUser.voiceEnabled !== false);
+    loggedInUser.voiceEnabled = newStatus;
+    localStorage.setItem(`voice_pref_${loggedInUser.uid || loggedInUser.phone}`, newStatus ? 'true' : 'false');
+    updateVoiceUI(newStatus);
+    if (newStatus) speakSimpleHindi('CUSTOM', { customText: "आवाज चालू कर दी गई है" });
+  }
+
+  function speakSimpleHindi(eventCode, extraData = {}) {
+    if (!('speechSynthesis' in window)) return;
+    if (loggedInUser && loggedInUser.voiceEnabled === false) return;
+
+    window.speechSynthesis.cancel();
+    let text = "";
+    switch (eventCode) {
+      case 'WELCOME': text = `राम राम ${extraData.name || 'भाई'}, स्वागत है।`; break;
+      case 'MOTOR_ON': text = "मोटर चालू हो गई है। खेत में पानी शुरू हो गया है।"; break;
+      case 'MOTOR_OFF': text = "मोटर बंद कर दी गई है।"; break;
+      case 'NOT_YOUR_TURN': text = "रुकिए भैया, अभी आपका नंबर नहीं आया है।"; break;
+      case 'TURN_FINISH': 
+        text = `पानी भर गया है। कुल समय ${extraData.hours} घंटे ${extraData.mins} मिनट हुआ। इस बारी का बिल ${Math.round(extraData.fare || 0)} रुपया बना है।`; 
+        break;
+      default: text = extraData.customText || "";
+    }
+    if (!text) return;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'hi-IN';
+    utterance.rate = 0.90;
+    utterance.pitch = 0.98;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function toggleVoiceSearch() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return alert("बोलकर खोजने की सुविधा इस ब्राउज़र में उपलब्ध नहीं है।");
+
+    const micBtn = document.getElementById('voiceSearchMicBtn');
+    if (isListeningVoice) { isListeningVoice = false; micBtn.classList.remove('listening'); return; }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'hi-IN';
+    recognition.onstart = () => { isListeningVoice = true; micBtn.classList.add('listening'); triggerVibrate(50); };
+    recognition.onresult = (e) => {
+      document.getElementById('ledgerSearchInput').value = e.results[0][0].transcript;
+      handleAISearch();
+    };
+    recognition.onend = () => { isListeningVoice = false; micBtn.classList.remove('listening'); };
+    recognition.start();
+  }
 
   async function verifyFarmerMobile() {
     const p = sanitizeMobile(document.getElementById('input_phone').value.trim());
@@ -505,9 +514,9 @@
       const co = meta.secondaryMaster || null;
 
       if (p === PRIMARY_ROOT_PHONE) {
-        candidateUser = { role: 'master', tier: 'primary', name: 'Nitin Kumar (Master)', phone: p, pin: String(meta.masterPin || '8354') };
+        candidateUser = { role: 'master', tier: 'primary', name: 'मुख्य मालिक', phone: p, pin: String(meta.masterPin || '8354'), voiceEnabled: meta.masterVoiceEnabled !== false };
       } else if (co && co.active && sanitizeMobile(co.phone) === p) {
-        candidateUser = { role: 'master', tier: 'secondary', name: co.name || 'Co-Master', phone: p, pin: String(co.pin || '1234') };
+        candidateUser = { role: 'master', tier: 'secondary', name: co.name || 'सह-मालिक', phone: p, pin: String(co.pin || '1234'), voiceEnabled: meta.masterVoiceEnabled !== false };
       } else {
         const farmers = (await rtdb.ref('/tubewell/farmers').once('value')).val() || {};
         let found = null;
@@ -515,8 +524,11 @@
           if (sanitizeMobile(farmers[k].phone) === p || sanitizeMobile(k) === p) found = { uid: farmers[k].uid || k, ...farmers[k] };
         });
         if (!found) return alert("यह मोबाइल नंबर दर्ज नहीं है।");
-        candidateUser = { role: 'farmer', ...found, pin: String(found.pin || p.slice(-4)) };
+        candidateUser = { role: 'farmer', ...found, pin: String(found.pin || p.slice(-4)), voiceEnabled: found.voiceEnabled !== false };
       }
+
+      const localPref = localStorage.getItem(`voice_pref_${candidateUser.uid || candidateUser.phone}`);
+      if (localPref !== null) candidateUser.voiceEnabled = (localPref === 'true');
 
       document.getElementById('step_mobile').style.display = 'none';
       document.getElementById('step_secret_pin').style.display = 'block';
@@ -532,10 +544,12 @@
 
     loggedInUser = candidateUser;
     document.getElementById('authGate').style.display = 'none';
-    
-    const isMaster = loggedInUser.role === 'master';
-    document.querySelectorAll('.owner-only').forEach(el => el.style.display = isMaster ? 'block' : 'none');
+    updateVoiceUI(loggedInUser.voiceEnabled !== false);
 
+    const isMaster = loggedInUser.role === 'master';
+    document.querySelectorAll('.owner-only').forEach(el => el.style.display = isMaster ? '' : 'none');
+
+    speakSimpleHindi('WELCOME', { name: loggedInUser.name });
     initCloudListeners();
   }
 
@@ -554,111 +568,174 @@
       document.getElementById('tele_v_y').innerText = `${t.vY || 414} V`;
       document.getElementById('tele_v_b').innerText = `${t.vB || 410} V`;
       document.getElementById('tele_i_amps').innerText = `${(t.amps || 0).toFixed(1)} A`;
+
+      if (t.lockedOut) {
+        noiseFilterStreak++;
+        if (noiseFilterStreak >= FAULT_HYSTERESIS_COUNT) {
+          document.getElementById('visualOrb').className = "reactor-core fault";
+          document.getElementById('motorTitleState').innerText = `🚨 सुरक्षा के लिए बंद (${t.fault})`;
+          document.getElementById('mainMotorButton').className = "giant-actuator-btn btn-locked";
+          document.getElementById('mainMotorButton').innerHTML = `<span class="icon">warning</span> मोटर ट्रिप लॉक है`;
+          document.getElementById('mainMotorButton').disabled = true;
+          return;
+        }
+      } else {
+        noiseFilterStreak = 0;
+        document.getElementById('mainMotorButton').disabled = false;
+      }
       refreshMotorUI();
     });
 
     rtdb.ref('/tubewell/active_turn').on('value', snap => {
       activeTurnObj = snap.val() || null;
       isMotorPhysicallyOn = !!(activeTurnObj && activeTurnObj.isMotorRunning);
+
+      if (isMotorPhysicallyOn) {
+        startLiveTimer();
+      } else {
+        clearInterval(timerTicker);
+        renderLiveMetrics(calculateRunSeconds());
+      }
       refreshMotorUI();
+      renderTurnCardUI();
     });
 
     rtdb.ref('/tubewell/farmers').on('value', snap => {
       farmersCache = snap.val() || {};
-      populateTargetFarmerDropdowns();
-      recalculateLedger();
+      populateTargetFarmerDropdown();
     });
 
     rtdb.ref('/tubewell/sessions').on('value', snap => {
       const s = snap.val() || {};
       sessionsCache = Object.keys(s).map(k => ({ sessionId: k, ...s[k] }));
-      recalculateLedger();
-      renderRecentStream();
+      recalculateAccountsAndLedger();
     });
 
-    rtdb.ref('/tubewell/invoices').on('value', snap => {
-      const inv = snap.val() || {};
-      invoicesCache = Object.keys(inv).map(k => ({ invoiceId: k, ...inv[k] }));
-      recalculateLedger();
+    rtdb.ref('/tubewell/payments').on('value', snap => {
+      const p = snap.val() || {};
+      paymentsCache = Object.keys(p).map(k => ({ paymentId: k, ...p[k] }));
+      recalculateAccountsAndLedger();
     });
   }
 
-  function recalculateLedger() {
+  function recalculateAccountsAndLedger() {
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
     const balances = {};
+
     Object.keys(farmersCache).forEach(uid => {
       const f = farmersCache[uid];
-      balances[f.phone] = { name: f.name, phone: f.phone, plot: f.plot, totalPaid: 0, totalDiscount: 0, netDue: 0, totalMinutes: 0 };
+      balances[f.phone] = { name: f.name, phone: f.phone, plot: f.plot, totalBilled: 0, totalPaid: 0, totalDiscount: 0, netDue: 0, sessions: [], totalMinutesWorked: 0 };
     });
 
     sessionsCache.forEach(s => {
       const p = sanitizeMobile(s.userPhone);
       if (!balances[p]) {
-        balances[p] = { name: s.userName, phone: p, plot: s.plot, totalPaid: 0, totalDiscount: 0, netDue: 0, totalMinutes: 0 };
+        balances[p] = { name: s.userName, phone: p, plot: s.plot, totalBilled: 0, totalPaid: 0, totalDiscount: 0, netDue: 0, sessions: [], totalMinutesWorked: 0 };
       }
-      const m = s.durationMins || Math.round((s.durationHours || 0) * 60);
-      balances[p].totalMinutes += m;
-      balances[p].netDue += Math.round(s.fare || (m * unitTariffPerMin));
+
+      const totalMins = s.durationMins || Math.round((s.durationHours || 0) * 60);
+      const fare = Math.round(s.fare || (totalMins * unitTariffPerMin));
+
+      balances[p].totalBilled += fare;
+      balances[p].netDue += fare;
+      balances[p].totalMinutesWorked += totalMins;
+      balances[p].sessions.push(s);
     });
 
-    invoicesCache.forEach(inv => {
-      const p = sanitizeMobile(inv.userPhone);
-      if (balances[p] && inv.isPakkaBill) {
-        balances[p].totalPaid += Math.round(parseFloat(inv.amountPaid || 0));
-        balances[p].totalDiscount += Math.round(parseFloat(inv.discount || 0));
-        balances[p].netDue -= (Math.round(parseFloat(inv.amountPaid || 0)) + Math.round(parseFloat(inv.discount || 0)));
+    paymentsCache.forEach(pm => {
+      const p = sanitizeMobile(pm.userPhone);
+      if (balances[p]) {
+        const cash = Math.round(parseFloat(pm.amountPaid || 0));
+        const disc = Math.round(parseFloat(pm.discount || 0));
+        balances[p].totalPaid += cash;
+        balances[p].totalDiscount += disc;
+        balances[p].netDue -= (cash + disc);
       }
     });
 
-    const container = document.getElementById('masterRosterContainer');
-    if (!container) return;
-    container.innerHTML = '';
+    let sumCollected = 0, sumDisc = 0, sumDue = 0;
+    Object.values(balances).forEach(b => {
+      sumCollected += b.totalPaid;
+      sumDisc += b.totalDiscount;
+      sumDue += b.netDue;
+    });
 
-    const list = Object.values(balances);
-    if (list.length === 0) {
-      container.innerHTML = `<div style="text-align: center; padding: 10px; color: var(--text-muted);">कोई किसान पंजीकृत नहीं है।</div>`;
-      return;
+    document.getElementById('tot_collected').innerText = `₹${sumCollected}`;
+    document.getElementById('tot_discount').innerText = `₹${sumDisc}`;
+    document.getElementById('tot_outstanding').innerText = `₹${sumDue}`;
+
+    if (activeTurnObj && balances[sanitizeMobile(activeTurnObj.farmerPhone)]) {
+      const curFarmer = balances[sanitizeMobile(activeTurnObj.farmerPhone)];
+      document.getElementById('label_prev_due').innerText = `₹${curFarmer.netDue}`;
+    } else {
+      document.getElementById('label_prev_due').innerText = `₹0`;
     }
 
-    list.forEach(b => {
-      const h = Math.floor(b.totalMinutes / 60);
-      const m = b.totalMinutes % 60;
-      container.innerHTML += `
-        <div class="roster-row-strip">
-          <div class="strip-user-info">
-            <span class="strip-name">${b.name}</span>
-            <span class="strip-sub">${b.plot || 'खेत'} | समय: ${h}घं ${m}मि</span>
-          </div>
-          <div style="text-align: right;">
-            <span class="strip-due-num" style="color: ${b.netDue > 0 ? 'var(--danger)' : 'var(--success)'};">₹${b.netDue}</span>
-          </div>
-          <button class="strip-action-btn" onclick="alert('Farmer: ${b.name}\\nDue: ₹${b.netDue}')">विवरण</button>
-        </div>
-      `;
-    });
+    setupAIFuseIndex(balances);
+    renderPassbookUI(balances);
   }
 
-  function renderRecentStream() {
-    const container = document.getElementById('recentPumpStreamContainer');
+  function setupAIFuseIndex(balances) {
+    const list = Object.values(balances);
+    fuseInstance = new Fuse(list, { keys: ['name', 'phone', 'plot'], threshold: 0.35, ignoreLocation: true });
+  }
+
+  function handleAISearch() {
+    activeSearchQuery = document.getElementById('ledgerSearchInput').value.trim();
+    recalculateAccountsAndLedger();
+  }
+
+  function applySortPill(type, el) {
+    activeSortPill = type;
+    document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    recalculateAccountsAndLedger();
+  }
+
+  function renderPassbookUI(balances) {
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
+    const container = document.getElementById('passbookContainer');
     if (!container) return;
     container.innerHTML = '';
 
-    const stream = [...sessionsCache].reverse().slice(0, 5);
-    if (stream.length === 0) {
-      container.innerHTML = `<div style="text-align: center; padding: 10px; color: var(--text-muted);">हाल ही में कोई सिंचाई नहीं हुई है।</div>`;
-      return;
+    let list = Object.values(balances);
+    if (activeSearchQuery && fuseInstance) {
+      list = fuseInstance.search(activeSearchQuery).map(r => r.item);
     }
 
-    stream.forEach(s => {
-      const m = s.durationMins || 0;
-      const h = Math.floor(m / 60);
-      const rem = m % 60;
+    if (activeSortPill === 'DUE_DESC') list.sort((a, b) => b.netDue - a.netDue);
+    if (activeSortPill === 'UNPAID') list = list.filter(b => b.netDue > 0);
+    if (activeSortPill === 'PAID') list = list.filter(b => b.netDue <= 0);
+
+    list.forEach(b => {
+      if (!isMaster && sanitizeMobile(b.phone) !== sanitizeMobile(loggedInUser.phone)) return;
+
+      const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
+      const dueText = b.netDue > 0 ? `बाकी: ₹${b.netDue}` : `चुकता (Adv: ₹${Math.abs(b.netDue)})`;
+      const totalHoursPart = Math.floor(b.totalMinutesWorked / 60);
+      const totalMinsPart = b.totalMinutesWorked % 60;
+      const totalUsageFormatted = `${totalHoursPart} घंटे ${totalMinsPart} मिनट`;
+
       container.innerHTML += `
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #0B0D10; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border);">
-          <div>
-            <div style="font-weight: 700; color: #FFF;">${s.userName} <span style="font-size: 11px; color: var(--text-muted);">(${s.plot || 'खेत'})</span></div>
-            <div style="font-size: 11px; color: var(--text-dim);">${s.date} | ${h}घं ${rem}मि</div>
+        <div class="passbook-slip">
+          <div class="slip-header">
+            <div>
+              <strong style="font-size:16px; color:#fff;">${b.name}</strong>
+              <div style="font-size:12px; color:var(--text-dim);">${b.plot || 'खेत'} | +91-${b.phone}</div>
+              <div style="font-size:12px; color:var(--primary); font-weight:bold; margin-top:2px;">
+                कुल सिंचाई: ${totalUsageFormatted}
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <strong style="font-size:15px; color:${dueColor}; font-family:monospace;">${dueText}</strong>
+            </div>
           </div>
-          <div style="text-align: right; font-weight: 700; color: var(--success); font-family: monospace;">₹${Math.round(s.fare || (m * unitTariffPerMin))}</div>
+
+          <div class="slip-grid">
+            <div>कुल बिल: <strong>₹${b.totalBilled}</strong></div>
+            <div>जमा: <strong style="color:var(--success);">₹${b.totalPaid}</strong></div>
+            <div>छूट: <strong style="color:var(--warning);">₹${b.totalDiscount}</strong></div>
+          </div>
         </div>
       `;
     });
@@ -669,49 +746,60 @@
     const isMyTurn = activeTurnObj && loggedInUser && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
     const isAuthorized = isMaster ? true : isMyTurn;
 
-    const btn = document.getElementById('mainMotorButton');
-    const icon = document.getElementById('mainMotorIcon');
-    const mainText = document.getElementById('mainMotorText');
-    const subText = document.getElementById('mainMotorSubText');
+    const orb = document.getElementById('visualOrb');
     const title = document.getElementById('motorTitleState');
     const sub = document.getElementById('motorSubState');
+    const btn = document.getElementById('mainMotorButton');
 
     if (isMotorPhysicallyOn) {
-      title.innerText = "मोटर चालू है (पानी चल रहा है)";
+      orb.className = "reactor-core running";
+      title.innerText = "मोटर चालू है";
       title.style.color = "var(--success)";
       sub.innerText = "खेत में पानी जा रहा है...";
     } else {
+      orb.className = "reactor-core";
       title.innerText = "मोटर बंद है";
       title.style.color = "var(--text)";
       sub.innerText = "मोटर चालू करने के लिए तैयार";
     }
 
     if (!isAuthorized) {
-      btn.className = "giant-circular-btn btn-locked";
-      icon.innerText = "lock";
-      mainText.innerText = "बंद है";
-      subText.innerText = "LOCKED";
+      btn.className = "giant-actuator-btn btn-locked";
+      btn.innerHTML = `<span class="icon">lock</span> अभी आपका नंबर नहीं है`;
     } else {
       if (isMotorPhysicallyOn) {
-        btn.className = "giant-circular-btn btn-stop";
-        icon.innerText = "power_settings_new";
-        mainText.innerText = "बंद करें";
-        subText.innerText = "STOP";
+        btn.className = "giant-actuator-btn btn-stop";
+        btn.innerHTML = `<span class="icon">power_settings_new</span> मोटर बंद करो`;
       } else {
-        btn.className = "giant-circular-btn btn-start";
-        icon.innerText = "play_arrow";
-        mainText.innerText = "चालू करें";
-        subText.innerText = "START";
+        btn.className = "giant-actuator-btn btn-start";
+        btn.innerHTML = `<span class="icon">play_arrow</span> मोटर चालू करो`;
       }
+    }
+  }
+
+  function renderTurnCardUI() {
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
+    const isMyTurn = activeTurnObj && loggedInUser && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
+
+    if (activeTurnObj) {
+      document.getElementById('label_active_field').innerText = `${activeTurnObj.farmerName} (${activeTurnObj.plot || 'खेत'})`;
+      document.getElementById('label_start_time').innerText = activeTurnObj.cycleStartTimeIso || "--:--:--";
+      document.getElementById('btnFarmerSurrender').style.display = (isMyTurn && !isMaster) ? 'block' : 'none';
+      document.getElementById('btnOwnerRevoke').style.display = isMaster ? 'block' : 'none';
+    } else {
+      document.getElementById('label_active_field').innerText = "मालिक का खेत (Standby)";
+      document.getElementById('label_start_time').innerText = "--:--:--";
+      document.getElementById('btnFarmerSurrender').style.display = 'none';
+      document.getElementById('btnOwnerRevoke').style.display = 'none';
     }
   }
 
   async function handleMotorSwitch() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const isMyTurn = activeTurnObj && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
-    if (!isMaster && !isMyTurn) return alert("अभी आपका नंबर नहीं है।");
+    if (!isMaster && !isMyTurn) { speakSimpleHindi('NOT_YOUR_TURN'); return; }
 
-    triggerVibrate(60);
+    triggerVibrate(70);
 
     if (!isMotorPhysicallyOn && isMaster && !activeTurnObj) {
       const now = Date.now();
@@ -726,29 +814,101 @@
     if (!isMotorPhysicallyOn) {
       await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: true, lastMotorStartTime: Date.now() });
       rtdb.ref('/tubewell/control/trigger_start').set(true);
+      speakSimpleHindi('MOTOR_ON');
     } else {
       const elapsed = activeTurnObj.lastMotorStartTime ? Math.round((Date.now() - activeTurnObj.lastMotorStartTime) / 1000) : 0;
       const total = (activeTurnObj.accumulatedSecondsBeforeCurrentRun || 0) + elapsed;
       await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: false, accumulatedSecondsBeforeCurrentRun: total, lastMotorStartTime: null });
       rtdb.ref('/tubewell/control/trigger_stop').set(true);
+      speakSimpleHindi('MOTOR_OFF');
     }
   }
 
-  function populateTargetFarmerDropdowns() {
-    const selQuick = document.getElementById('quick_select_target_farmer');
-    if (!selQuick) return;
-    const optionsHtml = ['<option value="OWNER_DIRECT">⚡ मालिक का खेत (Standby)</option>'];
+  function calculateRunSeconds() {
+    if (!activeTurnObj) return 0;
+    let sec = activeTurnObj.accumulatedSecondsBeforeCurrentRun || 0;
+    if (activeTurnObj.isMotorRunning && activeTurnObj.lastMotorStartTime) {
+      sec += Math.max(0, Math.round((Date.now() - activeTurnObj.lastMotorStartTime) / 1000));
+    }
+    return sec;
+  }
+
+  function renderLiveMetrics(sec) {
+    const totalMinutes = Math.floor(sec / 60);
+    const displayHours = Math.floor(totalMinutes / 60);
+    const displayRemainingMins = totalMinutes % 60;
+    const currentFare = Math.round(totalMinutes * unitTariffPerMin);
+    const dischargeLiters = Math.round((sec / 3600) * 22800);
+
+    document.getElementById('label_live_time_split').innerText = `${displayHours} घंटे ${displayRemainingMins} मिनट`;
+    document.getElementById('label_live_total_mins').innerText = `${totalMinutes} मिनट`;
+    document.getElementById('label_live_fare').innerText = `₹${currentFare}`;
+
+    const prevDue = parseFloat(document.getElementById('label_prev_due').innerText.replace(/[^\d.-]/g, '')) || 0;
+    document.getElementById('label_total_payable').innerText = `₹${Math.round(prevDue + currentFare)}`;
+  }
+
+  function startLiveTimer() {
+    clearInterval(timerTicker);
+    timerTicker = setInterval(() => renderLiveMetrics(calculateRunSeconds()), 1000);
+  }
+
+  async function finalizeTurnWithBilling() {
+    if (!activeTurnObj) return;
+
+    let sec = activeTurnObj.accumulatedSecondsBeforeCurrentRun || 0;
+    if (activeTurnObj.isMotorRunning && activeTurnObj.lastMotorStartTime) {
+      sec += Math.round((Date.now() - activeTurnObj.lastMotorStartTime) / 1000);
+      await rtdb.ref('/tubewell/control/trigger_stop').set(true);
+    }
+
+    const totalMinutes = Math.max(1, Math.round(sec / 60));
+    const displayHours = Math.floor(totalMinutes / 60);
+    const displayRemainingMins = totalMinutes % 60;
+    const fare = Math.round(totalMinutes * unitTariffPerMin);
+
+    const isOwner = activeTurnObj.isOwnerPersonalRun || activeTurnObj.farmerUid === 'OWNER_DIRECT';
+
+    const record = {
+      cycleId: (isOwner ? 'OWN-' : 'CYC-') + Math.floor(1000 + Math.random() * 9000),
+      userUid: activeTurnObj.farmerUid,
+      userPhone: activeTurnObj.farmerPhone,
+      userName: activeTurnObj.farmerName,
+      plot: activeTurnObj.plot || 'खेत',
+      isOwnerPersonalRun: isOwner,
+      date: new Date().toLocaleDateString('en-IN'),
+      startIso: activeTurnObj.cycleStartTimeIso,
+      endIso: new Date().toLocaleTimeString('en-IN'),
+      durationMins: totalMinutes,
+      fare: fare
+    };
+
+    await rtdb.ref('/tubewell/sessions').push(record);
+    await rtdb.ref('/tubewell/active_turn').remove();
+
+    speakSimpleHindi('TURN_FINISH', { hours: displayHours, mins: displayRemainingMins, fare: fare });
+    alert(`⚡ सिंचाई पूरी हुई और खाता में जुड़ गई!\nकिसान: ${activeTurnObj.farmerName}\nसमय: ${displayHours} घंटे ${displayRemainingMins} मिनट (कुल ${totalMinutes} मिनट)\nइस बारी का बिल: ₹${fare}`);
+  }
+
+  function surrenderFarmerTurn() {
+    if (confirm("खेत भर गया? मोटर बंद करके अपनी बारी छोड़ना चाहते हैं?")) finalizeTurnWithBilling();
+  }
+
+  function populateTargetFarmerDropdown() {
+    const sel = document.getElementById('select_target_farmer');
+    if (!sel) return;
+    sel.innerHTML = '<option value="OWNER_DIRECT">⚡ मालिक का खेत</option>';
     Object.keys(farmersCache).forEach(k => {
       const f = farmersCache[k];
-      optionsHtml.push(`<option value="${f.uid || k}">पानी दें: ${f.name} (${f.plot || 'खेत'})</option>`);
+      sel.innerHTML += `<option value="${f.uid || k}">पानी दें: ${f.name} (${f.plot || 'खेत'})</option>`;
     });
-    selQuick.innerHTML = optionsHtml.join('');
   }
 
   async function executeInstantFieldSwitch(uid) {
     if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले मोटर बंद करें।");
     const now = Date.now();
     const timeStr = new Date(now).toLocaleTimeString('en-IN');
+
     if (uid === 'OWNER_DIRECT') {
       await rtdb.ref('/tubewell/active_turn').set({
         farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_ROOT_PHONE, farmerName: 'मालिक का खेत',
@@ -771,13 +931,13 @@
     const doc = new jsPDF();
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(18);
-    doc.text("Tubewell Smart Grid v1.0.1 - Audit Statement", 14, 20);
+    doc.text("Tubewell Smart Grid v1.0 - Base Audit Statement", 14, 20);
     doc.setFont("Helvetica", "normal");
     doc.setFontSize(11);
     doc.text(`Generated On: ${new Date().toLocaleString()}`, 14, 28);
     doc.text(`Operator: ${loggedInUser ? loggedInUser.name : 'System Master'}`, 14, 34);
     doc.line(14, 40, 196, 40);
-    doc.save("Tubewell_Audit_Report.pdf");
+    doc.save("Tubewell_Base_Audit_Report.pdf");
   }
 </script>
 </body>
