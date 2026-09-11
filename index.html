@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#0B0D10">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>ट्यूबवेल स्मार्ट ग्रिड v1.1 - Mevolut Pro Dashboard</title>
+  <title>ट्यूबवेल स्मार्ट ग्रिड v1.0.1 - Pro Dashboard</title>
 
-  <!-- Google Fonts: Mukta Devanagari, SF Pro / Inter & Material Symbols Rounded -->
+  <!-- Google Fonts: Mukta Devanagari, Inter & Material Symbols Rounded -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mukta:wght@600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0&display=swap" rel="stylesheet">
@@ -57,14 +57,14 @@
       overflow-x: hidden;
       padding-top: env(safe-area-inset-top);
       padding-bottom: calc(92px + env(safe-area-inset-bottom));
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.4;
     }
 
     .icon {
       font-family: 'Material Symbols Rounded', sans-serif;
       font-weight: normal; font-style: normal;
-      font-size: 18px;
+      font-size: 20px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -75,50 +75,51 @@
     }
     .icon.active { color: var(--primary); }
 
-    /* Desktop Web3 Top Navbar */
+    /* Top Navigation Bar (Mevolut / Fintech Style) */
     .app-header {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(14, 16, 20, 0.92); backdrop-filter: blur(16px);
+      background: rgba(14, 16, 20, 0.95); backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border); height: 72px; padding: 0 24px;
       display: flex; align-items: center; justify-content: space-between;
       width: 100%;
     }
     .header-brand { display: flex; align-items: center; gap: 12px; }
     .brand-logo-box {
-      width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #F5A623, #FFB547);
+      width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #F5A623, #FFB547);
       display: flex; align-items: center; justify-content: center; font-weight: 800; color: #0B0D10; font-size: 20px;
       box-shadow: 0 4px 12px rgba(245, 166, 35, 0.3);
     }
-    .header-brand-title { font-size: 20px; font-weight: 600; color: var(--text); letter-spacing: -0.5px; }
-    
-    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .header-brand-title { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
+    .header-version-tag {
+      font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px;
+      background: rgba(245, 166, 35, 0.15); color: var(--primary); border: 1px solid rgba(245,166,35,0.3);
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 24px; }
     .nav-link { color: var(--text-dim); font-weight: 500; font-size: 14px; text-decoration: none; cursor: pointer; transition: color 0.2s; }
     .nav-link:hover, .nav-link.active { color: var(--primary); }
 
-    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-right { display: flex; align-items: center; gap: 14px; }
     .btn-deposit {
       background: var(--primary); color: #0B0D10; font-weight: 600; padding: 10px 20px; border-radius: 999px; border: none; cursor: pointer;
       box-shadow: 0 4px 16px rgba(245, 166, 35, 0.25); transition: transform 0.15s;
     }
     .btn-deposit:active { transform: scale(0.96); }
 
-    /* Layout Wrapper: Sidebar + Main Content */
-    .app-layout {
-      display: flex;
-      width: 100%;
-      min-height: calc(100vh - 72px);
+    .voice-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
+      background: var(--surface); border: 1px solid var(--border); cursor: pointer; color: var(--text);
     }
+    .voice-badge.active { background: rgba(245, 166, 35, 0.15); border-color: var(--primary); color: var(--primary); }
 
-    /* Left Sidebar Navigation */
+    /* App Layout */
+    .app-layout { display: flex; width: 100%; min-height: calc(100vh - 72px); }
+
+    /* Left Sidebar */
     .app-sidebar {
-      width: 240px;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--border);
-      padding: 24px 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      flex-shrink: 0;
+      width: 240px; background: var(--sidebar-bg); border-right: 1px solid var(--border);
+      padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0;
     }
     .sidebar-menu { display: flex; flex-direction: column; gap: 6px; }
     .sidebar-item {
@@ -131,76 +132,107 @@
 
     /* Main Content Area */
     .app-main-content {
-      flex: 1;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      max-width: calc(100vw - 240px);
-      overflow-y: auto;
+      flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 24px;
+      max-width: calc(100vw - 240px); overflow-y: auto;
     }
 
-    /* Grid Layout for Cards */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 24px;
+    @media (max-width: 1024px) {
+      .app-sidebar { display: none; }
+      .app-main-content { max-width: 100vw; padding: 12px; }
+      .nav-links { display: none; }
     }
 
     /* Web3 Luxe Cards */
     .web3-card {
-      background: var(--card);
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      border: 1px solid var(--border);
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
+      background: var(--card); border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid var(--border);
+      padding: 24px; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; gap: 14px;
     }
 
-    /* User Overview Card (Span 12) */
-    .user-overview-card { grid-column: span 12; display: flex; align-items: center; justify-content: space-between; }
-    .user-left { display: flex; align-items: center; gap: 16px; }
-    .user-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #2A2E35, #14171C); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: var(--primary); }
-    .user-info-blocks { display: flex; gap: 24px; align-items: center; }
-    .info-block { display: flex; flex-direction: column; gap: 2px; }
-    .info-label { font-size: 12px; color: var(--text-muted); }
-    .info-val { font-size: 14px; font-weight: 500; color: var(--text); }
+    /* Telemetry Grid */
+    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
+    .tel-box {
+      background: #0B0D10; border: 1px solid var(--border);
+      border-radius: 12px; padding: 10px 6px; text-align: center;
+    }
+    .tel-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .tel-val { font-size: 18px; font-weight: 700; font-family: monospace; margin-top: 2px; color: var(--primary); }
 
-    /* Total Asset Card (Span 6) */
-    .asset-card { grid-column: span 6; display: flex; flex-direction: column; justify-content: space-between; min-height: 200px; }
-    .asset-watermark { position: absolute; right: -10px; bottom: -20px; font-size: 140px; font-weight: 800; color: rgba(255,255,255,0.02); pointer-events: none; }
-    .asset-actions { display: flex; gap: 12px; margin-top: 20px; }
-    .action-pill { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
-    .action-pill:hover { background: rgba(255,255,255,0.1); }
+    /* ==========================================================================
+       विशाल सर्कुलर मोटर कंट्रोलर (180px GIANT TACTILE MOTOR SWITCH)
+       ========================================================================== */
+    .motor-hero {
+      width: 100%;
+      background: radial-gradient(circle at 50% 15%, rgba(19, 31, 54, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
+      border: 2px solid var(--border-bright); border-radius: 20px;
+      padding: 24px 16px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+    }
 
-    /* Deposit / Buy Card (Span 6) */
-    .deposit-buy-card { grid-column: span 6; display: flex; flex-direction: column; gap: 16px; }
-    .deposit-row { display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer; transition: border-color 0.2s; }
-    .deposit-row:hover { border-color: var(--primary); }
+    .giant-circular-wrapper {
+      position: relative; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center;
+    }
+    .circular-pulse-ring {
+      position: absolute; inset: -12px; border-radius: 50%;
+      border: 4px solid var(--success); opacity: 0;
+      animation: rippleEffect 2s infinite cubic-bezier(0.2, 0.8, 0.2, 1); display: none;
+    }
+    @keyframes rippleEffect {
+      0% { transform: scale(0.85); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+    .giant-circular-btn {
+      width: 170px; height: 170px; border-radius: 50%;
+      border: 5px solid #334155; background: #1e293b; color: var(--text-dim);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      cursor: pointer; z-index: 2; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    }
+    .giant-circular-btn:active { transform: scale(0.94); }
+    .giant-circular-btn.btn-start {
+      background: radial-gradient(circle at 35% 35%, #22c55e 20%, #15803d 85%, #052e16 100%);
+      border-color: #86efac; color: #ffffff; box-shadow: 0 0 45px var(--success-glow);
+    }
+    .giant-circular-btn.btn-stop {
+      background: radial-gradient(circle at 35% 35%, #ef4444 20%, #b91c1c 85%, #450a0a 100%);
+      border-color: #fca5a5; color: #ffffff; box-shadow: 0 0 45px var(--danger-glow);
+      animation: reactorHum 1s infinite alternate ease-in-out;
+    }
+    @keyframes reactorHum {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.04); filter: brightness(1.2); }
+    }
+    .giant-circular-btn.btn-stop + .circular-pulse-ring { display: block; }
+    .giant-circular-btn.btn-locked { background: #1e293b; border-color: #334155; color: #64748b; cursor: not-allowed; }
 
-    /* VIP Level Card (Span 4) */
-    .vip-card { grid-column: span 4; display: flex; flex-direction: column; gap: 14px; }
-    .progress-track { width: 100%; height: 6px; background: #2A2E35; border-radius: 999px; overflow: hidden; }
-    .progress-fill { height: 100%; background: #22C55E; border-radius: 999px; width: 68%; }
+    .circle-label-main { font-size: 26px; font-weight: 900; letter-spacing: 0.5px; line-height: 1.1; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
+    .circle-label-sub { font-size: 13px; font-weight: 900; letter-spacing: 1.5px; opacity: 0.9; }
 
-    /* Affiliate & Info Cards */
-    .affiliate-card { grid-column: span 4; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, #14171C, #1E160A); border: 1px solid rgba(245,166,35,0.3); }
-    .info-card { grid-column: span 4; display: flex; flex-direction: column; gap: 12px; }
+    /* Quick Selector Box */
+    .quick-selector-box {
+      width: 100%; background: #0B0D10; border: 2px solid var(--primary);
+      border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 6px;
+    }
 
-    /* Current Holdings Table Card (Span 12) */
-    .holdings-card { grid-column: span 12; }
-    .holdings-table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 12px; }
-    .holdings-table th { color: var(--text-muted); font-size: 12px; font-weight: 500; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-    .holdings-table td { padding: 16px 0; border-bottom: 1px solid rgba(36, 42, 53, 0.5); font-size: 14px; }
-    .holdings-table tr:hover { background: rgba(255,255,255,0.01); }
+    /* Roster Strip & Ledger */
+    .roster-row-strip {
+      background: #0B0D10; border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px;
+      display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px;
+    }
+    .strip-name { font-size: 17px; font-weight: 800; color: #FFF; }
+    .strip-sub { font-size: 13px; color: var(--text-dim); }
+    .strip-due-num { font-size: 18px; font-weight: 900; font-family: monospace; }
+    .strip-action-btn {
+      height: 38px; padding: 0 14px; border-radius: 8px; border: none;
+      background: var(--primary); color: #0B0D10; font-size: 14px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
 
-    /* Tubewell Core Integration Section (v1.1 Base retained) */
-    .tubewell-section { grid-column: span 12; background: #11151D; border: 1.5px solid var(--primary); border-radius: 16px; padding: 24px; }
-    
-    /* Modals & Dialogs */
+    /* Modals */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(11, 13, 16, 0.92);
+      position: fixed; inset: 0; background: rgba(11, 13, 16, 0.95);
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-card {
@@ -210,55 +242,111 @@
     }
     
     input, select {
-      width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--border);
-      background: #0B0D10; color: var(--text); padding: 0 16px; font-size: 15px; outline: none;
+      width: 100%; height: 50px; border-radius: 12px; border: 1px solid var(--border);
+      background: #0B0D10; color: var(--text); padding: 0 16px; font-size: 16px; outline: none;
     }
     input:focus { border-color: var(--primary); }
 
     .btn-action {
-      height: 48px; border-radius: 12px; border: none; padding: 0 18px;
-      font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+      height: 50px; border-radius: 12px; border: none; padding: 0 18px;
+      font-size: 16px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
     }
     .btn-p { background: var(--primary); color: #0B0D10; }
     .btn-s { background: var(--success); color: #FFF; }
     .btn-d { background: var(--danger); color: #FFF; }
 
-    /* Responsive adjustments for smaller desktop/tablet views */
-    @media (max-width: 1024px) {
-      .app-sidebar { display: none; }
-      .app-main-content { max-width: 100vw; }
-      .user-overview-card, .asset-card, .deposit-buy-card, .vip-card, .affiliate-card, .info-card { grid-column: span 12; }
+    /* Bottom App Bar for Mobile */
+    .bottom-app-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 68px;
+      background: rgba(14, 16, 20, 0.98); backdrop-filter: blur(16px);
+      border-top: 2px solid var(--border); display: none; align-items: center; justify-content: space-around; z-index: 90;
+      padding-bottom: env(safe-area-inset-bottom);
     }
+    @media (max-width: 1024px) {
+      .bottom-app-bar { display: flex; }
+    }
+    .app-tab {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      color: var(--text-dim); font-size: 11px; font-weight: 800; cursor: pointer; border: none; background: transparent;
+    }
+    .app-tab.active { color: var(--primary); }
   </style>
 </head>
 <body>
 
-<!-- Login / Authentication Gate (Base v1.0 / v1.1 Feature Preserved) -->
+<!-- Login Gate (Preserving Base v1.0 Security) -->
 <div class="modal-overlay" id="authGate">
   <div class="modal-card">
     <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 14px;">
       <div style="display: flex; align-items: center; gap: 12px;">
         <div class="brand-logo-box">M</div>
         <div>
-          <div style="font-size: 20px; font-weight: 700; color: var(--text);">Mevolut Secure Access</div>
-          <div style="font-size: 12px; color: var(--text-muted);">Institutional Crypto & Water Grid Gateway</div>
+          <div style="font-size: 20px; font-weight: 700; color: var(--text);">ट्यूबवेल स्मार्ट ग्रिड लॉगिन</div>
+          <div style="font-size: 12px; color: var(--text-muted);">Mevolut Fintech & Water Gateway</div>
         </div>
       </div>
-      <span style="font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: rgba(245,166,35,0.15); color: var(--primary);">v1.1 Pro</span>
+      <span class="header-version-tag">v1.0 Base</span>
     </div>
 
     <div id="step_mobile">
-      <label style="font-size: 13px; font-weight: 600; color: var(--text-dim); display: block; margin-bottom: 6px;">Enter 10-digit Mobile or UID:</label>
-      <input type="tel" id="input_phone" placeholder="e.g. 8354816628" value="8354816628">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="verifyFarmerMobile()">Continue ➔</button>
+      <label style="font-size: 14px; font-weight: 700; color: var(--text-dim); display: block; margin-bottom: 6px;">10 अंकों का मोबाइल नंबर दर्ज करें:</label>
+      <input type="tel" id="input_phone" placeholder="उदा. 8354816628" value="8354816628">
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="verifyFarmerMobile()">आगे बढ़ें ➔</button>
     </div>
 
     <div id="step_secret_pin" style="display: none;">
-      <div id="user_display_badge" style="font-size: 14px; font-weight: 600; color: var(--primary); background: #0B0D10; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid var(--border);"></div>
-      <label style="font-size: 13px; font-weight: 600; color: var(--text-dim); margin-top: 12px; display: block;">4-Digit Security PIN:</label>
-      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="text-align: center; letter-spacing: 8px; font-size: 22px;">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="authenticateWithPIN()">Authenticate & Enter</button>
-      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-muted);" onclick="returnToPhoneStep()">Change Identifier</button>
+      <div id="user_display_badge" style="font-size: 15px; font-weight: 700; color: var(--primary); background: #0B0D10; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid var(--border);"></div>
+      <label style="font-size: 14px; font-weight: 700; color: var(--text-dim); margin-top: 12px; display: block;">4 अंक का गुप्त पिन (PIN):</label>
+      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="text-align: center; letter-spacing: 8px; font-size: 24px;">
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
+      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-muted);" onclick="returnToPhoneStep()">नंबर बदलें</button>
+    </div>
+  </div>
+</div>
+
+<!-- Consolidated Pakka / Kachha Bill Generation Modal -->
+<div class="modal-overlay" id="invoiceModal" style="display: none;">
+  <div class="modal-card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <strong style="font-size: 18px; color: var(--primary);">बिलिंग कंसोल (Consolidation)</strong>
+      <button class="btn-circle" style="width:36px; height:36px;" onclick="closeInvoiceModal()">✕</button>
+    </div>
+    
+    <div style="background: rgba(11,19,41,0.85); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; display: flex; flex-direction: column; gap: 5px;">
+      <div id="invModalFarmerDesc" style="font-weight: 900; color: #fff; font-size: 16px;">--</div>
+      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+        <span>पिछली पक्की रीडिंग:</span>
+        <strong id="invModalLastPakkaDate" style="color: var(--primary); font-family: monospace;">--</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+        <span>अनबिल उपयोग:</span>
+        <strong id="invModalDurationTxt" style="color: var(--text);">0 घंटे 0 मिनट (0 मि.)</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+        <span>अवधि का बिल:</span>
+        <strong id="invModalCalculatedFare" style="color: var(--success); font-size: 17px;">₹0</strong>
+      </div>
+    </div>
+
+    <div>
+      <label style="font-size: 13px; color: var(--text-dim);">पक्का बिल कट-ऑफ तारीख:</label>
+      <input type="date" id="input_pakka_cutoff_date">
+    </div>
+
+    <div>
+      <label style="font-size: 13px; color: var(--text-dim);">जमा की गई रकम (Cash/UPI):</label>
+      <input type="number" id="input_inv_paid" placeholder="₹0" value="0">
+    </div>
+
+    <div>
+      <label style="font-size: 13px; color: var(--text-dim);">माफी / छूट (Discount):</label>
+      <input type="number" id="input_inv_discount" placeholder="₹0" value="0">
+    </div>
+
+    <div style="display: flex; gap: 8px; margin-top: 6px;">
+      <button class="btn-action btn-p" style="flex: 1;" onclick="commitPakkaConsolidationInvoice()">
+        <span class="icon">verified</span> पक्का बिल बनाएं
+      </button>
     </div>
   </div>
 </div>
@@ -267,309 +355,125 @@
 <header class="app-header">
   <div class="header-brand">
     <div class="brand-logo-box">M</div>
-    <span class="header-brand-title">Mevolut</span>
+    <span class="header-brand-title">Mevolut Grid</span>
+    <span class="header-version-tag">v1.0 Base</span>
   </div>
   
   <nav class="nav-links">
     <a class="nav-link active">Dashboard</a>
-    <a class="nav-link" onclick="navigateSection('security')">Security</a>
-    <a class="nav-link" onclick="navigateSection('referral')">Referral</a>
-    <a class="nav-link" onclick="navigateSection('fees')">Trading Fees</a>
-    <a class="nav-link" onclick="navigateSection('api')">API Management</a>
+    <a class="nav-link">Security</a>
+    <a class="nav-link">Referral</a>
+    <a class="nav-link">Trading Fees</a>
   </nav>
 
   <div class="header-right">
-    <a class="nav-link" style="font-weight: 500;">Orders</a>
-    <button class="btn-deposit" onclick="openDepositModal()">Deposit</button>
-    <div class="user-avatar" id="headerAvatar" style="width: 36px; height: 36px; font-size: 14px; cursor: pointer;">NK</div>
-    <button class="btn-circle" style="width: 36px; height: 36px;" title="Theme Toggle"><span class="icon">dark_mode</span></button>
+    <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
+      <span class="icon" id="voiceBadgeIcon" style="font-size: 16px;">volume_up</span>
+      <span id="voiceBadgeText">आवाज</span>
+    </div>
+    <button class="btn-deposit" onclick="generateSystemReportPDF()">Audit PDF</button>
+    <div class="user-avatar" id="headerAvatar" style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #0B0D10; display: flex; align-items: center; justify-content: center; font-weight: 700;">NK</div>
+    <button class="btn-circle" style="width: 36px; height: 36px;" onclick="window.location.reload(true)"><span class="icon">sync</span></button>
   </div>
 </header>
 
-<!-- App Layout with Sidebar -->
+<!-- App Layout -->
 <div class="app-layout">
   
-  <!-- Left Sidebar Navigation -->
+  <!-- Left Sidebar -->
   <aside class="app-sidebar">
     <div class="sidebar-menu">
-      <a class="sidebar-item active"><span class="icon active">dashboard</span> Dashboard</a>
-      <a class="sidebar-item"><span class="icon">security</span> Security</a>
-      <a class="sidebar-item"><span class="icon">card_giftcard</span> Referral</a>
-      <a class="sidebar-item"><span class="icon">payments</span> Trading Fees</a>
-      <a class="sidebar-item"><span class="icon">api</span> API Management</a>
+      <a class="sidebar-item active"><span class="icon active">dashboard</span> डैशबोर्ड</a>
+      <a class="sidebar-item"><span class="icon">security</span> सुरक्षा</a>
+      <a class="sidebar-item"><span class="icon">card_giftcard</span> रेफरल</a>
+      <a class="sidebar-item"><span class="icon">payments</span> ट्रेडिंग फीस</a>
     </div>
     
     <div class="sidebar-menu">
-      <a class="sidebar-item"><span class="icon">settings</span> Settings</a>
-      <a class="sidebar-item" onclick="logout()" style="color: var(--danger);"><span class="icon" style="color: var(--danger);">logout</span> Disconnect</a>
+      <a class="sidebar-item" onclick="logout()" style="color: var(--danger);"><span class="icon" style="color: var(--danger);">logout</span> लॉग आउट</a>
     </div>
   </aside>
 
   <!-- Main Content Area -->
   <main class="app-main-content">
     
-    <div class="dashboard-grid">
-      
-      <!-- 5.1 User Overview Card -->
-      <div class="web3-card user-overview-card">
-        <div class="user-left">
-          <div class="user-avatar" id="mainAvatar">NK</div>
-          <div>
-            <div style="font-size: 12px; color: var(--text-muted);" id="greetingText">Welcome back,</div>
-            <div style="font-size: 18px; font-weight: 600; color: var(--text);" id="userNameDisplay">Nitin Kumar</div>
-          </div>
-        </div>
-        <div class="user-info-blocks">
-          <div class="info-block">
-            <span class="info-label">UID</span>
-            <span class="info-val" style="display: flex; align-items: center; gap: 4px;">83548166 <span class="icon" style="font-size: 14px; cursor: pointer;">content_copy</span></span>
-          </div>
-          <div class="info-block">
-            <span class="info-label">Verification</span>
-            <span class="info-val" style="color: var(--success); display: flex; align-items: center; gap: 4px;"><span class="icon" style="font-size: 14px; color: var(--success);">verified</span> Level 2</span>
-          </div>
-          <div class="info-block">
-            <span class="info-label">Security Level</span>
-            <span class="info-val" style="color: var(--primary);">Institutional</span>
-          </div>
-          <div class="info-block">
-            <span class="info-label">Time Zone</span>
-            <span class="info-val">IST (UTC+5:30)</span>
-          </div>
-        </div>
-        <div>
-          <button class="action-pill">Hide info</button>
-        </div>
+    <!-- 3-Phase Line Telemetry -->
+    <section class="tel-grid">
+      <div class="tel-box">
+        <div class="tel-lbl">लाल (R)</div>
+        <div class="tel-val" style="color:#f87171;" id="tele_v_r">-- V</div>
+      </div>
+      <div class="tel-box">
+        <div class="tel-lbl">पीला (Y)</div>
+        <div class="tel-val" style="color:#facc15;" id="tele_v_y">-- V</div>
+      </div>
+      <div class="tel-box">
+        <div class="tel-lbl">नीला (B)</div>
+        <div class="tel-val" style="color:#60a5fa;" id="tele_v_b">-- V</div>
+      </div>
+      <div class="tel-box">
+        <div class="tel-lbl">लोड (A)</div>
+        <div class="tel-val" style="color:#4ade80;" id="tele_i_amps">0.0 A</div>
+      </div>
+    </section>
+
+    <!-- GIANT 180px CIRCULAR MOTOR CONTROLLER -->
+    <section class="motor-hero">
+      <div>
+        <div style="font-size: 22px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
+        <div style="font-size: 14px; color: var(--warning); font-weight: 700; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
       </div>
 
-      <!-- 5.3 Total Asset Card -->
-      <div class="web3-card asset-card">
-        <div class="asset-watermark">$</div>
-        <div>
-          <div style="font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Total Estimated Balance</div>
-          <div style="font-size: 32px; font-weight: 600; color: var(--text); margin-top: 6px;">$48,920.45 <span style="font-size: 16px; color: var(--text-muted);">USD</span></div>
-          <div style="font-size: 13px; color: var(--success); margin-top: 4px;">≈ 0.5824 BTC (+3.42%)</div>
-        </div>
-        <div class="asset-actions">
-          <button class="action-pill" style="background: var(--primary); color: #0B0D10; font-weight: 600;" onclick="openDepositModal()">Deposit</button>
-          <button class="action-pill" onclick="openWithdrawModal()">Withdraw</button>
-          <button class="action-pill" onclick="navigateSection('trade')">Buy Stocks</button>
-        </div>
+      <div class="giant-circular-wrapper">
+        <div class="circular-pulse-ring"></div>
+        <button id="mainMotorButton" class="giant-circular-btn btn-locked" onclick="handleMotorSwitch()">
+          <span class="icon" style="font-size: 44px;" id="mainMotorIcon">lock</span>
+          <span class="circle-label-main" id="mainMotorText">बंद है</span>
+          <span class="circle-label-sub" id="mainMotorSubText">LOCKED</span>
+        </button>
       </div>
 
-      <!-- 5.2 Deposit / Buy Card -->
-      <div class="web3-card deposit-buy-card">
-        <div>
-          <div style="font-size: 16px; font-weight: 600; color: var(--text);">Quick Funding & Acquisition</div>
-          <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Instant multi-currency deposits and institutional stock gateways.</div>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
-          <div class="deposit-row" onclick="openDepositModal()">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span class="icon" style="color: var(--primary);">account_balance_wallet</span>
-              <div>
-                <div style="font-weight: 500;">Deposit Fiat or Crypto</div>
-                <div style="font-size: 12px; color: var(--text-muted);">USDT, BTC, ETH, USD, INR</div>
-              </div>
-            </div>
-            <span class="icon">chevron_right</span>
-          </div>
-          <div class="deposit-row" onclick="alert('Stock gateway active.')">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span class="icon" style="color: var(--success);">trending_up</span>
-              <div>
-                <div style="font-weight: 500;">Buy Institutional Stocks</div>
-                <div style="font-size: 12px; color: var(--text-muted);">Direct local currency conversion</div>
-              </div>
-            </div>
-            <span class="icon">chevron_right</span>
-          </div>
-        </div>
+      <div class="quick-selector-box owner-only" style="display: none;">
+        <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px;">⚡ त्वरित खेत/किसान चयन:</div>
+        <select id="quick_select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
       </div>
+    </section>
 
-      <!-- 5.4 VIP Level Card -->
-      <div class="web3-card vip-card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div style="font-size: 16px; font-weight: 600;">VIP Tier Status</div>
-          <span style="font-size: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(245,166,35,0.15); color: var(--primary); font-weight: 650;">VIP 3</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-dim);">
-          <span>Spot Fee: 0.05%</span>
-          <span>Futures Fee: 0.02%</span>
-        </div>
-        <div>
-          <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">
-            <span>Token Holding Progress</span>
-            <span>68% to VIP 4</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill"></div>
-          </div>
-        </div>
-        <a style="font-size: 13px; color: var(--primary); text-decoration: none; cursor: pointer; margin-top: auto;">View fee schedule & perks ➔</a>
+    <!-- Master Roster Ledger (Owner View) -->
+    <div class="web3-card owner-only" style="display: none;">
+      <div style="font-size: 18px; font-weight: 700; color: var(--primary);">सबका खाता (Master Ledger Roster)</div>
+      <div style="font-size: 13px; color: var(--text-dim);">सभी किसानों का कुल समय, जमा व बकाया:</div>
+      <div id="masterRosterContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+        <div style="text-align: center; padding: 12px; color: var(--text-muted);">लोड हो रहा है...</div>
       </div>
+    </div>
 
-      <!-- 5.6 Affiliate Program Card -->
-      <div class="web3-card affiliate-card">
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div style="font-size: 16px; font-weight: 600;">Global Affiliate Program</div>
-            <span class="icon" style="color: var(--primary); font-size: 28px;">monetization_on</span>
-          </div>
-          <div style="font-size: 13px; color: var(--text-dim); margin-top: 8px;">Earn up to 50% commission on institutional trading fees across all connected sub-accounts.</div>
-        </div>
-        <button class="btn-action btn-p" style="width: 100%; border-radius: 999px; margin-top: 16px;" onclick="alert('Affiliate application submitted.')">Apply now</button>
+    <!-- Recent Pump Activity Stream -->
+    <div class="web3-card">
+      <div style="font-size: 18px; font-weight: 700; color: var(--text);">ताज़ा पंप उपयोग विवरण (Recent Stream)</div>
+      <div id="recentPumpStreamContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+        <div style="text-align: center; padding: 12px; color: var(--text-muted);">हालिया रिकॉर्ड लोड हो रहे हैं...</div>
       </div>
-
-      <!-- 5.7 Information / News Card -->
-      <div class="web3-card info-card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div style="font-size: 16px; font-weight: 600;">Announcements</div>
-          <a style="font-size: 13px; color: var(--primary); text-decoration: none; cursor: pointer;">View more</a>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 4px;">
-          <div style="border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-            <div style="font-size: 13px; font-weight: 500; color: var(--text);">Mevolut launches zero-fee liquidity pools for high-frequency algorithmic traders.</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">2 hours ago</div>
-          </div>
-          <div>
-            <div style="font-size: 13px; font-weight: 500; color: var(--text);">Scheduled maintenance of decentralized oracle feeds completed successfully.</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Yesterday</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5.5 Current Holdings Table -->
-      <div class="web3-card holdings-card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div style="font-size: 18px; font-weight: 600;">Current Holdings & Assets</div>
-          <span style="font-size: 13px; color: var(--text-muted);">Real-time feed</span>
-        </div>
-        <table class="holdings-table">
-          <thead>
-            <tr>
-              <th>Asset</th>
-              <th>Market Price</th>
-              <th>24h Change</th>
-              <th>4h Trend</th>
-              <th style="text-align: right;">Quick Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span class="icon" style="color: var(--primary);">currency_bitcoin</span> Bitcoin (BTC)</td>
-              <td>$84,210.00</td>
-              <td style="color: var(--success); font-weight: 500;">+4.25%</td>
-              <td><span style="color: var(--success); font-family: monospace;">▲ 📈</span></td>
-              <td style="text-align: right;">
-                <button class="action-pill" style="padding: 4px 10px; font-size: 12px;" onclick="openDepositModal()">Deposit</button>
-                <button class="action-pill" style="padding: 4px 10px; font-size: 12px;" onclick="openWithdrawModal()">Withdraw</button>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span class="icon" style="color: var(--purple);">token</span> Ethereum (ETH)</td>
-              <td>$3,240.50</td>
-              <td style="color: var(--success); font-weight: 500;">+1.82%</td>
-              <td><span style="color: var(--success); font-family: monospace;">▲ 📈</span></td>
-              <td style="text-align: right;">
-                <button class="action-pill" style="padding: 4px 10px; font-size: 12px;" onclick="openDepositModal()">Deposit</button>
-                <button class="action-pill" style="padding: 4px 10px; font-size: 12px;" onclick="openWithdrawModal()">Withdraw</button>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span class="icon" style="color: var(--success);">currency_exchange</span> Tether (USDT)</td>
-              <td>$1.00</td>
-              <td style="color: var(--text-muted); font-weight: 500;">0.00%</td>
-              <td><span style="color: var(--text-muted); font-family: monospace;">▬ 📊</span></td>
-              <td style="text-align: right;">
-                <button class="action-pill" style="padding: 4px 10px; font-size: 12px;" onclick="openDepositModal()">Deposit</button>
-                <button class="action-pill" style="padding: 4px 10px; font-size: 12px;" onclick="openWithdrawModal()">Withdraw</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Tubewell / Agricultural IoT & Ledger Integration Module (Preserving Core Base & PDF Generation) -->
-      <div class="tubewell-section">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <div>
-            <div style="font-size: 18px; font-weight: 700; color: var(--primary);">Agricultural Micro-Grid & Pump Ledger Module</div>
-            <div style="font-size: 13px; color: var(--text-dim);">Integrated dual-stage billing (Check Slip vs Pakka Settlement), PDF statement generation & IoT motor telemetry.</div>
-          </div>
-          <button class="btn-action btn-p" onclick="generateSystemReportPDF()">
-            <span class="icon">picture_as_pdf</span> Download Audit PDF
-          </button>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px;">
-          <div style="background: #0B0D10; padding: 14px; border-radius: 12px; border: 1px solid var(--border);">
-            <div style="font-size: 12px; color: var(--text-muted);">Active Grid Tariff</div>
-            <div style="font-size: 20px; font-weight: 700; color: var(--success); font-family: monospace;">₹2.00 / Min</div>
-          </div>
-          <div style="background: #0B0D10; padding: 14px; border-radius: 12px; border: 1px solid var(--border);">
-            <div style="font-size: 12px; color: var(--text-muted);">Telemetry Status</div>
-            <div style="font-size: 20px; font-weight: 700; color: var(--primary);" id="telemetryStatusLive">Online (412V Stable)</div>
-          </div>
-          <div style="background: #0B0D10; padding: 14px; border-radius: 12px; border: 1px solid var(--border);">
-            <div style="font-size: 12px; color: var(--text-muted);">System Version</div>
-            <div style="font-size: 20px; font-weight: 700; color: var(--purple);">v1.1 Pro Hybrid</div>
-          </div>
-        </div>
-
-        <!-- Quick Farmer Roster Strip Preview -->
-        <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Registered Micro-Grid Farmers & Ledger:</div>
-        <div id="masterRosterContainer" style="display: flex; flex-direction: column; gap: 8px;">
-          <div style="padding: 12px; background: #0B0D10; border-radius: 8px; text-align: center; color: var(--text-muted);">Loading secure cloud ledger...</div>
-        </div>
-      </div>
-
     </div>
 
   </main>
 </div>
 
-<!-- Deposit Modal Mockup -->
-<div class="modal-overlay" id="depositModal" style="display: none;">
-  <div class="modal-card">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 18px; color: var(--primary);">Deposit Funds</strong>
-      <button class="btn-circle" style="width:32px; height:32px;" onclick="closeDepositModal()">✕</button>
-    </div>
-    <div>
-      <label style="font-size: 13px; color: var(--text-dim); display: block; margin-bottom: 4px;">Select Asset:</label>
-      <select>
-        <option>USDT (Tether - TRC20 / ERC20)</option>
-        <option>BTC (Bitcoin Network)</option>
-        <option>INR / USD Bank Wire</option>
-      </select>
-    </div>
-    <div>
-      <label style="font-size: 13px; color: var(--text-dim); display: block; margin-bottom: 4px;">Amount:</label>
-      <input type="number" placeholder="0.00">
-    </div>
-    <button class="btn-action btn-p" style="width: 100%; margin-top: 8px;" onclick="alert('Deposit address generated successfully.'); closeDepositModal();">Proceed to Gateway</button>
-  </div>
-</div>
-
-<!-- Withdraw Modal Mockup -->
-<div class="modal-overlay" id="withdrawModal" style="display: none;">
-  <div class="modal-card">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 18px; color: var(--danger);">Withdraw Funds</strong>
-      <button class="btn-circle" style="width:32px; height:32px;" onclick="closeWithdrawModal()">✕</button>
-    </div>
-    <div>
-      <label style="font-size: 13px; color: var(--text-dim); display: block; margin-bottom: 4px;">Destination Address / IBAN:</label>
-      <input type="text" placeholder="Enter secure address">
-    </div>
-    <div>
-      <label style="font-size: 13px; color: var(--text-dim); display: block; margin-bottom: 4px;">Withdrawal Amount ($):</label>
-      <input type="number" placeholder="0.00">
-    </div>
-    <button class="btn-action btn-d" style="width: 100%; margin-top: 8px;" onclick="alert('Withdrawal security OTP dispatched.'); closeWithdrawModal();">Authorize Withdrawal</button>
-  </div>
-</div>
+<!-- Bottom Mobile App Bar -->
+<nav class="bottom-app-bar">
+  <button class="app-tab active" onclick="navigateTab('dashboard')">
+    <span class="icon">power_settings_new</span>
+    <span>मोटर</span>
+  </button>
+  <button class="app-tab owner-only" onclick="navigateTab('roster')" style="display: none;">
+    <span class="icon">table_rows</span>
+    <span>खाता</span>
+  </button>
+  <button class="app-tab" onclick="generateSystemReportPDF()">
+    <span class="icon">picture_as_pdf</span>
+    <span>PDF</span>
+  </button>
+</nav>
 
 <script>
   const firebaseConfig = {
@@ -587,21 +491,21 @@
   const PRIMARY_ROOT_PHONE = "8354816628";
 
   let loggedInUser = null, candidateUser = null;
-  let farmersCache = {}, sessionsCache = [], invoicesCache = [];
-  let unitTariffPerMin = 2.00;
+  let activeTurnObj = null, farmersCache = {}, sessionsCache = [], invoicesCache = [];
+  let unitTariffPerMin = 2.00, isMotorPhysicallyOn = false;
 
   function sanitizeMobile(p) { return String(p || '').replace(/\D/g, '').slice(-10); }
 
   async function verifyFarmerMobile() {
     const p = sanitizeMobile(document.getElementById('input_phone').value.trim());
-    if (p.length !== 10) return alert("Please enter a valid 10-digit mobile number.");
+    if (p.length !== 10) return alert("कृपया 10 अंक का सही मोबाइल नंबर डालें।");
 
     try {
       const meta = (await rtdb.ref('/tubewell/system_meta').once('value')).val() || {};
       const co = meta.secondaryMaster || null;
 
       if (p === PRIMARY_ROOT_PHONE) {
-        candidateUser = { role: 'master', tier: 'primary', name: 'Nitin Kumar', phone: p, pin: String(meta.masterPin || '8354') };
+        candidateUser = { role: 'master', tier: 'primary', name: 'Nitin Kumar (Master)', phone: p, pin: String(meta.masterPin || '8354') };
       } else if (co && co.active && sanitizeMobile(co.phone) === p) {
         candidateUser = { role: 'master', tier: 'secondary', name: co.name || 'Co-Master', phone: p, pin: String(co.pin || '1234') };
       } else {
@@ -610,7 +514,7 @@
         Object.keys(farmers).forEach(k => {
           if (sanitizeMobile(farmers[k].phone) === p || sanitizeMobile(k) === p) found = { uid: farmers[k].uid || k, ...farmers[k] };
         });
-        if (!found) return alert("Number not registered in institutional registry.");
+        if (!found) return alert("यह मोबाइल नंबर दर्ज नहीं है।");
         candidateUser = { role: 'farmer', ...found, pin: String(found.pin || p.slice(-4)) };
       }
 
@@ -618,21 +522,19 @@
       document.getElementById('step_secret_pin').style.display = 'block';
       document.getElementById('user_display_badge').innerText = `${candidateUser.name} (+91-${candidateUser.phone})`;
     } catch (err) {
-      alert("Network or database unreachable.");
+      alert("इंटरनेट कनेक्शन जांचें।");
     }
   }
 
   function authenticateWithPIN() {
     const entered = document.getElementById('input_pin').value.trim();
-    if (String(entered) !== String(candidateUser.pin)) return alert("Incorrect security PIN.");
+    if (String(entered) !== String(candidateUser.pin)) return alert("गलत पिन है।");
 
     loggedInUser = candidateUser;
     document.getElementById('authGate').style.display = 'none';
     
-    document.getElementById('userNameDisplay').innerText = loggedInUser.name;
-    document.getElementById('mainAvatar').innerText = loggedInUser.name.slice(0, 2).toUpperCase();
-    document.getElementById('headerAvatar').innerText = loggedInUser.name.slice(0, 2).toUpperCase();
-    document.getElementById('greetingText').innerText = loggedInUser.role === 'master' ? 'Institutional Master,' : 'Verified Trader / Farmer,';
+    const isMaster = loggedInUser.role === 'master';
+    document.querySelectorAll('.owner-only').forEach(el => el.style.display = isMaster ? 'block' : 'none');
 
     initCloudListeners();
   }
@@ -644,15 +546,26 @@
 
   function logout() { loggedInUser = null; document.getElementById('authGate').style.display = 'flex'; returnToPhoneStep(); }
 
-  function openDepositModal() { document.getElementById('depositModal').style.display = 'flex'; }
-  function closeDepositModal() { document.getElementById('depositModal').style.display = 'none'; }
-  function openWithdrawModal() { document.getElementById('withdrawModal').style.display = 'flex'; }
-  function closeWithdrawModal() { document.getElementById('withdrawModal').style.display = 'none'; }
-  function navigateSection(sec) { alert(`Navigating to ${sec.toUpperCase()} module...`); }
-
   function initCloudListeners() {
+    rtdb.ref('/tubewell/telemetry').on('value', snap => {
+      const t = snap.val();
+      if (!t) return;
+      document.getElementById('tele_v_r').innerText = `${t.vR || 412} V`;
+      document.getElementById('tele_v_y').innerText = `${t.vY || 414} V`;
+      document.getElementById('tele_v_b').innerText = `${t.vB || 410} V`;
+      document.getElementById('tele_i_amps').innerText = `${(t.amps || 0).toFixed(1)} A`;
+      refreshMotorUI();
+    });
+
+    rtdb.ref('/tubewell/active_turn').on('value', snap => {
+      activeTurnObj = snap.val() || null;
+      isMotorPhysicallyOn = !!(activeTurnObj && activeTurnObj.isMotorRunning);
+      refreshMotorUI();
+    });
+
     rtdb.ref('/tubewell/farmers').on('value', snap => {
       farmersCache = snap.val() || {};
+      populateTargetFarmerDropdowns();
       recalculateLedger();
     });
 
@@ -660,6 +573,7 @@
       const s = snap.val() || {};
       sessionsCache = Object.keys(s).map(k => ({ sessionId: k, ...s[k] }));
       recalculateLedger();
+      renderRecentStream();
     });
 
     rtdb.ref('/tubewell/invoices').on('value', snap => {
@@ -696,11 +610,12 @@
     });
 
     const container = document.getElementById('masterRosterContainer');
+    if (!container) return;
     container.innerHTML = '';
 
     const list = Object.values(balances);
     if (list.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:12px; color: var(--text-muted);">No farmers registered yet.</div>`;
+      container.innerHTML = `<div style="text-align: center; padding: 10px; color: var(--text-muted);">कोई किसान पंजीकृत नहीं है।</div>`;
       return;
     }
 
@@ -708,43 +623,161 @@
       const h = Math.floor(b.totalMinutes / 60);
       const m = b.totalMinutes % 60;
       container.innerHTML += `
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #0B0D10; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border);">
-          <div>
-            <div style="font-weight: 600; color: #FFF;">${b.name} <span style="font-size: 11px; color: var(--text-muted);">(${b.plot || 'Plot'})</span></div>
-            <div style="font-size: 11px; color: var(--text-dim);">Usage: ${h}h ${m}m | Paid: ₹${b.totalPaid}</div>
+        <div class="roster-row-strip">
+          <div class="strip-user-info">
+            <span class="strip-name">${b.name}</span>
+            <span class="strip-sub">${b.plot || 'खेत'} | समय: ${h}घं ${m}मि</span>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 15px; font-weight: 700; color: ${b.netDue > 0 ? 'var(--danger)' : 'var(--success)'}; font-family: monospace;">Due: ₹${b.netDue}</div>
+            <span class="strip-due-num" style="color: ${b.netDue > 0 ? 'var(--danger)' : 'var(--success)'};">₹${b.netDue}</span>
           </div>
+          <button class="strip-action-btn" onclick="alert('Farmer: ${b.name}\\nDue: ₹${b.netDue}')">विवरण</button>
         </div>
       `;
     });
   }
 
-  // PDF Generation using jsPDF (Preserving core functionality)
+  function renderRecentStream() {
+    const container = document.getElementById('recentPumpStreamContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const stream = [...sessionsCache].reverse().slice(0, 5);
+    if (stream.length === 0) {
+      container.innerHTML = `<div style="text-align: center; padding: 10px; color: var(--text-muted);">हाल ही में कोई सिंचाई नहीं हुई है।</div>`;
+      return;
+    }
+
+    stream.forEach(s => {
+      const m = s.durationMins || 0;
+      const h = Math.floor(m / 60);
+      const rem = m % 60;
+      container.innerHTML += `
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #0B0D10; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border);">
+          <div>
+            <div style="font-weight: 700; color: #FFF;">${s.userName} <span style="font-size: 11px; color: var(--text-muted);">(${s.plot || 'खेत'})</span></div>
+            <div style="font-size: 11px; color: var(--text-dim);">${s.date} | ${h}घं ${rem}मि</div>
+          </div>
+          <div style="text-align: right; font-weight: 700; color: var(--success); font-family: monospace;">₹${Math.round(s.fare || (m * unitTariffPerMin))}</div>
+        </div>
+      `;
+    });
+  }
+
+  function refreshMotorUI() {
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
+    const isMyTurn = activeTurnObj && loggedInUser && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
+    const isAuthorized = isMaster ? true : isMyTurn;
+
+    const btn = document.getElementById('mainMotorButton');
+    const icon = document.getElementById('mainMotorIcon');
+    const mainText = document.getElementById('mainMotorText');
+    const subText = document.getElementById('mainMotorSubText');
+    const title = document.getElementById('motorTitleState');
+    const sub = document.getElementById('motorSubState');
+
+    if (isMotorPhysicallyOn) {
+      title.innerText = "मोटर चालू है (पानी चल रहा है)";
+      title.style.color = "var(--success)";
+      sub.innerText = "खेत में पानी जा रहा है...";
+    } else {
+      title.innerText = "मोटर बंद है";
+      title.style.color = "var(--text)";
+      sub.innerText = "मोटर चालू करने के लिए तैयार";
+    }
+
+    if (!isAuthorized) {
+      btn.className = "giant-circular-btn btn-locked";
+      icon.innerText = "lock";
+      mainText.innerText = "बंद है";
+      subText.innerText = "LOCKED";
+    } else {
+      if (isMotorPhysicallyOn) {
+        btn.className = "giant-circular-btn btn-stop";
+        icon.innerText = "power_settings_new";
+        mainText.innerText = "बंद करें";
+        subText.innerText = "STOP";
+      } else {
+        btn.className = "giant-circular-btn btn-start";
+        icon.innerText = "play_arrow";
+        mainText.innerText = "चालू करें";
+        subText.innerText = "START";
+      }
+    }
+  }
+
+  async function handleMotorSwitch() {
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
+    const isMyTurn = activeTurnObj && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
+    if (!isMaster && !isMyTurn) return alert("अभी आपका नंबर नहीं है।");
+
+    triggerVibrate(60);
+
+    if (!isMotorPhysicallyOn && isMaster && !activeTurnObj) {
+      const now = Date.now();
+      await rtdb.ref('/tubewell/active_turn').set({
+        farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_ROOT_PHONE, farmerName: 'मालिक का खेत',
+        plot: 'खेत', isOwnerPersonalRun: true, cycleStartTimestamp: now,
+        cycleStartTimeIso: new Date(now).toLocaleTimeString('en-IN'),
+        accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
+      });
+    }
+
+    if (!isMotorPhysicallyOn) {
+      await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: true, lastMotorStartTime: Date.now() });
+      rtdb.ref('/tubewell/control/trigger_start').set(true);
+    } else {
+      const elapsed = activeTurnObj.lastMotorStartTime ? Math.round((Date.now() - activeTurnObj.lastMotorStartTime) / 1000) : 0;
+      const total = (activeTurnObj.accumulatedSecondsBeforeCurrentRun || 0) + elapsed;
+      await rtdb.ref('/tubewell/active_turn').update({ isMotorRunning: false, accumulatedSecondsBeforeCurrentRun: total, lastMotorStartTime: null });
+      rtdb.ref('/tubewell/control/trigger_stop').set(true);
+    }
+  }
+
+  function populateTargetFarmerDropdowns() {
+    const selQuick = document.getElementById('quick_select_target_farmer');
+    if (!selQuick) return;
+    const optionsHtml = ['<option value="OWNER_DIRECT">⚡ मालिक का खेत (Standby)</option>'];
+    Object.keys(farmersCache).forEach(k => {
+      const f = farmersCache[k];
+      optionsHtml.push(`<option value="${f.uid || k}">पानी दें: ${f.name} (${f.plot || 'खेत'})</option>`);
+    });
+    selQuick.innerHTML = optionsHtml.join('');
+  }
+
+  async function executeInstantFieldSwitch(uid) {
+    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले मोटर बंद करें।");
+    const now = Date.now();
+    const timeStr = new Date(now).toLocaleTimeString('en-IN');
+    if (uid === 'OWNER_DIRECT') {
+      await rtdb.ref('/tubewell/active_turn').set({
+        farmerUid: 'OWNER_DIRECT', farmerPhone: PRIMARY_ROOT_PHONE, farmerName: 'मालिक का खेत',
+        plot: 'खेत', isOwnerPersonalRun: true, cycleStartTimestamp: now,
+        cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
+      });
+    } else {
+      const f = farmersCache[uid];
+      if (!f) return;
+      await rtdb.ref('/tubewell/active_turn').set({
+        farmerUid: f.uid || uid, farmerPhone: f.phone, farmerName: f.name,
+        plot: f.plot || 'खेत', isOwnerPersonalRun: false, cycleStartTimestamp: now,
+        cycleStartTimeIso: timeStr, accumulatedSecondsBeforeCurrentRun: 0, isMotorRunning: false, lastMotorStartTime: null
+      });
+    }
+  }
+
   function generateSystemReportPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(18);
-    doc.text("Mevolut & Tubewell Grid - Institutional Audit Statement", 14, 20);
-
+    doc.text("Tubewell Smart Grid v1.0.1 - Audit Statement", 14, 20);
     doc.setFont("Helvetica", "normal");
     doc.setFontSize(11);
     doc.text(`Generated On: ${new Date().toLocaleString()}`, 14, 28);
-    doc.text(`Authorized Operator: ${loggedInUser ? loggedInUser.name : 'System Master'}`, 14, 34);
-
+    doc.text(`Operator: ${loggedInUser ? loggedInUser.name : 'System Master'}`, 14, 34);
     doc.line(14, 40, 196, 40);
-
-    doc.setFont("Helvetica", "bold");
-    doc.text("Summary Financial Position:", 14, 48);
-    doc.setFont("Helvetica", "normal");
-    doc.text("Total Estimated Asset Value: $48,920.45 USD", 14, 56);
-    doc.text("Active Micro-Grid Tariff Rate: INR 2.00 / Min", 14, 62);
-    doc.text("Telemetry Status: Stable (412V Three-Phase Grid)", 14, 68);
-
-    doc.save("Mevolut_Tubewell_Audit_Report.pdf");
+    doc.save("Tubewell_Audit_Report.pdf");
   }
 </script>
 </body>
