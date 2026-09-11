@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#020617">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>ट्यूबवेल स्मार्ट ग्रिड 10.0</title>
+  <title>ट्यूबवेल स्मार्ट ग्रिड 11.0</title>
 
   <!-- Google Material Symbols, Firebase SDKs & Fuse.js -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0" />
@@ -31,42 +29,38 @@
       --purple: #a855f7;
       --text: #f8fafc;
       --text-dim: #94a3b8;
-      --radius: 18px;
+      --radius: 16px;
     }
 
     * {
-      box-sizing: border-box;
-      margin: 0; padding: 0;
+      box-sizing: border-box; margin: 0; padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
-      width: 100%;
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
+      width: 100%; min-height: 100%;
+      background: var(--bg); color: var(--text);
       overflow-x: hidden;
       padding-top: env(safe-area-inset-top);
       padding-bottom: calc(84px + env(safe-area-inset-bottom));
     }
 
     .icon {
-      font-family: 'Material Symbols Rounded';
-      font-weight: normal; font-style: normal;
-      font-size: 26px; display: inline-block; vertical-align: middle; line-height: 1;
+      font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal;
+      font-size: 24px; display: inline-block; vertical-align: middle; line-height: 1;
     }
 
     /* Fixed App Header */
     .app-header {
       position: sticky; top: 0; z-index: 100;
       background: rgba(11, 19, 41, 0.96); backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border); height: 60px; padding: 0 14px;
+      border-bottom: 1px solid var(--border); height: 56px; padding: 0 14px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .header-brand { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 900; color: var(--primary); }
+    .header-brand { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 900; color: var(--primary); }
     .btn-circle {
-      width: 42px; height: 42px; border-radius: 50%;
+      width: 38px; height: 38px; border-radius: 50%;
       background: var(--card); border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
       color: var(--text); cursor: pointer; transition: transform 0.15s;
@@ -75,138 +69,138 @@
 
     .voice-badge {
       display: inline-flex; align-items: center; gap: 4px;
-      padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 800;
+      padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: 800;
       background: var(--card); border: 1px solid var(--border); cursor: pointer;
     }
     .voice-badge.active { background: var(--primary-dim); border-color: var(--primary); color: var(--primary); }
     .voice-badge.disabled { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); }
 
-    /* Fluid App Body */
     .app-body {
-      width: 100%;
-      padding: 12px;
-      display: flex; flex-direction: column; gap: 12px;
+      width: 100%; padding: 10px;
+      display: flex; flex-direction: column; gap: 10px;
     }
 
-    /* 4-Column Fluid Telemetry (2x2 on tiny screens, 4 on standard) */
-    .tel-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-    }
-    @media (max-width: 350px) {
-      .tel-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    /* 4-Column Compact Telemetry */
+    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
     .tel-box {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 8px 4px; text-align: center;
+      border-radius: 12px; padding: 6px 2px; text-align: center;
     }
-    .tel-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
-    .tel-val { font-size: 16px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+    .tel-lbl { font-size: 9.5px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
+    .tel-val { font-size: 15px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
-    /* Motor Reactor Hero */
+    /* Motor Controller */
     .motor-hero {
       width: 100%;
       background: radial-gradient(circle at 50% 15%, rgba(21, 34, 56, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
-      border: 1px solid var(--border-bright); border-radius: 22px;
-      padding: 20px 14px; text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 14px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+      border: 1px solid var(--border-bright); border-radius: 20px;
+      padding: 16px 12px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
-    .reactor-wrapper { position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; }
+    .reactor-wrapper { position: relative; width: 84px; height: 84px; display: flex; align-items: center; justify-content: center; }
     .pulse-wave {
       position: absolute; inset: 0; border-radius: 50%;
-      border: 4px solid var(--success); opacity: 0;
+      border: 3px solid var(--success); opacity: 0;
       animation: ripple 2s infinite ease-out; display: none;
     }
     @keyframes ripple { 0% { transform: scale(0.75); opacity: 0.9; } 100% { transform: scale(1.6); opacity: 0; } }
     .reactor-core {
-      width: 88px; height: 88px; border-radius: 50%;
-      background: #1e293b; border: 4px solid var(--border);
+      width: 74px; height: 74px; border-radius: 50%;
+      background: #1e293b; border: 3px solid var(--border);
       display: flex; align-items: center; justify-content: center;
-      font-size: 42px; z-index: 2; transition: all 0.35s ease;
+      font-size: 36px; z-index: 2; transition: all 0.35s ease;
     }
-    .reactor-core.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 35px var(--success-glow); }
+    .reactor-core.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 30px var(--success-glow); }
     .reactor-core.running + .pulse-wave { display: block; }
-    .reactor-core.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 35px var(--danger-glow); animation: shake 0.5s ease-in-out; }
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+    .reactor-core.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 30px var(--danger-glow); }
 
     .giant-actuator-btn {
-      width: 100%; height: 68px; border-radius: 18px; border: none;
-      font-size: 19px; font-weight: 900; letter-spacing: 0.5px;
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+      width: 100%; height: 62px; border-radius: 16px; border: none;
+      font-size: 18px; font-weight: 900; letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
     .giant-actuator-btn:active { transform: scale(0.97); }
     .btn-start { background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%); color: #fff; }
     .btn-stop { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); color: #fff; }
     .btn-locked { background: #1e293b; color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
 
-    /* Quick Selector Box - Immediately Below Start Button */
+    /* Quick Selector Box */
     .quick-selector-box {
-      width: 100%;
-      background: var(--surface);
-      border: 1.5px solid var(--primary);
-      border-radius: 16px; padding: 12px;
-      display: flex; flex-direction: column; gap: 6px;
-      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.12);
+      width: 100%; background: var(--surface); border: 1.5px solid var(--primary);
+      border-radius: 14px; padding: 10px; display: flex; flex-direction: column; gap: 4px;
     }
     .quick-selector-title {
-      font-size: 12.5px; font-weight: 800; color: var(--primary);
+      font-size: 11.5px; font-weight: 800; color: var(--primary);
       display: flex; align-items: center; justify-content: space-between;
     }
 
     /* Cards */
     .app-card {
-      width: 100%;
-      background: var(--surface); border: 1px solid var(--border);
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); overflow: hidden;
     }
-    .app-card-header { padding: 16px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .app-card-title { font-size: 15px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .app-card-arrow { transition: transform 0.25s; font-size: 24px; color: var(--text-dim); }
+    .app-card-header { padding: 14px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .app-card-title { font-size: 14.5px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .app-card-arrow { transition: transform 0.25s; font-size: 22px; color: var(--text-dim); }
     .app-card.open .app-card-arrow { transform: rotate(180deg); }
-    .app-card-content { display: none; padding: 14px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 12px; }
+    .app-card-content { display: none; padding: 12px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 10px; }
     .app-card.open .app-card-content { display: flex; }
 
     /* Bill Info Box */
     .bill-calc-box {
       background: rgba(11, 19, 41, 0.7); border: 1px solid var(--border-bright);
-      border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px;
+      border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 13px;
     }
     .calc-row { display: flex; justify-content: space-between; align-items: center; }
-    .calc-divider { border-top: 1px dashed var(--border); margin: 3px 0; }
+    .calc-divider { border-top: 1px dashed var(--border); margin: 2px 0; }
 
     /* Financial Horizon (3 Tabs) */
     .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .summary-box {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 10px 4px; text-align: center;
+      border-radius: 12px; padding: 8px 2px; text-align: center;
     }
-    .summary-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); }
-    .summary-val { font-size: 17px; font-weight: 900; font-family: monospace; margin-top: 3px; }
+    .summary-lbl { font-size: 9.5px; font-weight: 800; color: var(--text-dim); }
+    .summary-val { font-size: 16px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
-    /* Mobile-Native Roster Cards (No Wide Tables to Avoid Zooming Out) */
-    .roster-card-list { display: flex; flex-direction: column; gap: 8px; }
-    .roster-mobile-card {
+    /* --- REFACTORED: ULTRA CONCISE SINGLE ROW MASTER ROSTER --- */
+    .roster-single-row-list { display: flex; flex-direction: column; gap: 6px; }
+    .roster-row-strip {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;
+      border-radius: 12px; padding: 9px 10px;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 8px;
     }
-    .roster-card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-    .roster-card-stats {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
-      font-size: 11px; color: var(--text-dim); background: rgba(0,0,0,0.25); padding: 8px; border-radius: 10px;
+    .roster-row-strip:active { background: #131d33; }
+    .strip-user-info { display: flex; flex-direction: column; overflow: hidden; }
+    .strip-name { font-size: 13.5px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .strip-sub { font-size: 10.5px; color: var(--text-dim); }
+    
+    .strip-accounting-nums {
+      display: flex; flex-direction: column; align-items: flex-end; font-size: 11px;
     }
-    .roster-card-stats strong { color: var(--text); font-size: 13px; font-family: monospace; display: block; margin-top: 2px; }
+    .strip-paid-discount { color: var(--success); font-weight: 700; }
+    .strip-due-num { font-size: 14.5px; font-weight: 900; font-family: monospace; }
+    
+    .strip-action-btn {
+      height: 32px; padding: 0 10px; border-radius: 8px; border: none;
+      background: var(--success); color: #fff; font-size: 11px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .strip-action-btn:active { transform: scale(0.92); }
 
     /* AI Search */
     .ai-search-box { position: relative; display: flex; align-items: center; width: 100%; }
     .ai-search-box input {
-      width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--border-bright);
-      background: var(--surface); color: var(--text); padding: 0 46px 0 12px; font-size: 14.5px; outline: none;
+      width: 100%; height: 44px; border-radius: 12px; border: 1px solid var(--border-bright);
+      background: var(--surface); color: var(--text); padding: 0 42px 0 12px; font-size: 14px; outline: none;
     }
     .ai-search-box .mic-btn {
-      position: absolute; right: 4px; width: 40px; height: 40px; border-radius: 10px;
+      position: absolute; right: 4px; width: 36px; height: 36px; border-radius: 10px;
       border: none; background: var(--card); color: var(--primary);
       display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
@@ -215,7 +209,7 @@
     .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
     .filter-pills::-webkit-scrollbar { display: none; }
     .pill {
-      font-size: 11.5px; font-weight: 800; padding: 7px 12px; border-radius: 18px;
+      font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 16px;
       border: 1px solid var(--border); background: var(--surface); color: var(--text-dim);
       white-space: nowrap; cursor: pointer;
     }
@@ -223,12 +217,12 @@
 
     /* Form Controls */
     input, select {
-      width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 14.5px; outline: none;
+      width: 100%; height: 44px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 14px; outline: none;
     }
     .btn-action {
-      height: 48px; border-radius: 12px; border: none; padding: 0 16px;
-      font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+      height: 44px; border-radius: 12px; border: none; padding: 0 14px;
+      font-size: 13.5px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
     }
     .btn-p { background: var(--primary); color: #000; }
     .btn-s { background: var(--success); color: #fff; }
@@ -237,14 +231,14 @@
 
     /* Bottom App Bar */
     .bottom-app-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; height: 66px;
+      position: fixed; bottom: 0; left: 0; right: 0; height: 62px;
       background: rgba(11, 19, 41, 0.96); backdrop-filter: blur(14px);
       border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-around; z-index: 90;
       padding-bottom: env(safe-area-inset-bottom);
     }
     .app-tab {
       display: flex; flex-direction: column; align-items: center; gap: 2px;
-      color: var(--text-dim); font-size: 10.5px; font-weight: 800; cursor: pointer; border: none; background: transparent;
+      color: var(--text-dim); font-size: 10px; font-weight: 800; cursor: pointer; border: none; background: transparent;
     }
     .app-tab.active { color: var(--primary); }
 
@@ -254,8 +248,8 @@
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 14px;
     }
     .modal-card {
-      width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--border-bright);
-      border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px;
+      width: 100%; max-width: 360px; background: var(--surface); border: 1px solid var(--border-bright);
+      border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 10px;
     }
   </style>
 </head>
@@ -265,24 +259,24 @@
 <div class="modal-overlay" id="authGate">
   <div class="modal-card">
     <div style="display: flex; align-items: center; gap: 10px; color: var(--primary);">
-      <span class="icon" style="font-size: 34px;">water_drop</span>
+      <span class="icon" style="font-size: 32px;">water_drop</span>
       <div>
-        <div style="font-size: 19px; font-weight: 900;">ट्यूबवेल लॉगिन</div>
-        <div style="font-size: 12px; color: var(--text-dim);">अपना 10 अंक का मोबाइल नंबर डालें</div>
+        <div style="font-size: 18px; font-weight: 900;">ट्यूबवेल लॉगिन</div>
+        <div style="font-size: 11.5px; color: var(--text-dim);">अपना 10 अंक का मोबाइल नंबर डालें</div>
       </div>
     </div>
 
     <div id="step_mobile">
       <input type="tel" id="input_phone" placeholder="मोबाइल नंबर डालें" value="8354816628" style="margin-top: 6px;">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="verifyFarmerMobile()">आगे बढ़ें ➔</button>
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 12px;" onclick="verifyFarmerMobile()">आगे बढ़ें ➔</button>
     </div>
 
     <div id="step_secret_pin" style="display: none;">
-      <div id="user_display_badge" style="font-size: 14.5px; font-weight: 800; color: var(--primary);"></div>
-      <label style="font-size: 12px; color: var(--text-dim); margin-top: 6px; display: block;">4 अंक का गुप्त पिन डालें:</label>
-      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 6px; text-align: center; letter-spacing: 8px; font-size: 22px;">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
-      <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">नंबर बदलें</button>
+      <div id="user_display_badge" style="font-size: 14px; font-weight: 800; color: var(--primary);"></div>
+      <label style="font-size: 11.5px; color: var(--text-dim); margin-top: 6px; display: block;">4 अंक का गुप्त पिन डालें:</label>
+      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 4px; text-align: center; letter-spacing: 6px; font-size: 20px;">
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 12px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
+      <button class="btn-action" style="width: 100%; margin-top: 4px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">नंबर बदलें</button>
     </div>
   </div>
 </div>
@@ -291,35 +285,35 @@
 <div class="modal-overlay" id="paymentModal" style="display: none;">
   <div class="modal-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 17px; color: var(--primary);">रुपया वसूली व छूट हिसाब</strong>
-      <button class="btn-circle" style="width:34px; height:34px;" onclick="closePaymentModal()">✕</button>
+      <strong style="font-size: 16px; color: var(--primary);">रुपया वसूली व छूट</strong>
+      <button class="btn-circle" style="width:32px; height:32px;" onclick="closePaymentModal()">✕</button>
     </div>
     
-    <div style="background: rgba(11,19,41,0.7); border: 1px solid var(--border); border-radius: 12px; padding: 10px; font-size: 13px; display: flex; flex-direction: column; gap: 4px;">
+    <div style="background: rgba(11,19,41,0.7); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; font-size: 12.5px; display: flex; flex-direction: column; gap: 2px;">
       <div id="payModalFarmerDesc" style="font-weight: 800; color: #fff;">--</div>
       <div style="display:flex; justify-content:space-between; color: var(--text-dim);">
-        <span>अब तक का कुल पिछला बकाया:</span>
-        <strong id="modal_prev_balance_txt" style="color: var(--danger); font-size: 15px;">₹0</strong>
+        <span>अब तक का बकाया:</span>
+        <strong id="modal_prev_balance_txt" style="color: var(--danger); font-size: 14px;">₹0</strong>
       </div>
     </div>
 
     <div>
-      <label style="font-size: 12px; color: var(--text-dim);">किसान ने कितने रुपये जमा किए (Cash/UPI):</label>
+      <label style="font-size: 11.5px; color: var(--text-dim);">किसान ने कितने रुपये जमा किए (Cash/UPI):</label>
       <input type="number" id="input_cash_paid" placeholder="₹0" value="0" oninput="updatePaymentPreview()">
     </div>
 
     <div>
-      <label style="font-size: 12px; color: var(--text-dim);">माफी / छूट दी गई (Discount):</label>
+      <label style="font-size: 11.5px; color: var(--text-dim);">माफी / छूट दी गई (Discount):</label>
       <input type="number" id="input_discount_given" placeholder="₹0" value="0" oninput="updatePaymentPreview()">
     </div>
 
-    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); border-radius: 12px; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-size: 12.5px; color: var(--text-dim);">कटने के बाद आगे बचा बकाया:</span>
-      <strong id="modal_new_balance_txt" style="color: var(--primary); font-size: 17px; font-family: monospace;">₹0</strong>
+    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); border-radius: 10px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 12px; color: var(--text-dim);">आगे बचा बकाया:</span>
+      <strong id="modal_new_balance_txt" style="color: var(--primary); font-size: 16px; font-family: monospace;">₹0</strong>
     </div>
 
     <button class="btn-action btn-s" style="width: 100%; margin-top: 4px;" onclick="submitPaymentEntry()">
-      <span class="icon">payments</span> खाता अपडेट करें
+      <span class="icon" style="font-size:20px;">payments</span> खाता अपडेट करें
     </button>
   </div>
 </div>
@@ -328,11 +322,11 @@
 <header class="app-header">
   <div class="header-brand">
     <span class="icon">water_ph</span>
-    <span>किसान ट्यूबवेल 10.0</span>
+    <span>किसान ग्रिड 11.0</span>
   </div>
   <div style="display: flex; align-items: center; gap: 6px;">
     <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
-      <span class="icon" id="voiceBadgeIcon" style="font-size: 16px;">volume_up</span>
+      <span class="icon" id="voiceBadgeIcon" style="font-size: 15px;">volume_up</span>
       <span id="voiceBadgeText">आवाज</span>
     </div>
     <button class="btn-circle" onclick="window.location.reload(true)"><span class="icon">sync</span></button>
@@ -366,14 +360,14 @@
   <section class="motor-hero">
     <div class="reactor-wrapper">
       <div class="reactor-core" id="visualOrb">
-        <span class="icon" style="font-size: 46px;">power_settings_new</span>
+        <span class="icon" style="font-size: 40px;">power_settings_new</span>
       </div>
       <div class="pulse-wave"></div>
     </div>
 
     <div>
-      <div style="font-size: 20px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
-      <div style="font-size: 13.5px; color: var(--warning); font-weight: 700; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
+      <div style="font-size: 19px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
+      <div style="font-size: 12.5px; color: var(--warning); font-weight: 700; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
     </div>
 
     <!-- Giant Start/Stop Switch -->
@@ -381,11 +375,10 @@
       <span class="icon">lock</span> बटन बंद है (नंबर नहीं है)
     </button>
 
-    <!-- Field/Farmer Selector Positioned Directly Below Button -->
+    <!-- Quick Selector Directly Below Start Button -->
     <div class="quick-selector-box owner-only">
       <div class="quick-selector-title">
         <span>⚡ मोटर चलाने के लिए खेत / किसान चुनें:</span>
-        <span style="font-size:11px; color:var(--text-dim);">त्वरित चयन</span>
       </div>
       <select id="quick_select_target_farmer" onchange="executeInstantFieldSwitch(this.value)"></select>
     </div>
@@ -395,29 +388,29 @@
   <div class="app-card open" id="turnCard">
     <div class="app-card-header" onclick="toggleCard('turnCard')">
       <span class="app-card-title">
-        <span class="icon" style="color: var(--primary);">timer</span> चालू बारी का बिल व समय विवरण
+        <span class="icon" style="color: var(--primary);">timer</span> चालू बारी का समय व बिल
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
     <div class="app-card-content">
       <div class="bill-calc-box">
         <div class="calc-row">
-          <span style="color: var(--text-dim);">खेत का नाम / किसान:</span>
-          <strong id="label_active_field" style="color: var(--primary); font-size: 15px;">मालिक का खेत (Standby)</strong>
+          <span style="color: var(--text-dim);">खेत / किसान:</span>
+          <strong id="label_active_field" style="color: var(--primary);">मालिक का खेत (Standby)</strong>
         </div>
         <div class="calc-row">
-          <span style="color: var(--text-dim);">पानी शुरू होने का समय:</span>
+          <span style="color: var(--text-dim);">शुरू समय:</span>
           <strong id="label_start_time" style="font-family: monospace;">--:--:--</strong>
         </div>
         <div class="calc-divider"></div>
 
         <div class="calc-row">
-          <span style="color: var(--text-dim);">सिंचाई का समय:</span>
-          <strong id="label_live_time_split" style="color: var(--text); font-size: 14.5px;">0 घंटे 0 मिनट</strong>
+          <span style="color: var(--text-dim);">सिंचाई समय:</span>
+          <strong id="label_live_time_split" style="color: var(--text);">0 घंटे 0 मिनट</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">कुल मिनट:</span>
-          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace; font-size: 14.5px;">0 मिनट</strong>
+          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace;">0 मिनट</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">दर (Rate):</span>
@@ -427,15 +420,15 @@
 
         <div class="calc-row">
           <span style="color: var(--text-dim);">पुराना बकाया:</span>
-          <strong id="label_prev_due" style="color: var(--danger); font-size: 15px;">₹0</strong>
+          <strong id="label_prev_due" style="color: var(--danger);">₹0</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim); font-weight: bold;">इस बारी का बिल:</span>
-          <strong id="label_live_fare" style="color: var(--success); font-size: 18px;">₹0</strong>
+          <strong id="label_live_fare" style="color: var(--success); font-size: 17px;">₹0</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim); font-weight: bold;">कुल देय रकम:</span>
-          <strong id="label_total_payable" style="color: var(--primary); font-size: 18px;">₹0</strong>
+          <strong id="label_total_payable" style="color: var(--primary); font-size: 17px;">₹0</strong>
         </div>
       </div>
 
@@ -449,17 +442,19 @@
     </div>
   </div>
 
-  <!-- Master Usage Roster (All Users Direct Visibility in Fluid Cards) -->
+  <!-- CONCISE SINGLE ROW MASTER ROSTER (Owner Only) -->
   <div class="app-card open owner-only" id="ownerMasterRosterCard">
     <div class="app-card-header" onclick="toggleCard('ownerMasterRosterCard')">
       <span class="app-card-title">
-        <span class="icon" style="color: var(--purple);">table_view</span> सभी किसानों का सामूहिक खाता (Master Roster)
+        <span class="icon" style="color: var(--purple);">table_rows</span> सबका खाता (जमा व बकाया पट्टी)
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
-    <div class="app-card-content">
-      <div style="font-size: 12px; color: var(--text-dim);">सभी किसानों का कुल इस्तेमाल हुआ समय, बिल व बकाया एक साथ:</div>
-      <div class="roster-card-list" id="masterRosterContainer">
+    <div class="app-card-content" style="padding: 8px;">
+      <div style="font-size: 11px; color: var(--text-dim); padding: 0 4px 4px 4px;">एक पंक्ति में किसान का कुल समय, जमा व बाकी बकाया:</div>
+      
+      <!-- Single Row Container -->
+      <div class="roster-single-row-list" id="masterRosterContainer">
         <div style="text-align:center; padding:12px; color:var(--text-dim);">डेटा लोड हो रहा है...</div>
       </div>
     </div>
@@ -468,20 +463,20 @@
   <!-- Financial Horizon (Totals) -->
   <section class="summary-grid" id="analyticsSection">
     <div class="summary-box">
-      <div class="summary-lbl">कुल वसूल (Paid)</div>
+      <div class="summary-lbl">कुल वसूल</div>
       <div class="summary-val" style="color:var(--success);" id="tot_collected">₹0</div>
     </div>
     <div class="summary-box">
-      <div class="summary-lbl">कुल छूट (Discount)</div>
+      <div class="summary-lbl">कुल छूट</div>
       <div class="summary-val" style="color:var(--warning);" id="tot_discount">₹0</div>
     </div>
     <div class="summary-box">
-      <div class="summary-lbl">कुल बाकी (Due)</div>
+      <div class="summary-lbl">कुल बाकी</div>
       <div class="summary-val" style="color:var(--danger);" id="tot_outstanding">₹0</div>
     </div>
   </section>
 
-  <!-- AI Smart Search & Individual Ledger Slips -->
+  <!-- AI Search & Detailed Passbook Slips -->
   <div class="app-card open" id="ledgerCard">
     <div class="app-card-header" onclick="toggleCard('ledgerCard')">
       <span class="app-card-title">
@@ -493,7 +488,7 @@
       <div class="ai-search-box">
         <input type="text" id="ledgerSearchInput" placeholder="🔍 नाम, नंबर या बोलकर खोजें..." oninput="handleAISearch()">
         <button class="mic-btn" id="voiceSearchMicBtn" onclick="toggleVoiceSearch()" title="बोलकर खोजें">
-          <span class="icon" style="font-size:22px;">mic</span>
+          <span class="icon" style="font-size:20px;">mic</span>
         </button>
       </div>
 
@@ -504,25 +499,25 @@
         <div class="pill" onclick="applySortPill('PAID', this)">चुकाया गया</div>
       </div>
 
-      <div class="roster-card-list" id="passbookContainer"></div>
+      <div class="roster-single-row-list" id="passbookContainer"></div>
     </div>
   </div>
 
 </main>
 
-<!-- Fixed Mobile Bottom App Bar -->
+<!-- Bottom App Bar -->
 <nav class="bottom-app-bar">
   <button class="app-tab active" onclick="navigateTab('dashboard')">
     <span class="icon">power_settings_new</span>
     <span>मोटर स्विच</span>
   </button>
   <button class="app-tab owner-only" onclick="navigateTab('roster')">
-    <span class="icon">table_view</span>
+    <span class="icon">table_rows</span>
     <span>सबका खाता</span>
   </button>
   <button class="app-tab" onclick="navigateTab('ledger')">
     <span class="icon">receipt_long</span>
-    <span>खाता बही</span>
+    <span>पासबुक</span>
   </button>
   <button class="app-tab" onclick="navigateTab('analytics')">
     <span class="icon">monitoring</span>
@@ -560,10 +555,9 @@
   const FAULT_HYSTERESIS_COUNT = 2;
 
   function sanitizeMobile(p) { return String(p || '').replace(/\D/g, '').slice(-10); }
-  function triggerVibrate(ms = 60) { if ("vibrate" in navigator) navigator.vibrate(ms); }
+  function triggerVibrate(ms = 50) { if ("vibrate" in navigator) navigator.vibrate(ms); }
   function toggleCard(id) { document.getElementById(id).classList.toggle('open'); }
 
-  // Voice Engine
   function updateVoiceUI(isEnabled) {
     const badge = document.getElementById('voiceControlBadge');
     const icon = document.getElementById('voiceBadgeIcon');
@@ -614,7 +608,6 @@
     window.speechSynthesis.speak(utterance);
   }
 
-  // Voice Search / Mic
   function toggleVoiceSearch() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return alert("बोलकर खोजने की सुविधा उपलब्ध नहीं है।");
@@ -656,7 +649,6 @@
     }
   }
 
-  // Authentication
   async function verifyFarmerMobile() {
     const p = sanitizeMobile(document.getElementById('input_phone').value.trim());
     if (p.length !== 10) return alert("कृपया 10 अंक का सही मोबाइल नंबर डालें।");
@@ -712,7 +704,6 @@
 
   function logout() { loggedInUser = null; document.getElementById('authGate').style.display = 'flex'; returnToPhoneStep(); }
 
-  // Cloud Synchronization
   function initCloudListeners() {
     rtdb.ref('/tubewell/telemetry').on('value', snap => {
       const t = snap.val();
@@ -727,7 +718,7 @@
         noiseFilterStreak++;
         if (noiseFilterStreak >= FAULT_HYSTERESIS_COUNT) {
           document.getElementById('visualOrb').className = "reactor-core fault";
-          document.getElementById('motorTitleState').innerText = `🚨 सुरक्षा के लिए बंद (${t.fault})`;
+          document.getElementById('motorTitleState').innerText = `🚨 सुरक्षा बंद (${t.fault})`;
           document.getElementById('motorTitleState').style.color = "var(--danger)";
           document.getElementById('mainMotorButton').className = "giant-actuator-btn btn-locked";
           document.getElementById('mainMotorButton').innerHTML = `<span class="icon">warning</span> मोटर ट्रिप लॉक है`;
@@ -774,7 +765,6 @@
     });
   }
 
-  // Account Calculation
   function recalculateAccountsAndLedger() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const balances = {};
@@ -839,7 +829,7 @@
     }
 
     setupAIFuseIndex(balances);
-    renderMasterRosterMobile(balances);
+    renderMasterRosterSingleRow(balances);
     renderPassbookUI(balances);
   }
 
@@ -864,42 +854,38 @@
     recalculateAccountsAndLedger();
   }
 
-  // Master Roster Rendered in Fluid Mobile Cards (Never squishes display)
-  function renderMasterRosterMobile(balances) {
+  /* --- RENDER CONCISE SINGLE ROW MASTER ROSTER --- */
+  function renderMasterRosterSingleRow(balances) {
     const container = document.getElementById('masterRosterContainer');
     container.innerHTML = '';
 
     const list = Object.values(balances);
     if (list.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-dim);">कोई किसान दर्ज नहीं है।</div>`;
+      container.innerHTML = `<div style="text-align:center; padding:10px; color:var(--text-dim); font-size:12px;">कोई किसान दर्ज नहीं है।</div>`;
       return;
     }
 
     list.forEach(b => {
       const hoursPart = Math.floor(b.totalMinutesWorked / 60);
       const minsPart = b.totalMinutesWorked % 60;
-      const usageFormatted = `${hoursPart} घं. ${minsPart} मि.`;
+      const usageFormatted = `${hoursPart}घं ${minsPart}मि`;
       const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
-      const dueText = b.netDue > 0 ? `बकाया: ₹${b.netDue}` : `चुकता (Adv: ₹${Math.abs(b.netDue)})`;
+      const dueText = b.netDue > 0 ? `₹${b.netDue}` : `₹0`;
 
       container.innerHTML += `
-        <div class="roster-mobile-card">
-          <div class="roster-card-top">
-            <div>
-              <strong style="font-size:15px; color:#fff;">${b.name}</strong>
-              <div style="font-size:11.5px; color:var(--text-dim);">${b.plot || 'खेत'} | +91-${b.phone}</div>
-            </div>
-            <strong style="font-size:15px; color:${dueColor}; font-family:monospace;">${dueText}</strong>
+        <div class="roster-row-strip">
+          <div class="strip-user-info">
+            <span class="strip-name">${b.name}</span>
+            <span class="strip-sub">${b.plot || 'खेत'} | समय: <b style="color:var(--primary);">${usageFormatted}</b></span>
           </div>
 
-          <div class="roster-card-stats">
-            <div>कुल समय: <strong style="color:var(--primary);">${usageFormatted}</strong></div>
-            <div>कुल बिल: <strong>₹${b.totalBilled}</strong></div>
-            <div>जमा: <strong style="color:var(--success);">₹${b.totalPaid}</strong></div>
+          <div class="strip-accounting-nums">
+            <span class="strip-paid-discount">जमा: ₹${b.totalPaid}</span>
+            <span class="strip-due-num" style="color:${dueColor};">बाकी: ${dueText}</span>
           </div>
 
-          <button class="btn-action btn-s" style="height:38px; font-size:12px;" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
-            <span class="icon" style="font-size:18px;">payments</span> रुपया जमा / छूट दर्ज करें
+          <button class="strip-action-btn" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
+            जमा / छूट
           </button>
         </div>
       `;
@@ -925,69 +911,38 @@
       if (!isMaster && sanitizeMobile(b.phone) !== sanitizeMobile(loggedInUser.phone)) return;
 
       const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
-      const dueText = b.netDue > 0 ? `बाकी: ₹${b.netDue}` : `चुकता (Adv: ₹${Math.abs(b.netDue)})`;
-      const lastSession = b.sessions && b.sessions.length ? b.sessions[b.sessions.length - 1] : null;
-
-      const totalHoursPart = Math.floor(b.totalMinutesWorked / 60);
-      const totalMinsPart = b.totalMinutesWorked % 60;
-      const totalUsageFormatted = `${totalHoursPart} घंटे ${totalMinsPart} मिनट (कुल ${b.totalMinutesWorked} मिनट)`;
-
-      let lastSessionFormatted = "";
-      if (lastSession) {
-        const lastM = lastSession.durationMins || Math.round((lastSession.durationHours || 0) * 60);
-        const lH = Math.floor(lastM / 60);
-        const lM = lastM % 60;
-        lastSessionFormatted = `${lH} घंटे ${lM} मिनट`;
-      }
+      const dueText = b.netDue > 0 ? `₹${b.netDue}` : `₹0`;
+      const hoursPart = Math.floor(b.totalMinutesWorked / 60);
+      const minsPart = b.totalMinutesWorked % 60;
+      const usageFormatted = `${hoursPart}घं ${minsPart}मि`;
 
       container.innerHTML += `
-        <div class="roster-mobile-card">
-          <div class="roster-card-top">
-            <div>
-              <strong style="font-size:15px; color:#fff;">${b.name}</strong>
-              <div style="font-size:11.5px; color:var(--text-dim);">${b.plot || 'खेत'} | +91-${b.phone}</div>
-              <div style="font-size:11.5px; color:var(--primary); font-weight:bold; margin-top:2px;">
-                कुल सिंचाई: ${totalUsageFormatted}
-              </div>
-            </div>
-            <strong style="font-size:15px; color:${dueColor}; font-family:monospace;">${dueText}</strong>
+        <div class="roster-row-strip">
+          <div class="strip-user-info">
+            <span class="strip-name">${b.name}</span>
+            <span class="strip-sub">${b.plot || 'खेत'} | कुल बिल: ₹${b.totalBilled}</span>
           </div>
 
-          <div class="roster-card-stats">
-            <div>कुल बिल: <strong>₹${b.totalBilled}</strong></div>
-            <div>जमा: <strong style="color:var(--success);">₹${b.totalPaid}</strong></div>
-            <div>छूट: <strong style="color:var(--warning);">₹${b.totalDiscount}</strong></div>
+          <div class="strip-accounting-nums">
+            <span class="strip-paid-discount">जमा: ₹${b.totalPaid}</span>
+            <span class="strip-due-num" style="color:${dueColor};">बाकी: ${dueText}</span>
           </div>
 
-          ${lastSession ? `
-            <div style="font-size:11px; color:var(--text-dim); background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.18); border-radius:10px; padding:8px;">
-              <div style="display:flex; justify-content:space-between;">
-                <span>आखिरी सिंचाई: <strong>${lastSession.date}</strong></span>
-                <span style="color:var(--primary); font-weight:bold;">${lastSessionFormatted}</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; margin-top:2px;">
-                <span>उस बारी का बिल: ₹${Math.round(lastSession.fare)}</span>
-                <span style="color:var(--text-dim);">दर: ₹2/min</span>
-              </div>
-            </div>
-          ` : ''}
-
-          ${isMaster ? `
-            <div style="display:flex; gap:6px; margin-top:2px;">
-              <button class="btn-action btn-s" style="height:38px; font-size:12px; flex:1;" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
-                <span class="icon" style="font-size:18px;">payments</span> जमा / छूट
+          <div style="display:flex; gap:4px;">
+            ${isMaster ? `
+              <button class="strip-action-btn" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
+                जमा
               </button>
-              <button class="btn-action" style="height:38px; font-size:12px; background:#22c55e; color:#fff;" onclick="sendStatementWhatsApp('${b.phone}', '${b.name}', ${b.totalBilled}, ${b.totalPaid}, ${b.totalDiscount}, ${b.netDue}, '${totalUsageFormatted}')">
-                <span class="icon" style="font-size:18px;">chat</span> पर्ची भेजें
-              </button>
-            </div>
-          ` : ''}
+            ` : ''}
+            <button class="strip-action-btn" style="background:#0284c7;" onclick="sendStatementWhatsApp('${b.phone}', '${b.name}', ${b.totalBilled}, ${b.totalPaid}, ${b.totalDiscount}, ${b.netDue}, '${hoursPart} घंटे ${minsPart} मिनट')">
+              पर्ची
+            </button>
+          </div>
         </div>
       `;
     });
   }
 
-  // Payment Settlement Dialog Functions
   function openPaymentModal(phone, name, currentDue) {
     selectedFarmerForPayment = { phone, name, currentDue };
     document.getElementById('payModalFarmerDesc').innerText = `खाता: ${name} (+91-${phone})`;
@@ -1033,7 +988,6 @@
     closePaymentModal();
   }
 
-  // Motor Actuation & UI Refresh
   function refreshMotorUI() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const isMyTurn = activeTurnObj && loggedInUser && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
@@ -1046,14 +1000,14 @@
 
     if (isMotorPhysicallyOn) {
       orb.className = "reactor-core running";
-      title.innerText = "मोटर चालू है (पानी चल रहा है)";
+      title.innerText = "मोटर चालू है";
       title.style.color = "var(--success)";
       sub.innerText = "खेत में पानी जा रहा है...";
     } else {
       orb.className = "reactor-core";
       title.innerText = "मोटर बंद है";
       title.style.color = "var(--text)";
-      sub.innerText = "मोटर चालू करने के लिए तैयार है";
+      sub.innerText = "मोटर चालू करने के लिए तैयार";
     }
 
     if (!isAuthorized) {
@@ -1062,10 +1016,10 @@
     } else {
       if (isMotorPhysicallyOn) {
         btn.className = "giant-actuator-btn btn-stop";
-        btn.innerHTML = `<span class="icon">power_settings_new</span> मोटर बंद करो (लाल बटन)`;
+        btn.innerHTML = `<span class="icon">power_settings_new</span> मोटर बंद करो`;
       } else {
         btn.className = "giant-actuator-btn btn-start";
-        btn.innerHTML = `<span class="icon">play_arrow</span> मोटर चालू करो (हरा बटन)`;
+        btn.innerHTML = `<span class="icon">play_arrow</span> मोटर चालू करो`;
       }
     }
   }
@@ -1185,9 +1139,7 @@
       `⚡ सिंचाई पूरी हुई और खाता में जुड़ गई!\n` +
       `किसान: ${activeTurnObj.farmerName}\n` +
       `समय: ${displayHours} घंटे ${displayRemainingMins} मिनट (कुल ${totalMinutes} मिनट)\n` +
-      `इस बारी का बिल: ₹${fare}\n` +
-      `----------------------------\n` +
-      `नोट: रुपया जमा व छूट बाद में खाते से दर्ज कर सकते हैं।`
+      `इस बारी का बिल: ₹${fare}`
     );
   }
 
@@ -1219,7 +1171,7 @@
   }
 
   async function executeInstantFieldSwitch(uid) {
-    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले मोटर बंद करें।");
+    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले कृपया मोटर बंद करें।");
     const now = Date.now();
     const timeStr = new Date(now).toLocaleTimeString('en-IN');
 
@@ -1244,7 +1196,7 @@
 
   function sendStatementWhatsApp(phone, name, billed, paid, disc, due, totalUsage) {
     const text = 
-`⚡ ट्यूबवेल पानी पर्ची व लेजर खाता विवरण
+`⚡ ट्यूबवेल पानी पर्ची व लेजर विवरण
 किसान: ${name} (+91-${phone})
 कुल पानी इस्तेमाल: ${totalUsage}
 --------------------------------
@@ -1252,8 +1204,7 @@
 कुल जमा किया: ₹${paid}
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
-कुल बाकी बकाया (Net Due): ₹${due}
-(कृपया बकाया राशि समय पर जमा कराएं)`;
+कुल बाकी बकाया: ₹${due}`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 </script>
