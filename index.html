@@ -6,10 +6,10 @@
   <meta name="theme-color" content="#020617">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>ट्यूबवेल स्मार्ट ग्रिड v16.0 AI</title>
+  <title>ट्यूबवेल स्मार्ट ग्रिड v17.0 AI</title>
 
   <!-- Google Material Symbols, Firebase SDKs & Fuse.js -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,800,1,0" />
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
@@ -18,17 +18,18 @@
     :root {
       --bg: #020617;
       --surface: #0b1329;
-      --card: #152238;
-      --border: #243552;
-      --border-bright: #3b5278;
+      --card: #131f36;
+      --border: #1e2f4a;
+      --border-bright: #38bdf8;
       --primary: #38bdf8;
-      --primary-dim: rgba(56, 189, 248, 0.18);
+      --primary-glow: rgba(56, 189, 248, 0.4);
       --success: #22c55e;
-      --success-glow: rgba(34, 197, 94, 0.45);
+      --success-glow: rgba(34, 197, 94, 0.55);
       --danger: #ef4444;
-      --danger-glow: rgba(239, 68, 68, 0.45);
+      --danger-glow: rgba(239, 68, 68, 0.55);
       --warning: #f59e0b;
       --purple: #a855f7;
+      --purple-glow: rgba(168, 85, 247, 0.4);
       --text: #f8fafc;
       --text-dim: #94a3b8;
       --radius: 12px;
@@ -55,25 +56,25 @@
     .icon {
       font-family: 'Material Symbols Rounded';
       font-weight: normal; font-style: normal;
-      font-size: 24px; display: inline-block; vertical-align: middle; line-height: 1;
+      font-size: 26px; display: inline-block; vertical-align: middle; line-height: 1;
     }
 
     /* Fixed App Header */
     .app-header {
       position: sticky; top: 0; z-index: 100;
       background: rgba(11, 19, 41, 0.98); backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border); height: 54px; padding: 0 10px;
+      border-bottom: 1px solid var(--border); height: 52px; padding: 0 8px;
       display: flex; align-items: center; justify-content: space-between;
       width: 100vw; max-width: 100vw;
     }
     .header-brand { display: flex; align-items: center; gap: 6px; }
-    .header-brand-title { font-size: 16px; font-weight: 900; color: var(--primary); }
+    .header-brand-title { font-size: 16px; font-weight: 900; color: var(--primary); text-shadow: 0 0 12px var(--primary-glow); }
     .header-version-tag {
-      font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px;
-      background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3);
+      font-size: 9.5px; font-weight: 900; padding: 2px 6px; border-radius: 4px;
+      background: rgba(56, 189, 248, 0.15); color: var(--primary); border: 1px solid var(--primary);
     }
     .btn-circle {
-      width: 38px; height: 38px; border-radius: 50%;
+      width: 36px; height: 36px; border-radius: 50%;
       background: var(--card); border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
       color: var(--text); cursor: pointer;
@@ -82,80 +83,99 @@
 
     .voice-badge {
       display: inline-flex; align-items: center; gap: 4px;
-      padding: 4px 8px; border-radius: 16px; font-size: 11.5px; font-weight: 800;
+      padding: 4px 8px; border-radius: 14px; font-size: 11px; font-weight: 800;
       background: var(--card); border: 1px solid var(--border); cursor: pointer;
     }
-    .voice-badge.active { background: var(--primary-dim); border-color: var(--primary); color: var(--primary); }
+    .voice-badge.active { background: rgba(56, 189, 248, 0.2); border-color: var(--primary); color: var(--primary); }
     .voice-badge.disabled { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); }
 
-    /* Ultra-Compact Zero-Overflow Container */
+    /* Ultra-Compact Zero Margin Body */
     .app-body {
       width: 100vw;
       max-width: 100vw;
-      padding: 6px;
-      display: flex; flex-direction: column; gap: 8px;
+      padding: 4px;
+      display: flex; flex-direction: column; gap: 6px;
     }
 
-    /* 4-Column Compact Telemetry with Bigger Monospace Numbers */
-    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; width: 100%; }
+    /* 4-Column Compact Telemetry */
+    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; width: 100%; }
     .tel-box {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 6px 2px; text-align: center;
+      border-radius: 8px; padding: 6px 2px; text-align: center;
     }
-    .tel-lbl { font-size: 10.5px; font-weight: 800; color: var(--text-dim); }
-    .tel-val { font-size: 15.5px; font-weight: 900; font-family: monospace; margin-top: 1px; }
+    .tel-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); }
+    .tel-val { font-size: 15px; font-weight: 900; font-family: monospace; margin-top: 1px; }
 
-    /* AI Diagnostic Ribbon */
+    /* AI Diagnostic Ribbon with Pulse */
     .ai-smart-ribbon {
-      background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.4);
-      border-radius: 10px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;
-      font-size: 12.5px; color: #e9d5ff; font-weight: 600; width: 100%;
+      background: rgba(168, 85, 247, 0.12); border: 1px solid var(--purple);
+      border-radius: 8px; padding: 6px 8px; display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: #e9d5ff; font-weight: 700; width: 100%;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
     }
 
-    /* Motor Controller */
+    /* Neon Reactor Hero Card */
     .motor-hero {
       width: 100%;
-      background: radial-gradient(circle at 50% 15%, rgba(21, 34, 56, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
-      border: 1px solid var(--border-bright); border-radius: 16px;
-      padding: 12px 8px; text-align: center;
+      background: radial-gradient(circle at 50% 10%, rgba(19, 31, 54, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
+      border: 1.5px solid var(--border); border-radius: 14px;
+      padding: 12px 6px; text-align: center;
       display: flex; flex-direction: column; align-items: center; gap: 8px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.6);
     }
-    .reactor-wrapper { position: relative; width: 68px; height: 68px; display: flex; align-items: center; justify-content: center; }
+    .reactor-wrapper { position: relative; width: 66px; height: 66px; display: flex; align-items: center; justify-content: center; }
     .pulse-wave {
       position: absolute; inset: 0; border-radius: 50%;
       border: 3px solid var(--success); opacity: 0;
       animation: ripple 2s infinite ease-out; display: none;
     }
-    @keyframes ripple { 0% { transform: scale(0.75); opacity: 0.9; } 100% { transform: scale(1.5); opacity: 0; } }
+    @keyframes ripple { 0% { transform: scale(0.7); opacity: 0.9; } 100% { transform: scale(1.6); opacity: 0; } }
     .reactor-core {
-      width: 60px; height: 60px; border-radius: 50%;
+      width: 58px; height: 58px; border-radius: 50%;
       background: #1e293b; border: 3px solid var(--border);
       display: flex; align-items: center; justify-content: center;
       font-size: 32px; z-index: 2; transition: all 0.35s ease;
     }
-    .reactor-core.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 25px var(--success-glow); }
-    .reactor-core.running + .pulse-wave { display: block; }
-    .reactor-core.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 25px var(--danger-glow); }
-
-    .giant-actuator-btn {
-      width: 100%; height: 58px; border-radius: 12px; border: none;
-      font-size: 19px; font-weight: 900; letter-spacing: 0.5px;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    .reactor-core.running {
+      background: var(--success); border-color: #86efac; color: #fff;
+      box-shadow: 0 0 25px var(--success-glow);
     }
-    .giant-actuator-btn:active { transform: scale(0.98); }
-    .btn-start { background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%); color: #fff; }
-    .btn-stop { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); color: #fff; }
+    .reactor-core.running + .pulse-wave { display: block; }
+    .reactor-core.fault {
+      background: var(--danger); border-color: #fca5a5; color: #fff;
+      box-shadow: 0 0 25px var(--danger-glow);
+    }
+
+    /* MASSIVE TACTILE ACTUATOR BUTTON */
+    .giant-actuator-btn {
+      width: 100%; height: 68px; border-radius: 12px; border: none;
+      font-size: 20px; font-weight: 900; letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      cursor: pointer; transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .giant-actuator-btn:active { transform: scale(0.97); }
+    .btn-start {
+      background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
+      color: #fff;
+      box-shadow: 0 0 24px var(--success-glow);
+      border: 1px solid #86efac;
+    }
+    .btn-stop {
+      background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+      color: #fff;
+      box-shadow: 0 0 24px var(--danger-glow);
+      border: 1px solid #fca5a5;
+    }
     .btn-locked { background: #1e293b; color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
 
     /* Quick Selector Box Directly Below Button */
     .quick-selector-box {
       width: 100%; background: var(--surface); border: 1.5px solid var(--primary);
-      border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 4px;
+      border-radius: 10px; padding: 6px 8px; display: flex; flex-direction: column; gap: 3px;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
     }
     .quick-selector-title {
-      font-size: 12px; font-weight: 800; color: var(--primary);
+      font-size: 11.5px; font-weight: 800; color: var(--primary);
       display: flex; align-items: center; justify-content: space-between;
     }
 
@@ -164,67 +184,67 @@
       width: 100%; background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); overflow: hidden;
     }
-    .app-card-header { padding: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .app-card-title { font-size: 15px; font-weight: 900; color: var(--text); display: flex; align-items: center; gap: 6px; }
-    .app-card-arrow { transition: transform 0.25s; font-size: 22px; color: var(--text-dim); }
+    .app-card-header { padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .app-card-title { font-size: 14.5px; font-weight: 900; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .app-card-arrow { transition: transform 0.25s; font-size: 20px; color: var(--text-dim); }
     .app-card.open .app-card-arrow { transform: rotate(180deg); }
-    .app-card-content { display: none; padding: 8px 10px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 8px; }
+    .app-card-content { display: none; padding: 8px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 6px; }
     .app-card.open .app-card-content { display: flex; }
 
-    /* Bill Info Box with Bold Readable Metrics */
+    /* Bill Info Box */
     .bill-calc-box {
-      background: rgba(11, 19, 41, 0.7); border: 1px solid var(--border-bright);
-      border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 13.5px;
+      background: rgba(11, 19, 41, 0.8); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; font-size: 13px;
     }
     .calc-row { display: flex; justify-content: space-between; align-items: center; }
-    .calc-divider { border-top: 1px dashed var(--border); margin: 3px 0; }
+    .calc-divider { border-top: 1px dashed var(--border); margin: 2px 0; }
 
-    /* Financial Horizon (3 Tabs) */
-    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; }
+    /* Financial Horizon */
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; width: 100%; }
     .summary-box {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 8px 2px; text-align: center;
+      border-radius: 8px; padding: 6px 2px; text-align: center;
     }
-    .summary-lbl { font-size: 11px; font-weight: 800; color: var(--text-dim); }
-    .summary-val { font-size: 16px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+    .summary-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); }
+    .summary-val { font-size: 15px; font-weight: 900; font-family: monospace; margin-top: 1px; }
 
     /* Recent Usage Stream List */
-    .recent-stream-list { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+    .recent-stream-list { display: flex; flex-direction: column; gap: 4px; width: 100%; }
     .recent-stream-item {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 8px 10px;
+      border-radius: 8px; padding: 6px 8px;
       display: flex; justify-content: space-between; align-items: center;
     }
-    .stream-info { display: flex; flex-direction: column; gap: 2px; }
-    .stream-right { text-align: right; display: flex; flex-direction: column; gap: 2px; }
+    .stream-info { display: flex; flex-direction: column; gap: 1px; }
+    .stream-right { text-align: right; display: flex; flex-direction: column; gap: 1px; }
 
     /* Single Row Master Roster Strip */
-    .roster-single-row-list { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+    .roster-single-row-list { display: flex; flex-direction: column; gap: 4px; width: 100%; }
     .roster-row-strip {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 8px 10px;
-      display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px;
+      border-radius: 8px; padding: 6px 8px;
+      display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 6px;
     }
     .strip-user-info { display: flex; flex-direction: column; overflow: hidden; }
-    .strip-name { font-size: 14.5px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .strip-sub { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
+    .strip-name { font-size: 14px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .strip-sub { font-size: 10.5px; color: var(--text-dim); }
     
     .strip-accounting-nums {
-      display: flex; flex-direction: column; align-items: flex-end; font-size: 11.5px;
+      display: flex; flex-direction: column; align-items: flex-end; font-size: 11px;
     }
     .strip-paid-discount { color: var(--success); font-weight: 800; }
-    .strip-due-num { font-size: 15px; font-weight: 900; font-family: monospace; }
+    .strip-due-num { font-size: 14.5px; font-weight: 900; font-family: monospace; }
     
     .strip-action-btn {
-      height: 32px; padding: 0 10px; border-radius: 6px; border: none;
-      background: var(--primary); color: #000; font-size: 11.5px; font-weight: 900;
+      height: 30px; padding: 0 8px; border-radius: 6px; border: none;
+      background: var(--primary); color: #000; font-size: 11px; font-weight: 900;
       display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
     .strip-action-btn:active { transform: scale(0.92); }
 
     /* Badges */
     .bill-tag {
-      font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px;
+      font-size: 9.5px; font-weight: 900; padding: 2px 5px; border-radius: 4px;
       text-transform: uppercase; display: inline-block;
     }
     .tag-pakka { background: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
@@ -234,11 +254,11 @@
     /* AI Search */
     .ai-search-box { position: relative; display: flex; align-items: center; width: 100%; }
     .ai-search-box input {
-      width: 100%; height: 42px; border-radius: 10px; border: 1px solid var(--border-bright);
-      background: var(--surface); color: var(--text); padding: 0 42px 0 10px; font-size: 14px; outline: none;
+      width: 100%; height: 38px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); padding: 0 38px 0 8px; font-size: 13.5px; outline: none;
     }
     .ai-search-box .mic-btn {
-      position: absolute; right: 3px; width: 36px; height: 36px; border-radius: 8px;
+      position: absolute; right: 2px; width: 34px; height: 34px; border-radius: 6px;
       border: none; background: var(--card); color: var(--primary);
       display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
@@ -247,7 +267,7 @@
     .filter-pills { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
     .filter-pills::-webkit-scrollbar { display: none; }
     .pill {
-      font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 14px;
+      font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 12px;
       border: 1px solid var(--border); background: var(--surface); color: var(--text-dim);
       white-space: nowrap; cursor: pointer;
     }
@@ -255,12 +275,12 @@
 
     /* Inputs & Form Controls */
     input, select {
-      width: 100%; height: 44px; border-radius: 10px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text); padding: 0 10px; font-size: 14px; outline: none;
+      width: 100%; height: 40px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); padding: 0 8px; font-size: 13.5px; outline: none;
     }
     .btn-action {
-      height: 44px; border-radius: 10px; border: none; padding: 0 12px;
-      font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer;
+      height: 42px; border-radius: 8px; border: none; padding: 0 10px;
+      font-size: 13.5px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer;
     }
     .btn-p { background: var(--primary); color: #000; }
     .btn-s { background: var(--success); color: #fff; }
@@ -269,7 +289,7 @@
 
     /* Bottom App Bar */
     .bottom-app-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
+      position: fixed; bottom: 0; left: 0; right: 0; height: 54px;
       background: rgba(11, 19, 41, 0.98); backdrop-filter: blur(14px);
       border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-around; z-index: 90;
       padding-bottom: env(safe-area-inset-bottom);
@@ -277,18 +297,18 @@
     }
     .app-tab {
       display: flex; flex-direction: column; align-items: center; gap: 1px;
-      color: var(--text-dim); font-size: 10px; font-weight: 800; cursor: pointer; border: none; background: transparent;
+      color: var(--text-dim); font-size: 9.5px; font-weight: 800; cursor: pointer; border: none; background: transparent;
     }
     .app-tab.active { color: var(--primary); }
 
     /* Modals */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98);
-      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 10px;
+      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 8px;
     }
     .modal-card {
-      width: 100%; max-width: 360px; background: var(--surface); border: 1px solid var(--border-bright);
-      border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
+      width: 100%; max-width: 350px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 6px;
     }
   </style>
 </head>
@@ -299,23 +319,23 @@
   <div class="modal-card">
     <div style="display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 6px; color: var(--primary);">
-        <span class="icon" style="font-size: 30px;">water_drop</span>
-        <strong style="font-size: 18px;">ट्यूबवेल लॉगिन</strong>
+        <span class="icon" style="font-size: 28px;">water_drop</span>
+        <strong style="font-size: 17px;">ट्यूबवेल लॉगिन</strong>
       </div>
-      <span class="header-version-tag">v16.0 AI</span>
+      <span class="header-version-tag">v17.0 AI</span>
     </div>
-    <div style="font-size: 11.5px; color: var(--text-dim);">सिस्टम का उपयोग करने के लिए 10 अंकों का फोन नंबर दर्ज करें</div>
+    <div style="font-size: 11px; color: var(--text-dim);">सिस्टम का उपयोग करने के लिए 10 अंकों का फोन नंबर दर्ज करें</div>
 
     <div id="step_mobile">
       <input type="tel" id="input_phone" placeholder="10 अंकों का मोबाइल नंबर" value="8354816628" style="margin-top: 4px;">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 10px;" onclick="verifyFarmerMobile()">आगे बढ़ें ➔</button>
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 8px;" onclick="verifyFarmerMobile()">आगे बढ़ें ➔</button>
     </div>
 
     <div id="step_secret_pin" style="display: none;">
-      <div id="user_display_badge" style="font-size: 14px; font-weight: 800; color: var(--primary);"></div>
-      <label style="font-size: 11.5px; color: var(--text-dim); margin-top: 4px; display: block;">4 अंक का गुप्त पिन (Security PIN):</label>
-      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 4px; text-align: center; letter-spacing: 6px; font-size: 20px;">
-      <button class="btn-action btn-p" style="width: 100%; margin-top: 10px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
+      <div id="user_display_badge" style="font-size: 13.5px; font-weight: 800; color: var(--primary);"></div>
+      <label style="font-size: 11px; color: var(--text-dim); margin-top: 4px; display: block;">4 अंक का सुरक्षा पिन (Security PIN):</label>
+      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 4px; text-align: center; letter-spacing: 6px; font-size: 18px;">
+      <button class="btn-action btn-p" style="width: 100%; margin-top: 8px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
       <button class="btn-action" style="width: 100%; margin-top: 4px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">नंबर बदलें</button>
     </div>
   </div>
@@ -325,12 +345,12 @@
 <div class="modal-overlay" id="invoiceModal" style="display: none;">
   <div class="modal-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 16px; color: var(--primary);">बिलिंग कंसोल (Consolidation)</strong>
-      <button class="btn-circle" style="width:30px; height:30px;" onclick="closeInvoiceModal()">✕</button>
+      <strong style="font-size: 15px; color: var(--primary);">बिलिंग कंसोल (Consolidation)</strong>
+      <button class="btn-circle" style="width:28px; height:28px;" onclick="closeInvoiceModal()">✕</button>
     </div>
     
-    <div style="background: rgba(11,19,41,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 8px; font-size: 12px; display: flex; flex-direction: column; gap: 3px;">
-      <div id="invModalFarmerDesc" style="font-weight: 800; color: #fff; font-size: 13.5px;">--</div>
+    <div style="background: rgba(11,19,41,0.7); border: 1px solid var(--border); border-radius: 6px; padding: 6px; font-size: 11px; display: flex; flex-direction: column; gap: 2px;">
+      <div id="invModalFarmerDesc" style="font-weight: 800; color: #fff;">--</div>
       <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
         <span>पिछली पक्की रीडिंग:</span>
         <strong id="invModalLastPakkaDate" style="color: var(--primary); font-family: monospace;">--</strong>
@@ -341,7 +361,7 @@
       </div>
       <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
         <span>अवधि का बिल:</span>
-        <strong id="invModalCalculatedFare" style="color: var(--success); font-size: 14.5px;">₹0</strong>
+        <strong id="invModalCalculatedFare" style="color: var(--success); font-size: 13px;">₹0</strong>
       </div>
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
         <span style="color: var(--text-dim);">स्थिति / इटरेशन:</span>
@@ -350,26 +370,26 @@
     </div>
 
     <div>
-      <label style="font-size: 11.5px; color: var(--text-dim);">पक्का बिल कट-ऑफ तारीख (Upto Date):</label>
+      <label style="font-size: 11px; color: var(--text-dim);">पक्का बिल कट-ऑफ तारीख:</label>
       <input type="date" id="input_pakka_cutoff_date">
     </div>
 
     <div>
-      <label style="font-size: 11.5px; color: var(--text-dim);">जमा की गई रकम (Cash/UPI):</label>
+      <label style="font-size: 11px; color: var(--text-dim);">जमा की गई रकम (Cash/UPI):</label>
       <input type="number" id="input_inv_paid" placeholder="₹0" value="0" oninput="updateInvoicePreview()">
     </div>
 
     <div>
-      <label style="font-size: 11.5px; color: var(--text-dim);">माफी / छूट (Discount):</label>
+      <label style="font-size: 11px; color: var(--text-dim);">माफी / छूट (Discount):</label>
       <input type="number" id="input_inv_discount" placeholder="₹0" value="0" oninput="updateInvoicePreview()">
     </div>
 
-    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); border-radius: 8px; padding: 6px 8px; display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-size: 12px; color: var(--text-dim);">आगे कैरी-फॉरवर्ड बकाया:</span>
-      <strong id="invModalRemainingDueTxt" style="color: var(--primary); font-size: 16px; font-family: monospace;">₹0</strong>
+    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); border-radius: 6px; padding: 4px 6px; display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 11px; color: var(--text-dim);">आगे कैरी-फॉरवर्ड बकाया:</span>
+      <strong id="invModalRemainingDueTxt" style="color: var(--primary); font-size: 14.5px; font-family: monospace;">₹0</strong>
     </div>
 
-    <div style="display: flex; gap: 5px; margin-top: 2px;">
+    <div style="display: flex; gap: 4px; margin-top: 2px;">
       <button class="btn-action btn-p" style="flex: 1;" onclick="generateCheckBillOnly()">
         <span class="icon" style="font-size:16px;">print</span> जांच पर्ची
       </button>
@@ -383,11 +403,11 @@
 <!-- Header -->
 <header class="app-header">
   <div class="header-brand">
-    <span class="icon">water_ph</span>
+    <span class="icon" style="color:var(--primary); text-shadow:0 0 10px var(--primary);">water_ph</span>
     <span class="header-brand-title">किसान ग्रिड AI</span>
-    <span class="header-version-tag">v16.0 Pro</span>
+    <span class="header-version-tag">v17.0 Pro</span>
   </div>
-  <div style="display: flex; align-items: center; gap: 5px;">
+  <div style="display: flex; align-items: center; gap: 4px;">
     <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
       <span class="icon" id="voiceBadgeIcon" style="font-size: 14px;">volume_up</span>
       <span id="voiceBadgeText">आवाज</span>
@@ -421,30 +441,31 @@
 
   <!-- AI Smart Diagnostic Ribbon -->
   <div class="ai-smart-ribbon">
-    <span class="icon" style="color: #a855f7; font-size: 20px;">psychology</span>
+    <span class="icon" style="color: #a855f7; font-size: 18px;">psychology</span>
     <span id="aiPredictiveText">AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल रही है।</span>
   </div>
 
-  <!-- Screen-Fit Motor Controller -->
+  <!-- Screen-Fit Motor Controller with Massive 68px Glowing Actuator -->
   <section class="motor-hero">
     <div class="reactor-wrapper">
       <div class="reactor-core" id="visualOrb">
-        <span class="icon" style="font-size: 36px;">power_settings_new</span>
+        <span class="icon" style="font-size: 34px;">power_settings_new</span>
       </div>
       <div class="pulse-wave"></div>
     </div>
 
     <div>
-      <div style="font-size: 20px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
-      <div style="font-size: 13px; color: var(--warning); font-weight: 700; margin-top: 1px;" id="motorSubState">लाइन जांची जा रही है...</div>
+      <div style="font-size: 18px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
+      <div style="font-size: 12px; color: var(--warning); font-weight: 700;" id="motorSubState">लाइन जांची जा रही है...</div>
     </div>
 
-    <!-- Start/Stop Switch -->
+    <!-- MASSIVE NEON ACTUATOR SWITCH -->
     <button id="mainMotorButton" class="giant-actuator-btn btn-locked" onclick="handleMotorSwitch()">
-      <span class="icon">lock</span> बटन बंद है (नंबर नहीं है)
+      <span class="icon" style="font-size: 30px;">lock</span>
+      <span>बटन बंद है (नंबर नहीं है)</span>
     </button>
 
-    <!-- Quick Selector Directly Below Start Button -->
+    <!-- Quick Selector Positioned Directly Below Button -->
     <div class="quick-selector-box owner-only">
       <div class="quick-selector-title">
         <span>⚡ मोटर चलाने के लिए खेत / किसान चुनें:</span>
@@ -465,7 +486,7 @@
       <div class="bill-calc-box">
         <div class="calc-row">
           <span style="color: var(--text-dim);">खेत / किसान:</span>
-          <strong id="label_active_field" style="color: var(--primary); font-size: 15px;">मालिक का खेत (Standby)</strong>
+          <strong id="label_active_field" style="color: var(--primary); font-size: 14px;">मालिक का खेत (Standby)</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">शुरू समय (Reading):</span>
@@ -475,11 +496,11 @@
 
         <div class="calc-row">
           <span style="color: var(--text-dim);">सिंचाई समय:</span>
-          <strong id="label_live_time_split" style="color: var(--text); font-size: 14.5px;">0 घंटे 0 मिनट</strong>
+          <strong id="label_live_time_split" style="color: var(--text); font-size: 14px;">0 घंटे 0 मिनट</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">कुल मिनट:</span>
-          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace; font-size: 14.5px;">0 मिनट</strong>
+          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace; font-size: 14px;">0 मिनट</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">अनुमानित पानी डिस्चार्ज:</span>
@@ -493,11 +514,11 @@
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim); font-weight: bold;">इस बारी का बिल:</span>
-          <strong id="label_live_fare" style="color: var(--success); font-size: 17px;">₹0</strong>
+          <strong id="label_live_fare" style="color: var(--success); font-size: 16px;">₹0</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim); font-weight: bold;">वर्तमान कुल देय रकम:</span>
-          <strong id="label_total_payable" style="color: var(--primary); font-size: 17px;">₹0</strong>
+          <strong id="label_total_payable" style="color: var(--primary); font-size: 16px;">₹0</strong>
         </div>
       </div>
 
@@ -521,7 +542,7 @@
     </div>
     <div class="app-card-content" style="padding: 6px;">
       <div class="recent-stream-list" id="recentPumpStreamContainer">
-        <div style="text-align:center; padding:8px; color:var(--text-dim); font-size:12px;">हालिया रिकॉर्ड लोड हो रहे हैं...</div>
+        <div style="text-align:center; padding:8px; color:var(--text-dim); font-size:11px;">हालिया रिकॉर्ड लोड हो रहे हैं...</div>
       </div>
     </div>
   </div>
@@ -534,10 +555,10 @@
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
-    <div class="app-card-content" style="padding: 6px;">
-      <div style="font-size: 11.5px; color: var(--text-dim); padding: 0 4px 4px 4px;">सभी किसानों का कुल समय, अनबिल उपयोग, जमा व बकाया:</div>
+    <div class="app-card-content" style="padding: 4px;">
+      <div style="font-size: 10.5px; color: var(--text-dim); padding: 0 4px 4px 4px;">सभी किसानों का कुल समय, अनबिल उपयोग, जमा व बकाया:</div>
       <div class="roster-single-row-list" id="masterRosterContainer">
-        <div style="text-align:center; padding:10px; color:var(--text-dim); font-size:12px;">डेटा लोड हो रहा है...</div>
+        <div style="text-align:center; padding:8px; color:var(--text-dim); font-size:11px;">डेटा लोड हो रहा है...</div>
       </div>
     </div>
   </div>
@@ -586,11 +607,11 @@
       <span class="icon app-card-arrow">expand_more</span>
     </div>
     <div class="app-card-content">
-      <div style="font-size: 12px; color: var(--text-dim);" id="coMasterStateText">जांच चल रही है...</div>
+      <div style="font-size: 11px; color: var(--text-dim);" id="coMasterStateText">जांच चल रही है...</div>
       <input type="text" id="input_co_name" placeholder="सह-मालिक का नाम">
       <input type="tel" id="input_co_phone" placeholder="10 अंकों का मोबाइल">
       <input type="text" id="input_co_pin" placeholder="गुप्त पिन (4 अंक)" maxlength="6">
-      <div style="display: flex; gap: 6px;">
+      <div style="display: flex; gap: 4px;">
         <button class="btn-action btn-p" style="flex: 1;" onclick="saveCoMasterRecord()">सुरक्षित करें</button>
         <button id="btnDeleteCoMaster" class="btn-action btn-d" style="display: none;" onclick="removeCoMasterRecord()">हटाएं</button>
       </div>
@@ -609,7 +630,7 @@
       <div class="ai-search-box">
         <input type="text" id="ledgerSearchInput" placeholder="🔍 नाम, नंबर या बोलकर खोजें..." oninput="handleAISearch()">
         <button class="mic-btn" id="voiceSearchMicBtn" onclick="toggleVoiceSearch()" title="बोलकर खोजें">
-          <span class="icon" style="font-size:20px;">mic</span>
+          <span class="icon" style="font-size:18px;">mic</span>
         </button>
       </div>
 
@@ -887,7 +908,7 @@
       document.getElementById('tele_v_b').innerText = `${vb} V`;
       document.getElementById('tele_i_amps').innerText = `${amps.toFixed(1)} A`;
 
-      // AI Predictive Advisor
+      // AI Predictive Diagnostics
       const aiText = document.getElementById('aiPredictiveText');
       if (amps > 22.0) {
         aiText.innerText = "AI चेतावनी: मोटर लोड अधिक है, बोरिंग में घर्षण या रेत की संभावना!";
@@ -1070,7 +1091,7 @@
     const recentTen = stream.slice(0, 8);
 
     if (recentTen.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:6px; color:var(--text-dim); font-size:12px;">हाल ही में कोई पंप नहीं चला है।</div>`;
+      container.innerHTML = `<div style="text-align:center; padding:6px; color:var(--text-dim); font-size:11px;">हाल ही में कोई पंप नहीं चला है।</div>`;
       return;
     }
 
@@ -1083,12 +1104,12 @@
       container.innerHTML += `
         <div class="recent-stream-item">
           <div class="stream-info">
-            <strong style="font-size:13.5px; color:#fff;">${s.userName} <span style="font-size:11px; color:var(--text-dim);">(${s.plot || 'खेत'})</span></strong>
-            <span style="font-size:11px; color:var(--text-dim);">${s.date} | ${timeRange}</span>
+            <strong style="font-size:13.5px; color:#fff;">${s.userName} <span style="font-size:10.5px; color:var(--text-dim);">(${s.plot || 'खेत'})</span></strong>
+            <span style="font-size:10.5px; color:var(--text-dim);">${s.date} | ${timeRange}</span>
           </div>
           <div class="stream-right">
-            <span style="font-size:12.5px; font-weight:bold; color:var(--primary);">${dH}घं ${dM}मि</span>
-            <strong style="font-size:13.5px; color:var(--success);">₹${Math.round(s.fare || (durMins * unitTariffPerMin))}</strong>
+            <span style="font-size:12px; font-weight:bold; color:var(--primary);">${dH}घं ${dM}मि</span>
+            <strong style="font-size:13px; color:var(--success);">₹${Math.round(s.fare || (durMins * unitTariffPerMin))}</strong>
           </div>
         </div>
       `;
@@ -1332,14 +1353,14 @@
 
     if (!isAuthorized) {
       btn.className = "giant-actuator-btn btn-locked";
-      btn.innerHTML = `<span class="icon">lock</span> अभी आपका नंबर नहीं है`;
+      btn.innerHTML = `<span class="icon" style="font-size: 30px;">lock</span> <span>अभी आपका नंबर नहीं है</span>`;
     } else {
       if (isMotorPhysicallyOn) {
         btn.className = "giant-actuator-btn btn-stop";
-        btn.innerHTML = `<span class="icon">power_settings_new</span> मोटर बंद करो`;
+        btn.innerHTML = `<span class="icon" style="font-size: 30px;">power_settings_new</span> <span>मोटर बंद करो</span>`;
       } else {
         btn.className = "giant-actuator-btn btn-start";
-        btn.innerHTML = `<span class="icon">play_arrow</span> मोटर चालू करो`;
+        btn.innerHTML = `<span class="icon" style="font-size: 30px;">play_arrow</span> <span>मोटर चालू करो</span>`;
       }
     }
   }
@@ -1523,7 +1544,7 @@
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
 शेष बकाया (Net Due): ₹${due}
-(ट्यूबवेल स्मार्ट ग्रिड v16.0 AI Pro)`;
+(ट्यूबवेल स्मार्ट ग्रिड v17.0 AI Pro)`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 
@@ -1538,7 +1559,7 @@
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
 कुल बाकी बकाया: ₹${due}
-(ट्यूबवेल स्मार्ट ग्रिड v16.0 AI Pro)`;
+(ट्यूबवेल स्मार्ट ग्रिड v17.0 AI Pro)`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 </script>
