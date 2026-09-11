@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#020617">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>ट्यूबवेल स्मार्ट ग्रिड v13.0 AI</title>
+  <title>ट्यूबवेल स्मार्ट ग्रिड v14.0 AI Pro</title>
 
-  <!-- Google Material Symbols, Firebase SDKs & Fuse.js -->
+  <!-- Google Material Symbols, Firebase SDKs & Fuse.js AI Search -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0" />
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -22,16 +22,17 @@
       --border: #243552;
       --border-bright: #3b5278;
       --primary: #38bdf8;
-      --primary-dim: rgba(56, 189, 248, 0.18);
+      --primary-dim: rgba(56, 189, 248, 0.16);
       --success: #22c55e;
       --success-glow: rgba(34, 197, 94, 0.45);
       --danger: #ef4444;
       --danger-glow: rgba(239, 68, 68, 0.45);
       --warning: #f59e0b;
       --purple: #a855f7;
+      --purple-dim: rgba(168, 85, 247, 0.16);
       --text: #f8fafc;
       --text-dim: #94a3b8;
-      --radius: 16px;
+      --radius: 18px;
     }
 
     * {
@@ -45,7 +46,7 @@
       background: var(--bg); color: var(--text);
       overflow-x: hidden;
       padding-top: env(safe-area-inset-top);
-      padding-bottom: calc(88px + env(safe-area-inset-bottom));
+      padding-bottom: calc(90px + env(safe-area-inset-bottom));
     }
 
     .icon {
@@ -53,7 +54,7 @@
       font-size: 24px; display: inline-block; vertical-align: middle; line-height: 1;
     }
 
-    /* Fixed App Header */
+    /* Top App Header */
     .app-header {
       position: sticky; top: 0; z-index: 100;
       background: rgba(11, 19, 41, 0.96); backdrop-filter: blur(14px);
@@ -83,29 +84,36 @@
     .voice-badge.disabled { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); }
 
     .app-body {
-      width: 100%; padding: 10px;
-      display: flex; flex-direction: column; gap: 10px;
+      width: 100%; padding: 12px;
+      display: flex; flex-direction: column; gap: 12px;
     }
 
     /* 4-Column Compact Telemetry */
-    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .tel-box {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 6px 2px; text-align: center;
+      border-radius: 12px; padding: 8px 4px; text-align: center;
     }
     .tel-lbl { font-size: 9.5px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
     .tel-val { font-size: 15px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+
+    /* AI Insight Pill */
+    .ai-smart-ribbon {
+      background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 12px; padding: 8px 12px; display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: #d8b4fe;
+    }
 
     /* Motor Controller */
     .motor-hero {
       width: 100%;
       background: radial-gradient(circle at 50% 15%, rgba(21, 34, 56, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
-      border: 1px solid var(--border-bright); border-radius: 20px;
-      padding: 16px 12px; text-align: center;
+      border: 1px solid var(--border-bright); border-radius: 22px;
+      padding: 18px 14px; text-align: center;
       display: flex; flex-direction: column; align-items: center; gap: 12px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
-    .reactor-wrapper { position: relative; width: 84px; height: 84px; display: flex; align-items: center; justify-content: center; }
+    .reactor-wrapper { position: relative; width: 88px; height: 88px; display: flex; align-items: center; justify-content: center; }
     .pulse-wave {
       position: absolute; inset: 0; border-radius: 50%;
       border: 3px solid var(--success); opacity: 0;
@@ -113,20 +121,20 @@
     }
     @keyframes ripple { 0% { transform: scale(0.75); opacity: 0.9; } 100% { transform: scale(1.6); opacity: 0; } }
     .reactor-core {
-      width: 74px; height: 74px; border-radius: 50%;
+      width: 76px; height: 76px; border-radius: 50%;
       background: #1e293b; border: 3px solid var(--border);
       display: flex; align-items: center; justify-content: center;
-      font-size: 36px; z-index: 2; transition: all 0.35s ease;
+      font-size: 38px; z-index: 2; transition: all 0.35s ease;
     }
-    .reactor-core.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 30px var(--success-glow); }
+    .reactor-core.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 35px var(--success-glow); }
     .reactor-core.running + .pulse-wave { display: block; }
-    .reactor-core.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 30px var(--danger-glow); }
+    .reactor-core.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 35px var(--danger-glow); }
 
     .giant-actuator-btn {
-      width: 100%; height: 62px; border-radius: 16px; border: none;
-      font-size: 18px; font-weight: 900; letter-spacing: 0.5px;
+      width: 100%; height: 64px; border-radius: 16px; border: none;
+      font-size: 19px; font-weight: 900; letter-spacing: 0.5px;
       display: flex; align-items: center; justify-content: center; gap: 10px;
-      cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      cursor: pointer; box-shadow: 0 8px 22px rgba(0,0,0,0.4);
     }
     .giant-actuator-btn:active { transform: scale(0.97); }
     .btn-start { background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%); color: #fff; }
@@ -148,31 +156,41 @@
       width: 100%; background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); overflow: hidden;
     }
-    .app-card-header { padding: 14px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .app-card-header { padding: 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .app-card-title { font-size: 14.5px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
     .app-card-arrow { transition: transform 0.25s; font-size: 22px; color: var(--text-dim); }
     .app-card.open .app-card-arrow { transform: rotate(180deg); }
-    .app-card-content { display: none; padding: 12px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 10px; }
+    .app-card-content { display: none; padding: 14px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 10px; }
     .app-card.open .app-card-content { display: flex; }
 
-    /* Bill Calculation Box */
+    /* Bill Info Box */
     .bill-calc-box {
       background: rgba(11, 19, 41, 0.7); border: 1px solid var(--border-bright);
-      border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 13px;
+      border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 13px;
     }
     .calc-row { display: flex; justify-content: space-between; align-items: center; }
-    .calc-divider { border-top: 1px dashed var(--border); margin: 2px 0; }
+    .calc-divider { border-top: 1px dashed var(--border); margin: 3px 0; }
 
-    /* Horizon Financials */
+    /* Financial Horizon (3 Tabs) */
     .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .summary-box {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px 2px; text-align: center;
+      border-radius: 12px; padding: 10px 4px; text-align: center;
     }
     .summary-lbl { font-size: 9.5px; font-weight: 800; color: var(--text-dim); }
-    .summary-val { font-size: 16px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+    .summary-val { font-size: 16.5px; font-weight: 900; font-family: monospace; margin-top: 2px; }
 
-    /* Roster Row Card */
+    /* Recent Usage Stream List */
+    .recent-stream-list { display: flex; flex-direction: column; gap: 6px; }
+    .recent-stream-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px 10px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .stream-info { display: flex; flex-direction: column; gap: 2px; }
+    .stream-right { text-align: right; display: flex; flex-direction: column; gap: 2px; }
+
+    /* Refined Master Roster Card with Compact Side Icon Button */
     .roster-card-list { display: flex; flex-direction: column; gap: 8px; }
     .roster-mobile-card {
       background: var(--surface); border: 1px solid var(--border);
@@ -184,6 +202,20 @@
       font-size: 11px; color: var(--text-dim); background: rgba(0,0,0,0.25); padding: 8px; border-radius: 10px;
     }
     .roster-card-stats strong { color: var(--text); font-size: 13px; font-family: monospace; display: block; margin-top: 2px; }
+
+    /* Compact Side Action Chips (Small Icon Button) */
+    .compact-action-row {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px dashed var(--border); padding-top: 8px;
+    }
+    .btn-chip {
+      height: 32px; padding: 0 10px; border-radius: 8px; border: none;
+      font-size: 11.5px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;
+      cursor: pointer; transition: transform 0.1s;
+    }
+    .btn-chip:active { transform: scale(0.94); }
+    .btn-chip-primary { background: var(--primary); color: #000; }
+    .btn-chip-success { background: #22c55e; color: #fff; }
 
     /* Iteration & Bill Badges */
     .bill-tag {
@@ -264,7 +296,7 @@
         <span class="icon" style="font-size: 32px;">water_drop</span>
         <strong style="font-size: 18px;">ट्यूबवेल लॉगिन</strong>
       </div>
-      <span class="header-version-tag">v13.0 AI</span>
+      <span class="header-version-tag">v14.0 AI Pro</span>
     </div>
     <div style="font-size: 11.5px; color: var(--text-dim);">सिस्टम का उपयोग करने के लिए अधिकृत मोबाइल नंबर दर्ज करें</div>
 
@@ -287,14 +319,14 @@
 <div class="modal-overlay" id="invoiceModal" style="display: none;">
   <div class="modal-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 16px; color: var(--primary);">बिलिंग व भुगतान कंसोलिडेशन</strong>
+      <strong style="font-size: 16px; color: var(--primary);">बिलिंग कंसोल (Consolidation)</strong>
       <button class="btn-circle" style="width:32px; height:32px;" onclick="closeInvoiceModal()">✕</button>
     </div>
     
     <div style="background: rgba(11,19,41,0.7); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 4px;">
       <div id="invModalFarmerDesc" style="font-weight: 800; color: #fff;">--</div>
       <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
-        <span>पिछली पक्की बिल रीडिंग तारीख:</span>
+        <span>पिछली पक्की रीडिंग तारीख:</span>
         <strong id="invModalLastPakkaDate" style="color: var(--primary); font-family: monospace;">--</strong>
       </div>
       <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
@@ -347,7 +379,7 @@
   <div class="header-brand">
     <span class="icon">water_ph</span>
     <span class="header-brand-title">किसान ग्रिड AI</span>
-    <span class="header-version-tag">v13.0 AI</span>
+    <span class="header-version-tag">v14.0 Pro</span>
   </div>
   <div style="display: flex; align-items: center; gap: 6px;">
     <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
@@ -381,6 +413,12 @@
     </div>
   </section>
 
+  <!-- AI Smart Diagnostic Ribbon -->
+  <div class="ai-smart-ribbon">
+    <span class="icon" style="color: #a855f7; font-size: 20px;">psychology</span>
+    <span id="aiPredictiveText">AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल रही है।</span>
+  </div>
+
   <!-- Motor Controller with Quick-Selector Positioned Directly Below Button -->
   <section class="motor-hero">
     <div class="reactor-wrapper">
@@ -395,6 +433,7 @@
       <div style="font-size: 12.5px; color: var(--warning); font-weight: 700; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
     </div>
 
+    <!-- Giant Start/Stop Actuator Switch -->
     <button id="mainMotorButton" class="giant-actuator-btn btn-locked" onclick="handleMotorSwitch()">
       <span class="icon">lock</span> बटन बंद है (नंबर नहीं है)
     </button>
@@ -437,8 +476,8 @@
           <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace;">0 मिनट</strong>
         </div>
         <div class="calc-row">
-          <span style="color: var(--text-dim);">दर (Tariff Rate):</span>
-          <strong style="color: var(--text);">₹2.00 प्रति मिनट</strong>
+          <span style="color: var(--text-dim);">अनुमानित पानी डिस्चार्ज:</span>
+          <strong id="label_live_liters" style="color: var(--primary);">0 लीटर</strong>
         </div>
         <div class="calc-divider"></div>
 
@@ -466,47 +505,23 @@
     </div>
   </div>
 
-  <!-- RESTORED & ENHANCED: Add New User & PIN Registration (Owner Only) -->
-  <div class="app-card owner-only" id="addUserCard">
-    <div class="app-card-header" onclick="toggleCard('addUserCard')">
+  <!-- NEW FEATURE: Recent Pump Usage & Run Stream (Both Owner & User View) -->
+  <div class="app-card open" id="recentPumpStreamCard">
+    <div class="app-card-header" onclick="toggleCard('recentPumpStreamCard')">
       <span class="app-card-title">
-        <span class="icon" style="color: var(--success);">person_add</span> नया किसान जोड़ें व पिन सेट करें
+        <span class="icon" style="color: var(--primary);">history</span> ताज़ा पंप उपयोग विवरण (Recent Pump Stream)
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
-    <div class="app-card-content">
-      <div style="font-size: 12px; color: var(--text-dim);">नया किसान पंजीकृत करें (नाम, 10-अंकों का फोन, खेत व 4-अंकों का पिन):</div>
-      <input type="text" id="input_new_farmer_name" placeholder="किसान का नाम (Farmer Name)">
-      <input type="tel" id="input_new_farmer_phone" placeholder="10 अंकों का मोबाइल नंबर">
-      <input type="text" id="input_new_farmer_plot" placeholder="खेत / रकबा का नाम (उदा. पुलिया वाला खेत)">
-      <input type="password" id="input_new_farmer_pin" placeholder="4 अंकों का लॉगिन पिन (Security PIN)" maxlength="6">
-      <button class="btn-action btn-s" onclick="registerNewFarmer()">
-        <span class="icon">save</span> किसान सुरक्षित करें (Register Farmer)
-      </button>
-    </div>
-  </div>
-
-  <!-- RESTORED: Co-Master Authorization -->
-  <div class="app-card primary-only" id="coMasterCard">
-    <div class="app-card-header" onclick="toggleCard('coMasterCard')">
-      <span class="app-card-title">
-        <span class="icon" style="color: var(--purple);">admin_panel_settings</span> सह-मालिक प्रबंधन (Co-Master)
-      </span>
-      <span class="icon app-card-arrow">expand_more</span>
-    </div>
-    <div class="app-card-content">
-      <div style="font-size: 12px; color: var(--text-dim);" id="coMasterStateText">जांच चल रही है...</div>
-      <input type="text" id="input_co_name" placeholder="सह-मालिक का नाम">
-      <input type="tel" id="input_co_phone" placeholder="10 अंकों का मोबाइल">
-      <input type="text" id="input_co_pin" placeholder="गुप्त पिन (4 अंक)" maxlength="6">
-      <div style="display: flex; gap: 8px;">
-        <button class="btn-action btn-p" style="flex: 1;" onclick="saveCoMasterRecord()">सुरक्षित करें</button>
-        <button id="btnDeleteCoMaster" class="btn-action btn-d" style="display: none;" onclick="removeCoMasterRecord()">हटाएं</button>
+    <div class="app-card-content" style="padding: 10px;">
+      <div style="font-size: 11.5px; color: var(--text-dim); margin-bottom: 4px;">हाल ही में चले पंप का समय, अवधि व बिल विवरण:</div>
+      <div class="recent-stream-list" id="recentPumpStreamContainer">
+        <div style="text-align:center; padding:10px; color:var(--text-dim); font-size:12px;">हालिया रिकॉर्ड लोड हो रहे हैं...</div>
       </div>
     </div>
   </div>
 
-  <!-- MASTER USER USAGE ROSTER (Detailed v10 Visibility Restored) -->
+  <!-- MASTER ROSTER (With Refined, Smaller Side Action Buttons) -->
   <div class="app-card open owner-only" id="ownerMasterRosterCard">
     <div class="app-card-header" onclick="toggleCard('ownerMasterRosterCard')">
       <span class="app-card-title">
@@ -514,8 +529,8 @@
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
-    <div class="app-card-content" style="padding: 8px;">
-      <div style="font-size: 11px; color: var(--text-dim); padding: 0 4px 4px 4px;">सभी किसानों का कुल समय, अनबिल उपयोग, जमा व बकाया:</div>
+    <div class="app-card-content" style="padding: 10px;">
+      <div style="font-size: 11.5px; color: var(--text-dim); margin-bottom: 4px;">सभी किसानों का कुल समय, अनबिल उपयोग, जमा व बकाया:</div>
       <div class="roster-card-list" id="masterRosterContainer">
         <div style="text-align:center; padding:12px; color:var(--text-dim);">डेटा लोड हो रहा है...</div>
       </div>
@@ -538,11 +553,50 @@
     </div>
   </section>
 
+  <!-- Register New Farmer (Owner Only) -->
+  <div class="app-card owner-only" id="addUserCard">
+    <div class="app-card-header" onclick="toggleCard('addUserCard')">
+      <span class="app-card-title">
+        <span class="icon" style="color: var(--success);">person_add</span> नया किसान जोड़ें व पिन सेट करें
+      </span>
+      <span class="icon app-card-arrow">expand_more</span>
+    </div>
+    <div class="app-card-content">
+      <input type="text" id="input_new_farmer_name" placeholder="किसान का नाम (Farmer Name)">
+      <input type="tel" id="input_new_farmer_phone" placeholder="10 अंकों का मोबाइल नंबर">
+      <input type="text" id="input_new_farmer_plot" placeholder="खेत / रकबा का नाम (उदा. नहर वाला खेत)">
+      <input type="password" id="input_new_farmer_pin" placeholder="4 अंकों का लॉगिन पिन" maxlength="6">
+      <button class="btn-action btn-s" onclick="registerNewFarmer()">
+        <span class="icon">save</span> किसान सुरक्षित करें
+      </button>
+    </div>
+  </div>
+
+  <!-- Co-Master Authorization -->
+  <div class="app-card primary-only" id="coMasterCard">
+    <div class="app-card-header" onclick="toggleCard('coMasterCard')">
+      <span class="app-card-title">
+        <span class="icon" style="color: var(--purple);">admin_panel_settings</span> सह-मालिक प्रबंधन (Co-Master)
+      </span>
+      <span class="icon app-card-arrow">expand_more</span>
+    </div>
+    <div class="app-card-content">
+      <div style="font-size: 12px; color: var(--text-dim);" id="coMasterStateText">जांच चल रही है...</div>
+      <input type="text" id="input_co_name" placeholder="सह-मालिक का नाम">
+      <input type="tel" id="input_co_phone" placeholder="10 अंकों का मोबाइल">
+      <input type="text" id="input_co_pin" placeholder="गुप्त पिन (4 अंक)" maxlength="6">
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-action btn-p" style="flex: 1;" onclick="saveCoMasterRecord()">सुरक्षित करें</button>
+        <button id="btnDeleteCoMaster" class="btn-action btn-d" style="display: none;" onclick="removeCoMasterRecord()">हटाएं</button>
+      </div>
+    </div>
+  </div>
+
   <!-- AI Search & Invoice History Slips -->
   <div class="app-card open" id="ledgerCard">
     <div class="app-card-header" onclick="toggleCard('ledgerCard')">
       <span class="app-card-title">
-        <span class="icon" style="color: var(--success);">receipt_long</span> बिल इतिहास (Kachha vs Pakka Invoices)
+        <span class="icon" style="color: var(--success);">receipt_long</span> बिल इतिहास (Invoices & History)
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
@@ -711,7 +765,6 @@
     }
   }
 
-  // Authentication
   async function verifyFarmerMobile() {
     const p = sanitizeMobile(document.getElementById('input_phone').value.trim());
     if (p.length !== 10) return alert("कृपया 10 अंक का सही मोबाइल नंबर डालें।");
@@ -769,7 +822,6 @@
 
   function logout() { loggedInUser = null; document.getElementById('authGate').style.display = 'flex'; returnToPhoneStep(); }
 
-  // RESTORED: Register New Farmer Feature
   async function registerNewFarmer() {
     const name = document.getElementById('input_new_farmer_name').value.trim();
     const phone = sanitizeMobile(document.getElementById('input_new_farmer_phone').value.trim());
@@ -777,7 +829,7 @@
     const pin = document.getElementById('input_new_farmer_pin').value.trim();
 
     if (!name || phone.length !== 10 || pin.length < 4) {
-      return alert("कृपया नाम, 10-अंकों का वैध फोन नंबर और न्यूनतम 4-अंकों का पिन दर्ज करें।");
+      return alert("कृपया नाम, 10-अंकों का फोन नंबर और कम से कम 4-अंकों का पिन दर्ज करें।");
     }
 
     const newUid = "FARM-" + phone;
@@ -795,10 +847,9 @@
     document.getElementById('input_new_farmer_phone').value = '';
     document.getElementById('input_new_farmer_plot').value = '';
     document.getElementById('input_new_farmer_pin').value = '';
-    alert(`किसान ${name} (+91-${phone}) सफलतापूर्वक पंजीकृत किया गया। पिन: ${pin}`);
+    alert(`किसान ${name} (+91-${phone}) पंजीकृत हो गया। पिन: ${pin}`);
   }
 
-  // RESTORED: Co-Master Settings
   async function saveCoMasterRecord() {
     const name = document.getElementById('input_co_name').value.trim();
     const phone = sanitizeMobile(document.getElementById('input_co_phone').value.trim());
@@ -821,10 +872,28 @@
       const t = snap.val();
       if (!t) return;
 
-      document.getElementById('tele_v_r').innerText = `${t.vR || 412} V`;
-      document.getElementById('tele_v_y').innerText = `${t.vY || 414} V`;
-      document.getElementById('tele_v_b').innerText = `${t.vB || 410} V`;
-      document.getElementById('tele_i_amps').innerText = `${(t.amps || 0).toFixed(1)} A`;
+      const vr = t.vR || 412;
+      const vy = t.vY || 414;
+      const vb = t.vB || 410;
+      const amps = t.amps || 0;
+
+      document.getElementById('tele_v_r').innerText = `${vr} V`;
+      document.getElementById('tele_v_y').innerText = `${vy} V`;
+      document.getElementById('tele_v_b').innerText = `${vb} V`;
+      document.getElementById('tele_i_amps').innerText = `${amps.toFixed(1)} A`;
+
+      // AI Predictive Advisor
+      const aiText = document.getElementById('aiPredictiveText');
+      if (amps > 22.0) {
+        aiText.innerText = "AI चेतावनी: मोटर लोड अधिक है, बोरिंग में घर्षण या रेत की संभावना!";
+        aiText.parentElement.style.background = "rgba(239, 68, 68, 0.15)";
+      } else if (Math.abs(vr - vy) > 30 || Math.abs(vy - vb) > 30) {
+        aiText.innerText = "AI चेतावनी: वोल्टेज में असंतुलन, मोटर सुरक्षा की निगरानी करें!";
+        aiText.parentElement.style.background = "rgba(245, 158, 11, 0.15)";
+      } else {
+        aiText.innerText = "AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल रही है।";
+        aiText.parentElement.style.background = "rgba(168, 85, 247, 0.1)";
+      }
 
       if (t.lockedOut) {
         noiseFilterStreak++;
@@ -869,6 +938,7 @@
       const s = snap.val() || {};
       sessionsCache = Object.keys(s).map(k => ({ sessionId: k, ...s[k] }));
       recalculateAccountsAndLedger();
+      renderRecentPumpStream();
     });
 
     rtdb.ref('/tubewell/invoices').on('value', snap => {
@@ -893,7 +963,7 @@
     });
   }
 
-  // Double-Entry Balance & Cycle Engine (Tracks Check Bills vs Pakka Invoices)
+  // Account Calculation
   function recalculateAccountsAndLedger() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const balances = {};
@@ -917,7 +987,6 @@
       };
     });
 
-    // 1. Map Sessions Chronologically
     sessionsCache.sort((a,b) => (a.startTimestamp || a.timestamp || 0) - (b.startTimestamp || b.timestamp || 0));
     sessionsCache.forEach(s => {
       const p = sanitizeMobile(s.userPhone);
@@ -929,7 +998,6 @@
       balances[p].sessions.push(s);
     });
 
-    // 2. Map Invoices (Separating Check vs Pakka Settlements)
     invoicesCache.forEach(inv => {
       const p = sanitizeMobile(inv.userPhone);
       if (balances[p]) {
@@ -945,7 +1013,6 @@
       }
     });
 
-    // 3. Compute Unbilled Minutes since Last Pakka Consolidation
     Object.values(balances).forEach(b => {
       let unbilledM = 0;
       b.sessions.forEach(s => {
@@ -961,7 +1028,6 @@
       b.netDue = b.totalBilled - b.totalPaid - b.totalDiscount;
     });
 
-    // Update Horizon Summary Cards
     let sumCollected = 0, sumDisc = 0, sumDue = 0;
     Object.values(balances).forEach(b => {
       sumCollected += b.totalPaid;
@@ -985,6 +1051,47 @@
     renderInvoiceHistorySlips();
   }
 
+  // Render Recent Pump Activity Stream for Quick Visibility (Both Owner & User)
+  function renderRecentPumpStream() {
+    const container = document.getElementById('recentPumpStreamContainer');
+    container.innerHTML = '';
+
+    const isMaster = loggedInUser && loggedInUser.role === 'master';
+    let stream = [...sessionsCache];
+
+    if (!isMaster && loggedInUser) {
+      stream = stream.filter(s => sanitizeMobile(s.userPhone) === sanitizeMobile(loggedInUser.phone));
+    }
+
+    stream.reverse();
+    const recentTen = stream.slice(0, 10);
+
+    if (recentTen.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:8px; color:var(--text-dim); font-size:12px;">हाल ही में कोई पंप नहीं चला है।</div>`;
+      return;
+    }
+
+    recentTen.forEach(s => {
+      const durMins = s.durationMins || Math.round((s.durationHours || 0) * 60);
+      const dH = Math.floor(durMins / 60);
+      const dM = durMins % 60;
+      const timeRange = (s.startIso && s.endIso) ? `${s.startIso} - ${s.endIso}` : s.date;
+
+      container.innerHTML += `
+        <div class="recent-stream-item">
+          <div class="stream-info">
+            <strong style="font-size:13.5px; color:#fff;">${s.userName} <span style="font-size:11px; color:var(--text-dim);">(${s.plot || 'खेत'})</span></strong>
+            <span style="font-size:10.5px; color:var(--text-dim);">${s.date} | ${timeRange}</span>
+          </div>
+          <div class="stream-right">
+            <span style="font-size:12px; font-weight:bold; color:var(--primary);">${dH}घं ${dM}मि</span>
+            <strong style="font-size:13px; color:var(--success);">₹${Math.round(s.fare || (durMins * unitTariffPerMin))}</strong>
+          </div>
+        </div>
+      `;
+    });
+  }
+
   function setupAIFuseIndex(balances) {
     const list = Object.values(balances);
     fuseInstance = new Fuse(list, {
@@ -1006,7 +1113,7 @@
     recalculateAccountsAndLedger();
   }
 
-  // Master Roster Display: Full v10 Usage Breakdown Preserved
+  // Master Roster with Small Side Action Chips
   function renderMasterRosterCards(balances) {
     const container = document.getElementById('masterRosterContainer');
     container.innerHTML = '';
@@ -1020,54 +1127,52 @@
     list.forEach(b => {
       const totalH = Math.floor(b.totalMinutesWorked / 60);
       const totalM = b.totalMinutesWorked % 60;
-      const totalUsageFormatted = `${totalH} घंटे ${totalM} मिनट (कुल ${b.totalMinutesWorked} मिनट)`;
+      const totalUsageFormatted = `${totalH}घं ${totalM}मि (${b.totalMinutesWorked}m)`;
 
       const unbilledH = Math.floor(b.unbilledMins / 60);
       const unbilledM = b.unbilledMins % 60;
-      const unbilledUsageFormatted = `${unbilledH} घंटे ${unbilledM} मिनट (${b.unbilledMins} मि.)`;
+      const unbilledUsageFormatted = `${unbilledH}घं ${unbilledM}मि`;
       const unbilledFare = Math.round(b.unbilledMins * unitTariffPerMin);
 
       const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
-      const dueText = b.netDue > 0 ? `बकाया: ₹${b.netDue}` : `चुकता (Adv: ₹${Math.abs(b.netDue)})`;
+      const dueText = b.netDue > 0 ? `₹${b.netDue}` : `₹0`;
 
       container.innerHTML += `
         <div class="roster-mobile-card">
           <div class="roster-card-top">
             <div>
-              <strong style="font-size:15px; color:#fff;">${b.name}</strong>
-              <div style="font-size:11.5px; color:var(--text-dim);">${b.plot || 'खेत'} | +91-${b.phone}</div>
-              <div style="font-size:11.5px; color:var(--primary); font-weight:bold; margin-top:2px;">
-                कुल पानी उपयोग: ${totalUsageFormatted}
-              </div>
+              <strong style="font-size:14.5px; color:#fff;">${b.name}</strong>
+              <div style="font-size:11px; color:var(--text-dim);">${b.plot || 'खेत'} | +91-${b.phone}</div>
             </div>
-            <strong style="font-size:15.5px; color:${dueColor}; font-family:monospace;">${dueText}</strong>
+            <strong style="font-size:15px; color:${dueColor}; font-family:monospace;">${dueText}</strong>
           </div>
 
           <div class="roster-card-stats">
-            <div>अनबिल उपयोग: <strong style="color:var(--warning);">${unbilledUsageFormatted}</strong></div>
-            <div>अनबिल रकम: <strong style="color:var(--primary);">₹${unbilledFare}</strong></div>
-            <div>पिछली पक्की: <strong style="color:var(--text);">${b.lastPakkaDateStr}</strong></div>
+            <div>कुल समय: <strong style="color:var(--text);">${totalUsageFormatted}</strong></div>
+            <div>अनबिल: <strong style="color:var(--primary);">${unbilledUsageFormatted} (₹${unbilledFare})</strong></div>
+            <div>पक्की तक: <strong style="color:var(--warning);">${b.lastPakkaDateStr}</strong></div>
           </div>
 
-          <div style="display:flex; gap:6px; margin-top:2px;">
-            <button class="btn-action btn-p" style="height:36px; font-size:12px; flex:1;" onclick="openInvoiceModal('${b.phone}', '${b.name}', ${b.unbilledMins}, ${unbilledFare}, ${b.lastPakkaReadingTimestamp}, '${b.lastPakkaDateStr}')">
-              <span class="icon" style="font-size:18px;">receipt</span> बिलिंग कंसोल
-            </button>
-            <button class="btn-action" style="height:36px; font-size:12px; background:#22c55e; color:#fff;" onclick="sendStatementWhatsApp('${b.phone}', '${b.name}', ${b.totalBilled}, ${b.totalPaid}, ${b.totalDiscount}, ${b.netDue}, '${totalUsageFormatted}')">
-              <span class="icon" style="font-size:18px;">chat</span> पर्ची
-            </button>
+          <div class="compact-action-row">
+            <span style="font-size:11px; color:var(--text-dim);">जमा: ₹${b.totalPaid} | छूट: ₹${b.totalDiscount}</span>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-chip btn-chip-primary" onclick="openInvoiceModal('${b.phone}', '${b.name}', ${b.unbilledMins}, ${unbilledFare}, ${b.lastPakkaReadingTimestamp}, '${b.lastPakkaDateStr}')">
+                <span class="icon" style="font-size:15px;">receipt</span> बिल
+              </button>
+              <button class="btn-chip btn-chip-success" onclick="sendStatementWhatsApp('${b.phone}', '${b.name}', ${b.totalBilled}, ${b.totalPaid}, ${b.totalDiscount}, ${b.netDue}, '${totalUsageFormatted}')">
+                <span class="icon" style="font-size:15px;">chat</span> पर्ची
+              </button>
+            </div>
           </div>
         </div>
       `;
     });
   }
 
-  // Invoice Consolidation Modal Logic
   function openInvoiceModal(phone, name, unbilledMins, unbilledFare, lastPakkaTimestamp, lastPakkaDateStr) {
     const todayStr = new Date().toISOString().split('T')[0];
     document.getElementById('input_pakka_cutoff_date').value = todayStr;
 
-    // Determine iteration for this timeframe
     const userInvoices = invoicesCache.filter(inv => sanitizeMobile(inv.userPhone) === sanitizeMobile(phone));
     const matchingReprint = userInvoices.filter(inv => inv.fromDateStr === lastPakkaDateStr);
     const iterCount = matchingReprint.length + 1;
@@ -1113,7 +1218,6 @@
     targetInvoicePlan = null;
   }
 
-  // 1. Generate Non-Settling Check Bill (जांच पर्ची - Does not advance settlement point)
   async function generateCheckBillOnly() {
     if (!targetInvoicePlan) return;
 
@@ -1134,11 +1238,10 @@
     };
 
     await rtdb.ref('/tubewell/invoices').push(invoicePayload);
-    alert(`⚡ जांच पर्ची जनरेट हुई (Iteration #${targetInvoicePlan.iterCount})!\nयह केवल हिसाब जांचने के लिए है। भुगतान होने पर 'पक्का बिल' बनाएं।`);
+    alert(`⚡ जांच पर्ची जनरेट हुई (Iteration #${targetInvoicePlan.iterCount})!\nयह केवल हिसाब जांचने के लिए है।`);
     closeInvoiceModal();
   }
 
-  // 2. Commit Final Pakka Consolidation Invoice (Locks reading up to cutoff date)
   async function commitPakkaConsolidationInvoice() {
     if (!targetInvoicePlan) return;
 
@@ -1171,16 +1274,10 @@
     };
 
     await rtdb.ref('/tubewell/invoices').push(invoicePayload);
-    alert(
-      `⚡ पक्का बिल सफलतापूर्वक दर्ज हुआ!\n` +
-      `तारीख तक चुकता/निपटाया: ${cutoffDateStr}\n` +
-      `जमा: ₹${paid} | छूट: ₹${disc}\n` +
-      `आगे कैरी-फॉरवर्ड बकाया: ₹${netDue}`
-    );
+    alert(`⚡ पक्का बिल दर्ज हुआ!\nकट-ऑफ: ${cutoffDateStr}\nजमा: ₹${paid} | छूट: ₹${disc}\nबकाया: ₹${netDue}`);
     closeInvoiceModal();
   }
 
-  // Render Past Invoices with Exact Iterations & Durations
   function renderInvoiceHistorySlips() {
     const container = document.getElementById('invoiceSlipContainer');
     container.innerHTML = '';
@@ -1201,36 +1298,36 @@
     list.forEach(inv => {
       const dH = Math.floor(inv.durationMins / 60);
       const dM = inv.durationMins % 60;
-      const durationFormatted = `${dH} घंटे ${dM} मिनट (${inv.durationMins} मि.)`;
+      const durationFormatted = `${dH}घं ${dM}मि (${inv.durationMins}m)`;
       const isPakka = inv.isPakkaBill;
       const tagClass = isPakka ? "bill-tag tag-pakka" : (inv.iteration > 1 ? "bill-tag tag-reprint" : "bill-tag tag-kachha");
-      const tagText = isPakka ? `पक्का बिल #${inv.iteration}` : (inv.iteration > 1 ? `पुनः जांच #${inv.iteration}` : `जांच बिल #${inv.iteration}`);
+      const tagText = isPakka ? `पक्का #${inv.iteration}` : `जांच #${inv.iteration}`;
 
       container.innerHTML += `
         <div class="roster-mobile-card">
           <div class="roster-card-top">
             <div>
-              <strong style="font-size:15px; color:#fff;">${inv.userName}</strong>
-              <span class="${tagClass}" style="margin-left:6px;">${tagText}</span>
-              <div style="font-size:11.5px; color:var(--text-dim); margin-top:2px;">
-                अवधि: ${inv.fromDateStr} ➔ ${inv.toDateStr}
+              <strong style="font-size:14.5px; color:#fff;">${inv.userName}</strong>
+              <span class="${tagClass}" style="margin-left:4px;">${tagText}</span>
+              <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">
+                ${inv.fromDateStr} ➔ ${inv.toDateStr}
               </div>
             </div>
-            <strong style="font-size:15px; color:${inv.netDue > 0 ? 'var(--danger)' : 'var(--success)'}; font-family:monospace;">
-              ${inv.netDue > 0 ? `बकाया: ₹${inv.netDue}` : `चुकता`}
+            <strong style="font-size:14.5px; color:${inv.netDue > 0 ? 'var(--danger)' : 'var(--success)'}; font-family:monospace;">
+              ${inv.netDue > 0 ? `₹${inv.netDue}` : `चुकता`}
             </strong>
           </div>
 
           <div class="roster-card-stats">
             <div>समय: <strong style="color:var(--primary);">${durationFormatted}</strong></div>
-            <div>कुल बिल: <strong>₹${inv.fare}</strong></div>
+            <div>बिल: <strong>₹${inv.fare}</strong></div>
             <div>जमा: <strong style="color:var(--success);">₹${inv.amountPaid || 0}</strong></div>
           </div>
 
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
-            <span style="font-size:11px; color:var(--text-dim);">छूट/माफी: ₹${inv.discount || 0}</span>
-            <button class="btn-action" style="height:34px; font-size:11.5px; background:#0284c7; color:#fff;" onclick="sendInvoiceWhatsApp('${inv.userPhone}', '${inv.userName}', '${inv.fromDateStr}', '${inv.toDateStr}', '${durationFormatted}', ${inv.fare}, ${inv.amountPaid||0}, ${inv.discount||0}, ${inv.netDue}, ${inv.iteration}, ${isPakka})">
-              व्हाट्सएप पर्ची
+          <div class="compact-action-row">
+            <span style="font-size:11px; color:var(--text-dim);">छूट: ₹${inv.discount || 0}</span>
+            <button class="btn-chip btn-chip-primary" onclick="sendInvoiceWhatsApp('${inv.userPhone}', '${inv.userName}', '${inv.fromDateStr}', '${inv.toDateStr}', '${durationFormatted}', ${inv.fare}, ${inv.amountPaid||0}, ${inv.discount||0}, ${inv.netDue}, ${inv.iteration}, ${isPakka})">
+              <span class="icon" style="font-size:15px;">chat</span> व्हाट्सएप पर्ची
             </button>
           </div>
         </div>
@@ -1238,7 +1335,6 @@
     });
   }
 
-  // Motor Actuation & UI Refresh
   function refreshMotorUI() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const isMyTurn = activeTurnObj && loggedInUser && (activeTurnObj.farmerUid === loggedInUser.uid || sanitizeMobile(activeTurnObj.farmerPhone) === sanitizeMobile(loggedInUser.phone));
@@ -1336,9 +1432,11 @@
     const displayHours = Math.floor(totalMinutes / 60);
     const displayRemainingMins = totalMinutes % 60;
     const currentFare = Math.round(totalMinutes * unitTariffPerMin);
+    const dischargeLiters = Math.round((sec / 3600) * 22800);
 
     document.getElementById('label_live_time_split').innerText = `${displayHours} घंटे ${displayRemainingMins} मिनट`;
     document.getElementById('label_live_total_mins').innerText = `${totalMinutes} मिनट`;
+    document.getElementById('label_live_liters').innerText = `${dischargeLiters} लीटर (${(dischargeLiters/1000).toFixed(1)} kL)`;
     document.getElementById('label_live_fare').innerText = `₹${currentFare}`;
 
     const prevDue = parseFloat(document.getElementById('label_prev_due').innerText.replace(/[^\d.-]/g, '')) || 0;
@@ -1350,7 +1448,6 @@
     timerTicker = setInterval(() => renderLiveMetrics(calculateRunSeconds()), 1000);
   }
 
-  // Pure Minute Run Recording on Contactor Stop
   async function finalizeTurnDirectly() {
     if (!activeTurnObj) return;
 
@@ -1364,7 +1461,6 @@
     const displayHours = Math.floor(totalMinutes / 60);
     const displayRemainingMins = totalMinutes % 60;
     const fare = Math.round(totalMinutes * unitTariffPerMin);
-
     const isOwner = activeTurnObj.isOwnerPersonalRun || activeTurnObj.farmerUid === 'OWNER_DIRECT';
 
     const record = {
@@ -1387,7 +1483,7 @@
     await rtdb.ref('/tubewell/active_turn').remove();
 
     speakSimpleHindi('TURN_FINISH', { hours: displayHours, mins: displayRemainingMins, fare: fare });
-    alert(`⚡ सिंचाई पूरी हुई!\nसमय: ${displayHours} घंटे ${displayRemainingMins} मिनट (कुल ${totalMinutes} मिनट)\nइस बारी का बिल: ₹${fare}`);
+    alert(`सिंचाई समाप्त!\nसमय: ${displayHours} घंटे ${displayRemainingMins} मिनट (कुल ${totalMinutes} मिनट)\nइस बारी का बिल: ₹${fare}`);
   }
 
   function surrenderFarmerTurn() {
@@ -1454,7 +1550,7 @@
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
 शेष बकाया (Net Due): ₹${due}
-(ट्यूबवेल स्मार्ट ग्रिड v13.0 AI)`;
+(ट्यूबवेल स्मार्ट ग्रिड v14.0 AI Pro)`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 
@@ -1469,7 +1565,7 @@
 दी गई छूट/माफी: ₹${disc}
 --------------------------------
 कुल बाकी बकाया: ₹${due}
-(ट्यूबवेल स्मार्ट ग्रिड v13.0 AI)`;
+(ट्यूबवेल स्मार्ट ग्रिड v14.0 AI Pro)`;
     window.open(`https://wa.me/91${sanitizeMobile(phone)}?text=${encodeURIComponent(text)}`, '_blank');
   }
 </script>
