@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#020617">
-  <title>ट्यूबवेल स्मार्ट ग्रिड 9.0 - AI ऑपरेटर कंसोल</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>ट्यूबवेल स्मार्ट ग्रिड 10.0</title>
 
-  <!-- Google Material Symbols, Firebase SDKs & Fuse.js AI Search -->
+  <!-- Google Material Symbols, Firebase SDKs & Fuse.js -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,700,1,0" />
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -27,200 +29,205 @@
       --danger-glow: rgba(239, 68, 68, 0.45);
       --warning: #f59e0b;
       --purple: #a855f7;
-      --purple-dim: rgba(168, 85, 247, 0.18);
       --text: #f8fafc;
       --text-dim: #94a3b8;
       --radius: 18px;
     }
 
     * {
-      box-sizing: border-box; margin: 0; padding: 0;
+      box-sizing: border-box;
+      margin: 0; padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-      background: var(--bg); color: var(--text);
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
       overflow-x: hidden;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: calc(84px + env(safe-area-inset-bottom));
     }
 
     .icon {
-      font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal;
-      font-size: 28px; display: inline-block; vertical-align: middle; line-height: 1;
+      font-family: 'Material Symbols Rounded';
+      font-weight: normal; font-style: normal;
+      font-size: 26px; display: inline-block; vertical-align: middle; line-height: 1;
     }
 
-    /* Top App Header */
+    /* Fixed App Header */
     .app-header {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(11, 19, 41, 0.95); backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border); height: 64px; padding: 0 16px;
+      background: rgba(11, 19, 41, 0.96); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border); height: 60px; padding: 0 14px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .header-brand { display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 900; color: var(--primary); }
+    .header-brand { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 900; color: var(--primary); }
     .btn-circle {
-      width: 44px; height: 44px; border-radius: 50%;
+      width: 42px; height: 42px; border-radius: 50%;
       background: var(--card); border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
       color: var(--text); cursor: pointer; transition: transform 0.15s;
     }
-    .btn-circle:active { transform: scale(0.9); background: var(--border); }
+    .btn-circle:active { transform: scale(0.92); background: var(--border); }
 
     .voice-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 14px; border-radius: 24px; font-size: 12px; font-weight: 800;
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 800;
       background: var(--card); border: 1px solid var(--border); cursor: pointer;
     }
     .voice-badge.active { background: var(--primary-dim); border-color: var(--primary); color: var(--primary); }
     .voice-badge.disabled { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); }
 
-    .app-body { max-width: 580px; margin: 0 auto; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
-
-    /* Telemetry Horizontal Bar */
-    .tel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .tel-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px 4px; text-align: center; }
-    .tel-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
-    .tel-val { font-size: 16.5px; font-weight: 900; font-family: monospace; margin-top: 2px; }
-
-    /* Animated Reactor Hero */
-    .motor-hero {
-      background: radial-gradient(circle at 50% 15%, rgba(21, 34, 56, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
-      border: 1px solid var(--border-bright); border-radius: 26px;
-      padding: 24px 16px; text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 16px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.65);
+    /* Fluid App Body */
+    .app-body {
+      width: 100%;
+      padding: 12px;
+      display: flex; flex-direction: column; gap: 12px;
     }
-    .reactor-wrapper { position: relative; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; }
+
+    /* 4-Column Fluid Telemetry (2x2 on tiny screens, 4 on standard) */
+    .tel-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    @media (max-width: 350px) {
+      .tel-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .tel-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 8px 4px; text-align: center;
+    }
+    .tel-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
+    .tel-val { font-size: 16px; font-weight: 900; font-family: monospace; margin-top: 2px; }
+
+    /* Motor Reactor Hero */
+    .motor-hero {
+      width: 100%;
+      background: radial-gradient(circle at 50% 15%, rgba(21, 34, 56, 0.95) 0%, rgba(11, 19, 41, 0.98) 100%);
+      border: 1px solid var(--border-bright); border-radius: 22px;
+      padding: 20px 14px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    }
+    .reactor-wrapper { position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; }
     .pulse-wave {
       position: absolute; inset: 0; border-radius: 50%;
       border: 4px solid var(--success); opacity: 0;
       animation: ripple 2s infinite ease-out; display: none;
     }
-    @keyframes ripple { 0% { transform: scale(0.75); opacity: 0.9; } 100% { transform: scale(1.65); opacity: 0; } }
+    @keyframes ripple { 0% { transform: scale(0.75); opacity: 0.9; } 100% { transform: scale(1.6); opacity: 0; } }
     .reactor-core {
-      width: 96px; height: 96px; border-radius: 50%;
+      width: 88px; height: 88px; border-radius: 50%;
       background: #1e293b; border: 4px solid var(--border);
       display: flex; align-items: center; justify-content: center;
-      font-size: 48px; z-index: 2; transition: all 0.35s ease;
+      font-size: 42px; z-index: 2; transition: all 0.35s ease;
     }
-    .reactor-core.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 45px var(--success-glow); }
+    .reactor-core.running { background: var(--success); border-color: #86efac; color: #fff; box-shadow: 0 0 35px var(--success-glow); }
     .reactor-core.running + .pulse-wave { display: block; }
-    .reactor-core.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 45px var(--danger-glow); animation: shake 0.5s ease-in-out; }
+    .reactor-core.fault { background: var(--danger); border-color: #fca5a5; color: #fff; box-shadow: 0 0 35px var(--danger-glow); animation: shake 0.5s ease-in-out; }
     @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 
     .giant-actuator-btn {
-      width: 100%; height: 72px; border-radius: 20px; border: none;
-      font-size: 20px; font-weight: 900; letter-spacing: 0.5px;
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-      cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      width: 100%; height: 68px; border-radius: 18px; border: none;
+      font-size: 19px; font-weight: 900; letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.45);
     }
-    .giant-actuator-btn:active { transform: scale(0.96); }
+    .giant-actuator-btn:active { transform: scale(0.97); }
     .btn-start { background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%); color: #fff; }
     .btn-stop { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); color: #fff; }
     .btn-locked { background: #1e293b; color: var(--text-dim); border: 1px solid var(--border); cursor: not-allowed; }
 
-    /* Quick User Run Selector Box (Directly Below Start Button) */
+    /* Quick Selector Box - Immediately Below Start Button */
     .quick-selector-box {
-      width: 100%; background: var(--surface); border: 2px solid var(--primary);
-      border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
-      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15);
+      width: 100%;
+      background: var(--surface);
+      border: 1.5px solid var(--primary);
+      border-radius: 16px; padding: 12px;
+      display: flex; flex-direction: column; gap: 6px;
+      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.12);
     }
     .quick-selector-title {
-      font-size: 13px; font-weight: 800; color: var(--primary);
+      font-size: 12.5px; font-weight: 800; color: var(--primary);
       display: flex; align-items: center; justify-content: space-between;
     }
 
-    /* AI Predictive Insight Pill */
-    .ai-insight-box {
-      background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.35);
-      border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 10px;
-      font-size: 12.5px; color: #d8b4fe;
+    /* Cards */
+    .app-card {
+      width: 100%;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
     }
-
-    /* Expandable Cards */
-    .app-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-    .app-card-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .app-card-title { font-size: 15.5px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .app-card-header { padding: 16px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .app-card-title { font-size: 15px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
     .app-card-arrow { transition: transform 0.25s; font-size: 24px; color: var(--text-dim); }
     .app-card.open .app-card-arrow { transform: rotate(180deg); }
-    .app-card-content { display: none; padding: 18px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 14px; }
+    .app-card-content { display: none; padding: 14px; border-top: 1px solid var(--border); background: var(--card); flex-direction: column; gap: 12px; }
     .app-card.open .app-card-content { display: flex; }
 
-    /* Financial Horizon Summary */
+    /* Bill Info Box */
+    .bill-calc-box {
+      background: rgba(11, 19, 41, 0.7); border: 1px solid var(--border-bright);
+      border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px;
+    }
+    .calc-row { display: flex; justify-content: space-between; align-items: center; }
+    .calc-divider { border-top: 1px dashed var(--border); margin: 3px 0; }
+
+    /* Financial Horizon (3 Tabs) */
     .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .summary-box {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px 6px; text-align: center;
+      border-radius: 14px; padding: 10px 4px; text-align: center;
     }
-    .summary-lbl { font-size: 10.5px; font-weight: 800; color: var(--text-dim); }
-    .summary-val { font-size: 18px; font-weight: 900; font-family: monospace; margin-top: 4px; }
+    .summary-lbl { font-size: 10px; font-weight: 800; color: var(--text-dim); }
+    .summary-val { font-size: 17px; font-weight: 900; font-family: monospace; margin-top: 3px; }
 
-    /* Itemized Bill Box */
-    .bill-calc-box {
-      background: rgba(11, 19, 41, 0.7); border: 1px solid var(--border-bright);
-      border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px;
+    /* Mobile-Native Roster Cards (No Wide Tables to Avoid Zooming Out) */
+    .roster-card-list { display: flex; flex-direction: column; gap: 8px; }
+    .roster-mobile-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;
     }
-    .calc-row { display: flex; justify-content: space-between; align-items: center; }
-    .calc-divider { border-top: 1px dashed var(--border); margin: 4px 0; }
+    .roster-card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .roster-card-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+      font-size: 11px; color: var(--text-dim); background: rgba(0,0,0,0.25); padding: 8px; border-radius: 10px;
+    }
+    .roster-card-stats strong { color: var(--text); font-size: 13px; font-family: monospace; display: block; margin-top: 2px; }
 
-    /* Master User Usage Roster Table */
-    .roster-table-wrapper {
-      width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
-      border-radius: 14px; border: 1px solid var(--border); background: var(--surface);
-    }
-    .roster-table { width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: left; }
-    .roster-table th {
-      background: #0b1329; color: var(--text-dim); padding: 12px 10px; font-weight: 800;
-      white-space: nowrap; border-bottom: 2px solid var(--border);
-    }
-    .roster-table td {
-      padding: 12px 10px; border-bottom: 1px solid var(--border); white-space: nowrap;
-    }
-
-    /* AI Search Box with Voice Mic */
-    .ai-search-box { position: relative; display: flex; align-items: center; }
+    /* AI Search */
+    .ai-search-box { position: relative; display: flex; align-items: center; width: 100%; }
     .ai-search-box input {
-      width: 100%; height: 50px; border-radius: 14px; border: 1px solid var(--border-bright);
-      background: var(--surface); color: var(--text); padding: 0 48px 0 14px; font-size: 15px; outline: none;
+      width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--border-bright);
+      background: var(--surface); color: var(--text); padding: 0 46px 0 12px; font-size: 14.5px; outline: none;
     }
     .ai-search-box .mic-btn {
-      position: absolute; right: 6px; width: 40px; height: 40px; border-radius: 10px;
+      position: absolute; right: 4px; width: 40px; height: 40px; border-radius: 10px;
       border: none; background: var(--card); color: var(--primary);
       display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
-    .ai-search-box .mic-btn.listening { background: var(--danger); color: #fff; animation: pulse 1s infinite; }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    .ai-search-box .mic-btn.listening { background: var(--danger); color: #fff; }
 
     .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
     .filter-pills::-webkit-scrollbar { display: none; }
     .pill {
-      font-size: 12px; font-weight: 800; padding: 8px 14px; border-radius: 20px;
+      font-size: 11.5px; font-weight: 800; padding: 7px 12px; border-radius: 18px;
       border: 1px solid var(--border); background: var(--surface); color: var(--text-dim);
       white-space: nowrap; cursor: pointer;
     }
     .pill.active { background: var(--primary); color: #000; border-color: var(--primary); }
 
-    /* Passbook Mobile Slips */
-    .passbook-list { display: flex; flex-direction: column; gap: 10px; }
-    .passbook-slip {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
-    }
-    .slip-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed var(--border); padding-bottom: 8px; }
-    .slip-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
-      font-size: 11.5px; color: var(--text-dim); background: rgba(0,0,0,0.25); padding: 10px; border-radius: 10px;
-    }
-    .slip-grid strong { color: var(--text); font-size: 13.5px; font-family: monospace; display: block; margin-top: 2px; }
-
     /* Form Controls */
     input, select {
-      width: 100%; height: 48px; border-radius: 14px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text); padding: 0 14px; font-size: 15px; outline: none;
+      width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 14.5px; outline: none;
     }
     .btn-action {
-      height: 48px; border-radius: 14px; border: none; padding: 0 18px;
+      height: 48px; border-radius: 12px; border: none; padding: 0 16px;
       font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
     }
     .btn-p { background: var(--primary); color: #000; }
@@ -230,25 +237,25 @@
 
     /* Bottom App Bar */
     .bottom-app-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; height: 72px;
+      position: fixed; bottom: 0; left: 0; right: 0; height: 66px;
       background: rgba(11, 19, 41, 0.96); backdrop-filter: blur(14px);
       border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-around; z-index: 90;
       padding-bottom: env(safe-area-inset-bottom);
     }
     .app-tab {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      color: var(--text-dim); font-size: 11px; font-weight: 800; cursor: pointer; border: none; background: transparent;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      color: var(--text-dim); font-size: 10.5px; font-weight: 800; cursor: pointer; border: none; background: transparent;
     }
     .app-tab.active { color: var(--primary); }
 
     /* Modals */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98);
-      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px;
+      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 14px;
     }
     .modal-card {
-      width: 100%; max-width: 420px; background: var(--surface); border: 1px solid var(--border-bright);
-      border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px;
+      width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--border-bright);
+      border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px;
     }
   </style>
 </head>
@@ -258,10 +265,10 @@
 <div class="modal-overlay" id="authGate">
   <div class="modal-card">
     <div style="display: flex; align-items: center; gap: 10px; color: var(--primary);">
-      <span class="icon" style="font-size: 38px;">water_drop</span>
+      <span class="icon" style="font-size: 34px;">water_drop</span>
       <div>
-        <div style="font-size: 20px; font-weight: 900;">ट्यूबवेल लॉगिन</div>
-        <div style="font-size: 12.5px; color: var(--text-dim);">अपना 10 अंक का मोबाइल नंबर डालें</div>
+        <div style="font-size: 19px; font-weight: 900;">ट्यूबवेल लॉगिन</div>
+        <div style="font-size: 12px; color: var(--text-dim);">अपना 10 अंक का मोबाइल नंबर डालें</div>
       </div>
     </div>
 
@@ -271,9 +278,9 @@
     </div>
 
     <div id="step_secret_pin" style="display: none;">
-      <div id="user_display_badge" style="font-size: 15px; font-weight: 800; color: var(--primary);"></div>
-      <label style="font-size: 12px; color: var(--text-dim); margin-top: 8px; display: block;">4 अंक का गुप्त पिन डालें:</label>
-      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 6px; text-align: center; letter-spacing: 8px; font-size: 24px;">
+      <div id="user_display_badge" style="font-size: 14.5px; font-weight: 800; color: var(--primary);"></div>
+      <label style="font-size: 12px; color: var(--text-dim); margin-top: 6px; display: block;">4 अंक का गुप्त पिन डालें:</label>
+      <input type="password" id="input_pin" placeholder="••••" maxlength="6" style="margin-top: 6px; text-align: center; letter-spacing: 8px; font-size: 22px;">
       <button class="btn-action btn-p" style="width: 100%; margin-top: 14px;" onclick="authenticateWithPIN()">अंदर जाएं (लॉगिन)</button>
       <button class="btn-action" style="width: 100%; margin-top: 6px; background: transparent; color: var(--text-dim);" onclick="returnToPhoneStep()">नंबर बदलें</button>
     </div>
@@ -284,35 +291,35 @@
 <div class="modal-overlay" id="paymentModal" style="display: none;">
   <div class="modal-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 18px; color: var(--primary);">रुपया वसूली, छूट व बकाया हिसाब</strong>
-      <button class="btn-circle" style="width:36px; height:36px;" onclick="closePaymentModal()">✕</button>
+      <strong style="font-size: 17px; color: var(--primary);">रुपया वसूली व छूट हिसाब</strong>
+      <button class="btn-circle" style="width:34px; height:34px;" onclick="closePaymentModal()">✕</button>
     </div>
     
-    <div style="background: rgba(11,19,41,0.7); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 13.5px; display: flex; flex-direction: column; gap: 4px;">
+    <div style="background: rgba(11,19,41,0.7); border: 1px solid var(--border); border-radius: 12px; padding: 10px; font-size: 13px; display: flex; flex-direction: column; gap: 4px;">
       <div id="payModalFarmerDesc" style="font-weight: 800; color: #fff;">--</div>
       <div style="display:flex; justify-content:space-between; color: var(--text-dim);">
-        <span>अब तक का कुल पिछला बकाया (Old Due):</span>
+        <span>अब तक का कुल पिछला बकाया:</span>
         <strong id="modal_prev_balance_txt" style="color: var(--danger); font-size: 15px;">₹0</strong>
       </div>
     </div>
 
     <div>
-      <label style="font-size: 12px; color: var(--text-dim);">किसान ने कितने रुपये जमा किए (Cash/UPI Paid):</label>
+      <label style="font-size: 12px; color: var(--text-dim);">किसान ने कितने रुपये जमा किए (Cash/UPI):</label>
       <input type="number" id="input_cash_paid" placeholder="₹0" value="0" oninput="updatePaymentPreview()">
     </div>
 
     <div>
-      <label style="font-size: 12px; color: var(--text-dim);">माफी / छूट दी गई (Discount Amount):</label>
+      <label style="font-size: 12px; color: var(--text-dim);">माफी / छूट दी गई (Discount):</label>
       <input type="number" id="input_discount_given" placeholder="₹0" value="0" oninput="updatePaymentPreview()">
     </div>
 
-    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-size: 13px; color: var(--text-dim);">कटने के बाद आगे बचा बकाया (New Due):</span>
-      <strong id="modal_new_balance_txt" style="color: var(--primary); font-size: 18px; font-family: monospace;">₹0</strong>
+    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); border-radius: 12px; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 12.5px; color: var(--text-dim);">कटने के बाद आगे बचा बकाया:</span>
+      <strong id="modal_new_balance_txt" style="color: var(--primary); font-size: 17px; font-family: monospace;">₹0</strong>
     </div>
 
     <button class="btn-action btn-s" style="width: 100%; margin-top: 4px;" onclick="submitPaymentEntry()">
-      <span class="icon">payments</span> खाता अपडेट करें (Save Settlement)
+      <span class="icon">payments</span> खाता अपडेट करें
     </button>
   </div>
 </div>
@@ -320,12 +327,12 @@
 <!-- Header -->
 <header class="app-header">
   <div class="header-brand">
-    <span class="icon">psychology</span>
-    <span>किसान ग्रिड 9.0 AI</span>
+    <span class="icon">water_ph</span>
+    <span>किसान ट्यूबवेल 10.0</span>
   </div>
-  <div style="display: flex; align-items: center; gap: 8px;">
+  <div style="display: flex; align-items: center; gap: 6px;">
     <div id="voiceControlBadge" class="voice-badge active" onclick="toggleUserVoicePreference()">
-      <span class="icon" id="voiceBadgeIcon" style="font-size: 18px;">volume_up</span>
+      <span class="icon" id="voiceBadgeIcon" style="font-size: 16px;">volume_up</span>
       <span id="voiceBadgeText">आवाज</span>
     </div>
     <button class="btn-circle" onclick="window.location.reload(true)"><span class="icon">sync</span></button>
@@ -355,32 +362,26 @@
     </div>
   </section>
 
-  <!-- AI Predictive Insight Pill -->
-  <div class="ai-insight-box">
-    <span class="icon" style="color: #a855f7; font-size: 24px;">smart_toy</span>
-    <span id="aiPredictiveText">AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल सकती है।</span>
-  </div>
-
-  <!-- Animated Reactor Hero -->
+  <!-- Motor Controller with Quick-Selector Just Below -->
   <section class="motor-hero">
     <div class="reactor-wrapper">
       <div class="reactor-core" id="visualOrb">
-        <span class="icon" style="font-size: 52px;">power_settings_new</span>
+        <span class="icon" style="font-size: 46px;">power_settings_new</span>
       </div>
       <div class="pulse-wave"></div>
     </div>
 
     <div>
-      <div style="font-size: 22px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
-      <div style="font-size: 14px; color: var(--warning); font-weight: 700; margin-top: 3px;" id="motorSubState">लाइन जांची जा रही है...</div>
+      <div style="font-size: 20px; font-weight: 900;" id="motorTitleState">मोटर बंद है</div>
+      <div style="font-size: 13.5px; color: var(--warning); font-weight: 700; margin-top: 2px;" id="motorSubState">लाइन जांची जा रही है...</div>
     </div>
 
-    <!-- Main Giant Motor Switch -->
+    <!-- Giant Start/Stop Switch -->
     <button id="mainMotorButton" class="giant-actuator-btn btn-locked" onclick="handleMotorSwitch()">
       <span class="icon">lock</span> बटन बंद है (नंबर नहीं है)
     </button>
 
-    <!-- NEW FEATURE: Quick Field Selector Directly Below Start Button -->
+    <!-- Field/Farmer Selector Positioned Directly Below Button -->
     <div class="quick-selector-box owner-only">
       <div class="quick-selector-title">
         <span>⚡ मोटर चलाने के लिए खेत / किसान चुनें:</span>
@@ -402,7 +403,7 @@
       <div class="bill-calc-box">
         <div class="calc-row">
           <span style="color: var(--text-dim);">खेत का नाम / किसान:</span>
-          <strong id="label_active_field" style="color: var(--primary); font-size: 15.5px;">मालिक का खेत (Standby)</strong>
+          <strong id="label_active_field" style="color: var(--primary); font-size: 15px;">मालिक का खेत (Standby)</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">पानी शुरू होने का समय:</span>
@@ -412,11 +413,11 @@
 
         <div class="calc-row">
           <span style="color: var(--text-dim);">सिंचाई का समय:</span>
-          <strong id="label_live_time_split" style="color: var(--text); font-size: 15px;">0 घंटे 0 मिनट</strong>
+          <strong id="label_live_time_split" style="color: var(--text); font-size: 14.5px;">0 घंटे 0 मिनट</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">कुल मिनट:</span>
-          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace; font-size: 15px;">0 मिनट</strong>
+          <strong id="label_live_total_mins" style="color: var(--primary); font-family: monospace; font-size: 14.5px;">0 मिनट</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim);">दर (Rate):</span>
@@ -425,16 +426,16 @@
         <div class="calc-divider"></div>
 
         <div class="calc-row">
-          <span style="color: var(--text-dim);">पुराना बकाया (Old Due):</span>
-          <strong id="label_prev_due" style="color: var(--danger); font-size: 15.5px;">₹0</strong>
+          <span style="color: var(--text-dim);">पुराना बकाया:</span>
+          <strong id="label_prev_due" style="color: var(--danger); font-size: 15px;">₹0</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim); font-weight: bold;">इस बारी का बिल:</span>
-          <strong id="label_live_fare" style="color: var(--success); font-size: 19px;">₹0</strong>
+          <strong id="label_live_fare" style="color: var(--success); font-size: 18px;">₹0</strong>
         </div>
         <div class="calc-row">
           <span style="color: var(--text-dim); font-weight: bold;">कुल देय रकम:</span>
-          <strong id="label_total_payable" style="color: var(--primary); font-size: 19px;">₹0</strong>
+          <strong id="label_total_payable" style="color: var(--primary); font-size: 18px;">₹0</strong>
         </div>
       </div>
 
@@ -448,7 +449,7 @@
     </div>
   </div>
 
-  <!-- Master Usage Roster Table (All Users Direct Visibility to Owner) -->
+  <!-- Master Usage Roster (All Users Direct Visibility in Fluid Cards) -->
   <div class="app-card open owner-only" id="ownerMasterRosterCard">
     <div class="app-card-header" onclick="toggleCard('ownerMasterRosterCard')">
       <span class="app-card-title">
@@ -457,25 +458,9 @@
       <span class="icon app-card-arrow">expand_more</span>
     </div>
     <div class="app-card-content">
-      <div style="font-size: 12.5px; color: var(--text-dim);">बिना अलग-अलग पर्ची खोले, यहाँ सभी किसानों का कुल समय, बिल व बकाया एक साथ देखें:</div>
-
-      <div class="roster-table-wrapper">
-        <table class="roster-table">
-          <thead>
-            <tr>
-              <th>किसान / खेत</th>
-              <th>कुल समय इस्तेमाल</th>
-              <th>कुल बिल</th>
-              <th>जमा रकम</th>
-              <th>छूट</th>
-              <th>बकाया (Net Due)</th>
-              <th>कार्रवाई</th>
-            </tr>
-          </thead>
-          <tbody id="masterRosterTableBody">
-            <tr><td colspan="7" style="text-align:center; padding:18px; color:var(--text-dim);">डेटा लोड हो रहा है...</td></tr>
-          </tbody>
-        </table>
+      <div style="font-size: 12px; color: var(--text-dim);">सभी किसानों का कुल इस्तेमाल हुआ समय, बिल व बकाया एक साथ:</div>
+      <div class="roster-card-list" id="masterRosterContainer">
+        <div style="text-align:center; padding:12px; color:var(--text-dim);">डेटा लोड हो रहा है...</div>
       </div>
     </div>
   </div>
@@ -500,33 +485,32 @@
   <div class="app-card open" id="ledgerCard">
     <div class="app-card-header" onclick="toggleCard('ledgerCard')">
       <span class="app-card-title">
-        <span class="icon" style="color: var(--success);">receipt_long</span> किसान व्यक्तिगत पर्ची व खाता
+        <span class="icon" style="color: var(--success);">receipt_long</span> किसान व्यक्तिगत पर्ची व पासबुक
       </span>
       <span class="icon app-card-arrow">expand_more</span>
     </div>
     <div class="app-card-content">
-      <!-- AI Voice & Fuzzy Search -->
       <div class="ai-search-box">
         <input type="text" id="ledgerSearchInput" placeholder="🔍 नाम, नंबर या बोलकर खोजें..." oninput="handleAISearch()">
-        <button class="mic-btn" id="voiceSearchMicBtn" onclick="toggleVoiceSearch()" title="बोलकर खोजें या कमांड दें">
-          <span class="icon" style="font-size:24px;">mic</span>
+        <button class="mic-btn" id="voiceSearchMicBtn" onclick="toggleVoiceSearch()" title="बोलकर खोजें">
+          <span class="icon" style="font-size:22px;">mic</span>
         </button>
       </div>
 
       <div class="filter-pills">
-        <div class="pill active" onclick="applySortPill('NEWEST', this)">नवीनतम (New)</div>
-        <div class="pill" onclick="applySortPill('DUE_DESC', this)">अधिक बकाया (High Due)</div>
-        <div class="pill" onclick="applySortPill('UNPAID', this)">बाकी उधार (Unpaid)</div>
-        <div class="pill" onclick="applySortPill('PAID', this)">चुकाया गया (Settled)</div>
+        <div class="pill active" onclick="applySortPill('NEWEST', this)">नवीनतम</div>
+        <div class="pill" onclick="applySortPill('DUE_DESC', this)">अधिक बकाया</div>
+        <div class="pill" onclick="applySortPill('UNPAID', this)">बाकी उधार</div>
+        <div class="pill" onclick="applySortPill('PAID', this)">चुकाया गया</div>
       </div>
 
-      <div class="passbook-list" id="passbookContainer"></div>
+      <div class="roster-card-list" id="passbookContainer"></div>
     </div>
   </div>
 
 </main>
 
-<!-- Bottom Navigation Bar -->
+<!-- Fixed Mobile Bottom App Bar -->
 <nav class="bottom-app-bar">
   <button class="app-tab active" onclick="navigateTab('dashboard')">
     <span class="icon">power_settings_new</span>
@@ -579,7 +563,7 @@
   function triggerVibrate(ms = 60) { if ("vibrate" in navigator) navigator.vibrate(ms); }
   function toggleCard(id) { document.getElementById(id).classList.toggle('open'); }
 
-  // Voice Engine Settings
+  // Voice Engine
   function updateVoiceUI(isEnabled) {
     const badge = document.getElementById('voiceControlBadge');
     const icon = document.getElementById('voiceBadgeIcon');
@@ -630,10 +614,10 @@
     window.speechSynthesis.speak(utterance);
   }
 
-  // AI Voice Recognition & Command Handler
+  // Voice Search / Mic
   function toggleVoiceSearch() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return alert("बोलकर खोजने की सुविधा इस ब्राउज़र में उपलब्ध नहीं है।");
+    if (!SpeechRecognition) return alert("बोलकर खोजने की सुविधा उपलब्ध नहीं है।");
 
     const micBtn = document.getElementById('voiceSearchMicBtn');
     if (isListeningVoice) { isListeningVoice = false; micBtn.classList.remove('listening'); return; }
@@ -642,23 +626,13 @@
     recognition.lang = 'hi-IN';
     recognition.onstart = () => { isListeningVoice = true; micBtn.classList.add('listening'); triggerVibrate(50); };
     recognition.onresult = (e) => {
-      const query = e.results[0][0].transcript.toLowerCase();
-      document.getElementById('ledgerSearchInput').value = query;
-
-      // Smart Voice Command Logic
-      if (query.includes('बंद') && isMotorPhysicallyOn) {
-        if (confirm("AI आदेश: क्या आप मोटर बंद करना चाहते हैं?")) finalizeTurnDirectly();
-      } else if (query.includes('उधार') || query.includes('बकाया')) {
-        applySortPill('UNPAID', document.querySelector('.filter-pills .pill:nth-child(3)'));
-      } else {
-        handleAISearch();
-      }
+      document.getElementById('ledgerSearchInput').value = e.results[0][0].transcript;
+      handleAISearch();
     };
     recognition.onend = () => { isListeningVoice = false; micBtn.classList.remove('listening'); };
     recognition.start();
   }
 
-  // Tab Navigator
   function navigateTab(sec) {
     triggerVibrate(30);
     document.querySelectorAll('.app-tab').forEach(t => t.classList.remove('active'));
@@ -744,28 +718,10 @@
       const t = snap.val();
       if (!t) return;
 
-      const vr = t.vR || 412;
-      const vy = t.vY || 414;
-      const vb = t.vB || 410;
-      const amps = t.amps || 0;
-
-      document.getElementById('tele_v_r').innerText = `${vr} V`;
-      document.getElementById('tele_v_y').innerText = `${vy} V`;
-      document.getElementById('tele_v_b').innerText = `${vb} V`;
-      document.getElementById('tele_i_amps').innerText = `${amps.toFixed(1)} A`;
-
-      // AI Predictive Diagnostics
-      const aiText = document.getElementById('aiPredictiveText');
-      if (amps > 22.0) {
-        aiText.innerText = "AI चेतावनी: मोटर अधिक लोड ले रही है, बोरिंग में रेत या असर घिसने की संभावना!";
-        aiText.parentElement.style.background = "rgba(239, 68, 68, 0.15)";
-      } else if (Math.abs(vr - vy) > 30 || Math.abs(vy - vb) > 30) {
-        aiText.innerText = "AI चेतावनी: फेज़ वोल्टेज में भारी असंतुलन, सिंगल-फेज़िंग से सावधान रहें!";
-        aiText.parentElement.style.background = "rgba(245, 158, 11, 0.15)";
-      } else {
-        aiText.innerText = "AI विश्लेषक: ग्रिड वोल्टेज संतुलित है, मोटर पूर्ण दक्षता पर चल रही है।";
-        aiText.parentElement.style.background = "rgba(168, 85, 247, 0.1)";
-      }
+      document.getElementById('tele_v_r').innerText = `${t.vR || 412} V`;
+      document.getElementById('tele_v_y').innerText = `${t.vY || 414} V`;
+      document.getElementById('tele_v_b').innerText = `${t.vB || 410} V`;
+      document.getElementById('tele_i_amps').innerText = `${(t.amps || 0).toFixed(1)} A`;
 
       if (t.lockedOut) {
         noiseFilterStreak++;
@@ -773,10 +729,9 @@
           document.getElementById('visualOrb').className = "reactor-core fault";
           document.getElementById('motorTitleState').innerText = `🚨 सुरक्षा के लिए बंद (${t.fault})`;
           document.getElementById('motorTitleState').style.color = "var(--danger)";
-          const btn = document.getElementById('mainMotorButton');
-          btn.className = "giant-actuator-btn btn-locked";
-          btn.innerHTML = `<span class="icon">warning</span> मोटर ट्रिप लॉक है`;
-          btn.disabled = true;
+          document.getElementById('mainMotorButton').className = "giant-actuator-btn btn-locked";
+          document.getElementById('mainMotorButton').innerHTML = `<span class="icon">warning</span> मोटर ट्रिप लॉक है`;
+          document.getElementById('mainMotorButton').disabled = true;
           return;
         }
       } else {
@@ -819,7 +774,7 @@
     });
   }
 
-  // Account Engine: Master Roster & Fuse.js AI Indexing
+  // Account Calculation
   function recalculateAccountsAndLedger() {
     const isMaster = loggedInUser && loggedInUser.role === 'master';
     const balances = {};
@@ -884,7 +839,7 @@
     }
 
     setupAIFuseIndex(balances);
-    renderMasterRosterTable(balances);
+    renderMasterRosterMobile(balances);
     renderPassbookUI(balances);
   }
 
@@ -909,13 +864,14 @@
     recalculateAccountsAndLedger();
   }
 
-  function renderMasterRosterTable(balances) {
-    const tbody = document.getElementById('masterRosterTableBody');
-    tbody.innerHTML = '';
+  // Master Roster Rendered in Fluid Mobile Cards (Never squishes display)
+  function renderMasterRosterMobile(balances) {
+    const container = document.getElementById('masterRosterContainer');
+    container.innerHTML = '';
 
     const list = Object.values(balances);
     if (list.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:18px; color:var(--text-dim);">कोई किसान दर्ज नहीं है।</td></tr>`;
+      container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-dim);">कोई किसान दर्ज नहीं है।</div>`;
       return;
     }
 
@@ -924,21 +880,28 @@
       const minsPart = b.totalMinutesWorked % 60;
       const usageFormatted = `${hoursPart} घं. ${minsPart} मि.`;
       const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
+      const dueText = b.netDue > 0 ? `बकाया: ₹${b.netDue}` : `चुकता (Adv: ₹${Math.abs(b.netDue)})`;
 
-      tbody.innerHTML += `
-        <tr>
-          <td><strong>${b.name}</strong><br><small style="color:var(--text-dim);">${b.plot || 'खेत'} (+91-${b.phone})</small></td>
-          <td style="font-weight:bold; color:var(--primary);">${usageFormatted}</td>
-          <td>₹${b.totalBilled}</td>
-          <td style="color:var(--success); font-weight:bold;">₹${b.totalPaid}</td>
-          <td style="color:var(--warning);">₹${b.totalDiscount}</td>
-          <td style="color:${dueColor}; font-weight:900; font-family:monospace; font-size:14px;">₹${b.netDue}</td>
-          <td>
-            <button class="btn-action btn-s" style="height:34px; padding:0 10px; font-size:11px;" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
-              जमा / छूट
-            </button>
-          </td>
-        </tr>
+      container.innerHTML += `
+        <div class="roster-mobile-card">
+          <div class="roster-card-top">
+            <div>
+              <strong style="font-size:15px; color:#fff;">${b.name}</strong>
+              <div style="font-size:11.5px; color:var(--text-dim);">${b.plot || 'खेत'} | +91-${b.phone}</div>
+            </div>
+            <strong style="font-size:15px; color:${dueColor}; font-family:monospace;">${dueText}</strong>
+          </div>
+
+          <div class="roster-card-stats">
+            <div>कुल समय: <strong style="color:var(--primary);">${usageFormatted}</strong></div>
+            <div>कुल बिल: <strong>₹${b.totalBilled}</strong></div>
+            <div>जमा: <strong style="color:var(--success);">₹${b.totalPaid}</strong></div>
+          </div>
+
+          <button class="btn-action btn-s" style="height:38px; font-size:12px;" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
+            <span class="icon" style="font-size:18px;">payments</span> रुपया जमा / छूट दर्ज करें
+          </button>
+        </div>
       `;
     });
   }
@@ -962,8 +925,7 @@
       if (!isMaster && sanitizeMobile(b.phone) !== sanitizeMobile(loggedInUser.phone)) return;
 
       const dueColor = b.netDue > 0 ? 'var(--danger)' : 'var(--success)';
-      const dueText = b.netDue > 0 ? `बाकी बकाया: ₹${b.netDue}` : `चुकता (Advance: ₹${Math.abs(b.netDue)})`;
-
+      const dueText = b.netDue > 0 ? `बाकी: ₹${b.netDue}` : `चुकता (Adv: ₹${Math.abs(b.netDue)})`;
       const lastSession = b.sessions && b.sessions.length ? b.sessions[b.sessions.length - 1] : null;
 
       const totalHoursPart = Math.floor(b.totalMinutesWorked / 60);
@@ -979,31 +941,29 @@
       }
 
       container.innerHTML += `
-        <div class="passbook-slip">
-          <div class="slip-header">
+        <div class="roster-mobile-card">
+          <div class="roster-card-top">
             <div>
-              <strong style="font-size:16px; color:#fff;">${b.name}</strong>
-              <div style="font-size:12px; color:var(--text-dim);">${b.plot || 'खेत'} | +91-${b.phone}</div>
-              <div style="font-size:12px; color:var(--primary); font-weight:bold; margin-top:2px;">
-                कुल पानी इस्तेमाल: ${totalUsageFormatted}
+              <strong style="font-size:15px; color:#fff;">${b.name}</strong>
+              <div style="font-size:11.5px; color:var(--text-dim);">${b.plot || 'खेत'} | +91-${b.phone}</div>
+              <div style="font-size:11.5px; color:var(--primary); font-weight:bold; margin-top:2px;">
+                कुल सिंचाई: ${totalUsageFormatted}
               </div>
             </div>
-            <div style="text-align:right;">
-              <strong style="font-size:16px; color:${dueColor}; font-family:monospace;">${dueText}</strong>
-            </div>
+            <strong style="font-size:15px; color:${dueColor}; font-family:monospace;">${dueText}</strong>
           </div>
 
-          <div class="slip-grid">
-            <div>कुल बना बिल: <strong>₹${b.totalBilled}</strong></div>
-            <div>कुल जमा किया: <strong style="color:var(--success);">₹${b.totalPaid}</strong></div>
-            <div>कुल छूट/माफी: <strong style="color:var(--warning);">₹${b.totalDiscount}</strong></div>
+          <div class="roster-card-stats">
+            <div>कुल बिल: <strong>₹${b.totalBilled}</strong></div>
+            <div>जमा: <strong style="color:var(--success);">₹${b.totalPaid}</strong></div>
+            <div>छूट: <strong style="color:var(--warning);">₹${b.totalDiscount}</strong></div>
           </div>
 
           ${lastSession ? `
-            <div style="font-size:11.5px; color:var(--text-dim); background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.18); border-radius:10px; padding:10px;">
+            <div style="font-size:11px; color:var(--text-dim); background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.18); border-radius:10px; padding:8px;">
               <div style="display:flex; justify-content:space-between;">
-                <span>आखिरी सिंचाई तारीख: <strong>${lastSession.date}</strong></span>
-                <span style="color:var(--primary); font-weight:bold;">समय: ${lastSessionFormatted}</span>
+                <span>आखिरी सिंचाई: <strong>${lastSession.date}</strong></span>
+                <span style="color:var(--primary); font-weight:bold;">${lastSessionFormatted}</span>
               </div>
               <div style="display:flex; justify-content:space-between; margin-top:2px;">
                 <span>उस बारी का बिल: ₹${Math.round(lastSession.fare)}</span>
@@ -1013,11 +973,11 @@
           ` : ''}
 
           ${isMaster ? `
-            <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-action btn-s" style="height:40px; font-size:12.5px; flex:1;" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
-                <span class="icon" style="font-size:18px;">payments</span> रुपया जमा / छूट दर्ज करें
+            <div style="display:flex; gap:6px; margin-top:2px;">
+              <button class="btn-action btn-s" style="height:38px; font-size:12px; flex:1;" onclick="openPaymentModal('${b.phone}', '${b.name}', ${b.netDue})">
+                <span class="icon" style="font-size:18px;">payments</span> जमा / छूट
               </button>
-              <button class="btn-action" style="height:40px; font-size:12.5px; background:#22c55e; color:#fff;" onclick="sendStatementWhatsApp('${b.phone}', '${b.name}', ${b.totalBilled}, ${b.totalPaid}, ${b.totalDiscount}, ${b.netDue}, '${totalUsageFormatted}')">
+              <button class="btn-action" style="height:38px; font-size:12px; background:#22c55e; color:#fff;" onclick="sendStatementWhatsApp('${b.phone}', '${b.name}', ${b.totalBilled}, ${b.totalPaid}, ${b.totalDiscount}, ${b.netDue}, '${totalUsageFormatted}')">
                 <span class="icon" style="font-size:18px;">chat</span> पर्ची भेजें
               </button>
             </div>
@@ -1069,7 +1029,7 @@
     });
 
     const finalDue = selectedFarmerForPayment.currentDue - paid - disc;
-    alert(`खाता सफलतापूर्वक अपडेट हुआ!\nजमा: ₹${paid}\nछूट: ₹${disc}\nनया बाकी बकाया: ₹${finalDue}`);
+    alert(`खाता अपडेट हुआ!\nजमा: ₹${paid}\nछूट: ₹${disc}\nनया बाकी: ₹${finalDue}`);
     closePaymentModal();
   }
 
@@ -1259,7 +1219,7 @@
   }
 
   async function executeInstantFieldSwitch(uid) {
-    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले कृपया मोटर बंद करें।");
+    if (isMotorPhysicallyOn) return alert("खेत बदलने से पहले मोटर बंद करें।");
     const now = Date.now();
     const timeStr = new Date(now).toLocaleTimeString('en-IN');
 
